@@ -7,7 +7,7 @@ import { useEffect, useRef } from "react";
 import { toast } from "sonner";
 import { Markdown } from "@/components/markdown";
 
-export default function Home() {
+export default function ChatBot() {
   const { messages, input, handleSubmit, handleInputChange, isLoading } =
     useChat({
       onError: () =>
