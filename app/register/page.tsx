@@ -5,9 +5,7 @@ export default function Registro() {
     <div>
       <h1>Formulario de Registro</h1>
 
-      <button>
-        <Link href={"/"}>👉Volver al home</Link>
-      </button>
+      <Link href={"/"}>👉Volver al home</Link>
     </div>
   );
 }

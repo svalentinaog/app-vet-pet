@@ -5,9 +5,7 @@ export default function Profile() {
     <div>
       <h1>Perfil de Usuario</h1>
 
-      <button>
-        <Link href={"/"}>👉Volver al home</Link>
-      </button>
+      <Link href={"/"}>👉Volver al home</Link>
     </div>
   );
 }

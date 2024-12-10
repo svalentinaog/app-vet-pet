@@ -5,9 +5,7 @@ export default function Login() {
     <div>
       <h1>Formulario de Iniciar Sesión</h1>
 
-      <button>
-        <Link href={"/"}>👉Volver al home</Link>
-      </button>
+      <Link href={"/"}>👉Volver al home</Link>
     </div>
   );
 }

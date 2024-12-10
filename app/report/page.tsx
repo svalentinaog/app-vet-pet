@@ -5,9 +5,7 @@ export default function Report() {
     <div>
       <h1>Formulario de Reportar Animal</h1>
 
-      <button>
-        <Link href={"/"}>👉Volver al home</Link>
-      </button>
+      <Link href={"/"}>👉Volver al home</Link>
     </div>
   );
 }
