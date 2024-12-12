@@ -1,57 +1,18 @@
 "use client"; // Asegúrate de que esta línea sea la primera del archivo
 
+import { ChatContainer } from "@/styles/mui";
+
 import React, { useState } from "react";
 
 const UserForm = () => {
-  const [formData, setFormData] = useState({
-    fullName: "",
-    username: "",
-    email: "",
-    phone: "",
-    password: "",
-    confirmPassword: "",
+  const [formData] = useState({
+    fullName: "Juan Pérez",
+    username: "juan123",
+    email: "juan.perez@example.com",
+    phone: "+57 300 123 4567",
+    password: "********",
+    confirmPassword: "********",
   });
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
-  };
-
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    console.log("Form data submitted:", formData);
-  };
-
-  const renderInputWithButtons = (
-    id: string,
-    name: string,
-    type: string,
-    placeholder: string,
-    value: string
-  ) => (
-    <div style={{ marginBottom: "15px" }}>
-      <label htmlFor={id} style={{ display: "block", marginBottom: "5px", fontWeight: "bold", color: "#ffffff" }}>
-        {placeholder}
-      </label>
-      <input
-        type={type}
-        id={id}
-        name={name}
-        placeholder={placeholder}
-        value={value}
-        onChange={handleChange}
-        style={{
-          width: "100%", // Cambiar a 100% para que ocupe todo el ancho disponible
-          padding: "10px",
-          border: "1px solid #ccc",
-          borderRadius: "4px",
-          fontSize: "14px",
-          backgroundColor: "#25273e",
-          color: "#ffffff",
-        }}
-      />
-    </div>
-  );
 
   return (
     <div
@@ -61,32 +22,97 @@ const UserForm = () => {
         alignItems: "center",
         height: "100vh",
         backgroundColor: "#1c1e33",
+        margin: "0", // Elimina los márgenes del contenedor principal
       }}
     >
       <div
         style={{
           background: "#25273e",
-          padding: "20px",
+          padding: "0px",
           borderRadius: "8px",
           boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
           width: "100%",
           maxWidth: "400px",
+          margin: "0", // Elimina los márgenes del contenedor secundario
         }}
       >
-        <h2 style={{ textAlign: "center", marginBottom: "20px", color: "#ffffff" }}>Bienvenido Usuario</h2>
-        <form onSubmit={handleSubmit}>
-          {renderInputWithButtons("fullName", "fullName", "text", "Nombre completo", formData.fullName)}
-          {renderInputWithButtons("username", "username", "text", "Nombre de usuario", formData.username)}
-          {renderInputWithButtons("email", "email", "email", "Correo electrónico", formData.email)}
-          {renderInputWithButtons("phone", "phone", "tel", "Número de teléfono (opcional)", formData.phone)}
-          {renderInputWithButtons("password", "password", "password", "Contraseña", formData.password)}
-          {renderInputWithButtons("confirmPassword", "confirmPassword", "password", "Confirmar contraseña", formData.confirmPassword)}
+        {/* Contenedor para la imagen y el nombre del usuario con ajuste al 100% del ancho */}
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column", // Se asegura que la imagen y el texto estén en líneas separadas
+            justifyContent: "center",
+            alignItems: "center",
+            marginBottom: "10px",
+            backgroundColor: "#2a2d45", // Fondo del contenedor de la imagen
+            borderRadius: "0px 0px 8px 8px", // Bordes redondeados solo arriba
+            boxShadow: "0 4px 6px rgba(0, 0, 0, 0.2)", // Sombra para diferenciar el contenedor
+            width: "100%", // Ancho completo
+            paddingTop:"100px",
+          }}
+        >
+          <img
+            src="https://via.placeholder.com/100"
+            alt="Usuario"
+            style={{
+              width: "100px",
+              height: "100px",
+              borderRadius: "50%",
+              border: "2px solid #ffffff",
+             
+            }}
+          />
+          {/* Texto de bienvenida */}
+          <h2
+            style={{
+              textAlign: "center",
+              marginBottom: "20px",
+              color: "#ffffff",
+              marginTop: "10px", // Margen superior ajustado para separar el texto de la imagen
+            }}
+          >
+            Bienvenido Usuario
+          </h2>
+        </div>
+
+        {/* Nuevo contenedor para el resto de la información */}
+        <div
+          style={{
+            margin: "20px", // Separación entre el contenedor de la imagen y el contenedor de la información
+            borderRadius: "8px",
+            padding: "20px", // Relleno interior para el contenido
+          }}
+        >
+          <div style={{ marginBottom: "15px" }}>
+            <p style={{ fontWeight: "bold", color: "#ffffff" }}>Nombre completo:</p>
+            <p style={{ color: "#ffffff" }}>{formData.fullName}</p>
+          </div>
+          <div style={{ marginBottom: "15px" }}>
+            <p style={{ fontWeight: "bold", color: "#ffffff" }}>Nombre de usuario:</p>
+            <p style={{ color: "#ffffff" }}>{formData.username}</p>
+          </div>
+          <div style={{ marginBottom: "15px" }}>
+            <p style={{ fontWeight: "bold", color: "#ffffff" }}>Correo electrónico:</p>
+            <p style={{ color: "#ffffff" }}>{formData.email}</p>
+          </div>
+          <div style={{ marginBottom: "15px" }}>
+            <p style={{ fontWeight: "bold", color: "#ffffff" }}>Número de teléfono:</p>
+            <p style={{ color: "#ffffff" }}>{formData.phone}</p>
+          </div>
+          <div style={{ marginBottom: "15px" }}>
+            <p style={{ fontWeight: "bold", color: "#ffffff" }}>Contraseña:</p>
+            <p style={{ color: "#ffffff" }}>{formData.password}</p>
+          </div>
+          <div style={{ marginBottom: "15px" }}>
+            <p style={{ fontWeight: "bold", color: "#ffffff" }}>Confirmar contraseña:</p>
+            <p style={{ color: "#ffffff" }}>{formData.confirmPassword}</p>
+          </div>
 
           <div>
             <button
-              type="submit"
+              type="button"
               style={{
-                width: "100%", // Asegurar que el botón ocupe el 100% del ancho
+                width: "100%",
                 padding: "10px",
                 backgroundColor: "#ee3a57",
                 color: "#ffffff",
@@ -96,10 +122,10 @@ const UserForm = () => {
                 cursor: "pointer",
               }}
             >
-              Cerrar sesion
+              Cerrar sesión
             </button>
           </div>
-        </form>
+        </div>
       </div>
     </div>
   );
