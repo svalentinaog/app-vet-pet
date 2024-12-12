@@ -1,0 +1,32 @@
+/// Text color general
+/// @type Color
+$text-color: #d1d5db !default;
+
+/// Global background color for the application
+/// @type Color
+$bg-color: #1c1e33 !default;
+
+/// Primary color
+/// @type Color
+$primary-color: #25273e !default;
+
+/// Secondary color
+/// @type Color
+$secondary-color: #ee3a57 !default;
+
+/// Light color
+/// @type Color
+$light-color: #ffffff !default;
+
+/// Light color 2
+/// @type Color
+$gray-color: #a1a1aa !default;
+
+:root {
+  --text-color: #{$text-color};
+  --bg-color: #{$bg-color};
+  --primary-color: #{$primary-color};
+  --secondary-color: #{$secondary-color};
+  --light-color: #{$light-color};
+  --gray-color: #{$gray-color};
+}
