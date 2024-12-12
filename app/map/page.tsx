@@ -1,4 +1,4 @@
-"use client"; // Asegúrate de que esta línea sea la primera del archivo
+"use client";
 
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
@@ -13,17 +13,14 @@ import { Vector as VectorLayer } from "ol/layer";
 import { Vector as VectorSource } from "ol/source";
 import "ol/ol.css";
 
-// Definimos el tipo para el mapa y las capas
 type MyMapProps = {};
 
 const MyMap: React.FC<MyMapProps> = () => {
   const [map, setMap] = useState<Map | null>(null);
-  const [markerSource, setMarkerSource] = useState<VectorSource>(
-    new VectorSource()
-  );
+  const [markerSource] = useState<VectorSource>(new VectorSource());
 
   useEffect(() => {
-    // Configurar el mapa
+    // Configuración del mapa
     const initialMap = new Map({
       target: "map",
       layers: [
@@ -52,10 +49,8 @@ const MyMap: React.FC<MyMapProps> = () => {
             const { longitude, latitude } = position.coords;
             const userLocation = fromLonLat([longitude, latitude]);
 
-            // Limpiar marcadores anteriores
             markerSource.clear();
 
-            // Crear un marcador para la ubicación actual
             const userFeature = new Feature({
               geometry: new Point(userLocation),
               name: "Tu ubicación",
@@ -63,11 +58,9 @@ const MyMap: React.FC<MyMapProps> = () => {
 
             markerSource.addFeature(userFeature);
 
-            // Centrar el mapa en la ubicación actual
             initialMap.getView().animate({ center: userLocation, zoom: 12 });
           },
-          (error) =>
-            console.error("Error obteniendo la geolocalización", error)
+          (error) => console.error("Error obteniendo la geolocalización", error)
         );
       } else {
         alert("La geolocalización no es compatible con este navegador");
@@ -77,11 +70,10 @@ const MyMap: React.FC<MyMapProps> = () => {
     locateUser();
 
     return () => {
-      initialMap.setTarget(null);
+      initialMap.setTarget();
     };
   }, [markerSource]);
 
-  // Función para buscar una dirección mediante Nominatim
   const searchLocation = async (query: string) => {
     if (!query || !map) return;
 
@@ -91,9 +83,7 @@ const MyMap: React.FC<MyMapProps> = () => {
       );
       const data = await response.json();
       if (data && data.length > 0) {
-        // Limpiar marcadores anteriores
         markerSource.clear();
-
         data.forEach((location: any) => {
           const coords = fromLonLat([
             parseFloat(location.lon),
@@ -139,27 +129,12 @@ const MyMap: React.FC<MyMapProps> = () => {
       }}
     >
       <div>
-        {/* Enlace al Home con next/link */}
-        <div style={{ marginBottom: "10px", textAlign: "center" }}>
-          <Link
-            href="/"
-            style={{
-              color: "#ee3a57",
-              textDecoration: "none",
-              fontSize: "16px",
-              fontWeight: "bold",
-            }}
-          >
-            Ir al Home
-          </Link>
-        </div>
-
         {/* Formulario de búsqueda */}
         <form onSubmit={handleSubmit} style={{ marginBottom: "10px" }}>
           <input
             type="text"
             name="location"
-            placeholder="Buscar dirección"
+            placeholder="🐾 Buscar refugio o veterinaria..."
             style={{ marginRight: "5px" }}
           />
           <button type="submit">Buscar</button>
