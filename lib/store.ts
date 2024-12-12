@@ -1,15 +1,13 @@
 import { configureStore } from "@reduxjs/toolkit";
-import userSlice from "./features/userSlice";
 
-//TODO Configuración de la store
-const store = configureStore({
-  reducer: {
-    user: userSlice, 
-  },
-});
+export const makeStore = () => {
+  return configureStore({
+    reducer: {},
+  });
+};
 
-export default store;
-
-//TODO Inferencia de tipos para el estado raíz y el dispatch
-export type RootState = ReturnType<typeof store.getState>; 
-export type AppDispatch = typeof store.dispatch;          
+// Inferir el tipo de makeStore
+export type AppStore = ReturnType<typeof makeStore>;
+// Inferir los tipos RootState y AppDispatch a partir del store en sí mismo
+export type RootState = ReturnType<AppStore["getState"]>;
+export type AppDispatch = AppStore["dispatch"];
