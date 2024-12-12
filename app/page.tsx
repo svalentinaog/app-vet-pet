@@ -10,7 +10,7 @@ export default function Home() {
         <Link href={"/register"}>Registrate</Link>
         <Link href={"/chatbot"}>Chat de Consultas</Link>
         <Link href={"/profile"}>Perfil de Usuario</Link>
-        <Link href={"/map"}>Mapa de geocalización</Link>
+        <Link href={"/map"}>Mapa de localización</Link>
       </button>
     </div>
   );
