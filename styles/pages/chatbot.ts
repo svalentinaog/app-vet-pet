@@ -111,7 +111,7 @@ export const WelcomeMessage = styled(Box)({
 });
 
 export const WelcomeIcons = styled(Box)({
-  color: "var(--gray-color)",
+  color: "var(--secondary-color)",
   display: "flex",
   flexDirection: "row",
   justifyContent: "center",
@@ -129,6 +129,7 @@ export const MessageBox = styled(Box)({
   gap: "1rem",
   fontSize: "0.875rem",
   color: "var(--light-color)",
+  fontWeight: "normal",
 });
 
 export const ChatForm = styled("form")({
@@ -158,9 +159,14 @@ export const ChatInput = styled("input")({
   color: "var(--light-color)",
   border: "none",
   outline: "none",
+  "::placeholder": {
+    color: "var(--gray-color)",
+  },
 });
 
 export const SendContent = styled(Box)({
+  display: "flex",
+  alignItems: "center",
   color: "var(--gray-color)",
   cursor: "default",
 });
