@@ -1,5 +1,5 @@
 @charset "UTF-8";
 
-// Base stuff
-@use 'base/base';
-@use 'base/typography';
+// @use "base/base";
+@import "./base/base";
+@import "./abstracts/variables";
