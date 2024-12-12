@@ -7,7 +7,8 @@ export default function Home() {
 
       <button>
         <Link href={"/chatbot"}>👉Ir al chatbot</Link>
-        <Link href={"/mapa"}>👉Ir al mapa</Link>
+        
+        <Link href={"/mapa"}>👉Ir al chatbot</Link>
       </button>
     </div>
   );
