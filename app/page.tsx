@@ -7,6 +7,10 @@ export default function Home() {
 
       <button>
         <Link href={"/chatbot"}>👉Ir al chatbot</Link>
+
+        
+        <Link href={"/userinfo"}>👉Ir al userform</Link>
+        
       </button>
     </div>
   );
