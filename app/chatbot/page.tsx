@@ -25,7 +25,7 @@ import {
   ChatForm,
 } from "@/styles/mui";
 import SendIcon from "@mui/icons-material/Send";
-import EmergencyIcon from "@mui/icons-material/Emergency";
+import PetsIcon from "@mui/icons-material/Pets";
 import { Box } from "@mui/system";
 import Typography from "@mui/material/Typography";
 
@@ -83,7 +83,7 @@ export default function ChatBot() {
           <WelcomeMessage>
             <MessageBox>
               <WelcomeIcons>
-                <EmergencyIcon />
+                <PetsIcon />
               </WelcomeIcons>
               <Typography
                 variant="body1"
@@ -114,7 +114,7 @@ export default function ChatBot() {
               ref={inputRef}
               value={input}
               onChange={handleInputChange}
-              placeholder="Envía tu mensaje...🐈‍⬛"
+              placeholder="Realiza tu consulta...🐈‍⬛"
             />
             <SendContent>
               <SendIcon />
