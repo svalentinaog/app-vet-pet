@@ -6,11 +6,13 @@ export default function Home() {
       <h1>Hola soy la página de inicio</h1>
 
       <button>
-        <Link href={"/chatbot"}>👉Ir al chatbot</Link>
 
-        
-        <Link href={"/userinfo"}>👉Ir al userform</Link>
-        
+        <Link href={"/userinfo"}>👉Ir al userform</Link>        
+        <Link href={"/login"}>Iniciar sesión</Link>
+        <Link href={"/register"}>Registrate</Link>
+        <Link href={"/chatbot"}>Chat de Consultas</Link>
+        <Link href={"/profile"}>Perfil de Usuario</Link>
+        <Link href={"/map"}>Mapa de localización</Link>
       </button>
     </div>
   );
