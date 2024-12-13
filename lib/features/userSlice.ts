@@ -16,7 +16,7 @@ const userSlice = createSlice({
       action: PayloadAction<UserStateUpdate>
     ) => {
       if (state.user) {
-        state.user[action.payload.key] = action.payload.value;
+        (state.user as any)[action.payload.key] = action.payload.value; // cambiar luego :D
       }
     },
   },
