@@ -13,12 +13,17 @@ import {
   FormControlLabel,
   InputLabel,
   MenuItem,
+  Snackbar,
+  SnackbarCloseReason,
+  Alert,
+  Skeleton,
+  Stack,
+  CircularProgress,
 } from "@mui/material";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
 import Link from "next/link";
 import CloseIcon from "@mui/icons-material/Close";
-import { fontWeight } from "@mui/system";
-import { formDataReport } from "../../interfaces/typesReport";
+//import { formDataReport } from "../../interfaces/typesReport";
 
 const theme = createTheme({
   components: {
@@ -99,7 +104,21 @@ export default function Report() {
   const [description, setDescription] = useState<string>("");
   const [age, setAge] = useState<string>("");
   const [images, setImages] = useState<string[]>([]);
-  const [status, setStatus] = useState<string>("perdida");
+  const [status, setStatus] = useState<string>("");
+  const [open, setOpen] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(false);
+  const [successReport, setSuccessReport] = useState<boolean>(false);
+
+  const handleClose = (
+    event?: React.SyntheticEvent | Event,
+    reason?: SnackbarCloseReason
+  ) => {
+    if (reason === "clickaway") {
+      return;
+    }
+
+    setOpen(false);
+  };
 
   const handleImageUpload = (event: ChangeEvent<HTMLInputElement>) => {
     if (event.target.files) {
@@ -127,6 +146,21 @@ export default function Report() {
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    setLoading(true);
+    setTimeout(() => {
+      setSuccessReport(true);
+      setOpen(true);
+      setLoading(false);
+
+      //Restablcer Campos
+      setName("");
+      setPhone("");
+      setLocation("");
+      setDescription("");
+      setAge("");
+      setImages([]);
+      setStatus("");
+    }, 2000);
     const formData = {
       id: crypto.randomUUID().toString(),
       name,
@@ -137,7 +171,7 @@ export default function Report() {
       status,
       images,
     };
-    console.log(formData)
+    console.log(formData);
   };
 
   return (
@@ -162,7 +196,6 @@ export default function Report() {
           justifyContent: "flex-start",
           alignItems: "center",
           flexDirection: "column",
-          gap: "10px",
           width: "70%",
           height: "auto",
         }}
@@ -244,7 +277,14 @@ export default function Report() {
               </Select>
             </FormControl>
           </ThemeProvider>
-          <Box>
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "space-between",
+              width: "100%",
+            }}
+          >
             <Button
               variant="contained"
               component="label"
@@ -253,6 +293,7 @@ export default function Report() {
                 backgroundColor: "#ee3a57",
                 padding: "10px 20px",
                 width: "300px",
+                marginBottom: "20px",
               }}
             >
               Subir imagenes de la mascota
@@ -265,7 +306,16 @@ export default function Report() {
               />
             </Button>
 
-            <Box display="flex" gap={2} flexWrap="wrap" sx={{ marginTop: 2 }}>
+            <Box
+              display="flex"
+              gap={2}
+              flexWrap="wrap"
+              sx={{
+                alignItems: "center",
+                justifyContent: "center",
+                borderRadius: "5px",
+              }}
+            >
               {images.map((image, index) => (
                 <Box key={index} position="relative" width={100} height={100}>
                   <img
@@ -300,12 +350,13 @@ export default function Report() {
             aria-labelledby="status"
             defaultValue="perdida"
             name="status"
-            value={status || "perdida"}
+            value={status || ""}
             onChange={(event) => setStatus(event.target.value)}
             sx={{
               "& .MuiSvgIcon-root": {
                 color: "var(--secondary-color)",
               },
+              margin: 0,
             }}
           >
             <FormControlLabel
@@ -320,7 +371,14 @@ export default function Report() {
               label="Abandonada"
             />
           </RadioGroup>
-          <Button
+          {loading ? 
+            <CircularProgress size={45} sx={{
+              "&.MuiCircularProgress-root":{
+               color:"var(--secondary-color)" 
+              }
+            }} />
+            :
+            <Button
             type="submit"
             variant="contained"
             color="primary"
@@ -333,6 +391,17 @@ export default function Report() {
           >
             Enviar reporte
           </Button>
+          }
+          <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
+            <Alert
+              onClose={handleClose}
+              variant="filled"
+              severity={successReport ? "success" : "error"}
+              sx={{ width: "100%" }}
+            >
+              Reporte enviado correctamente. Gracias por tu contribución.
+            </Alert>
+          </Snackbar>
         </Box>
       </Box>
     </Box>
