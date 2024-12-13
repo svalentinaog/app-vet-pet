@@ -1,5 +1,5 @@
 "use client";
-import React, { ChangeEvent } from "react";
+import React, { ChangeEvent, useState, useEffect } from "react";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import {
   Box,
@@ -12,12 +12,13 @@ import {
   RadioGroup,
   FormControlLabel,
   InputLabel,
-  MenuItem
+  MenuItem,
 } from "@mui/material";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
 import Link from "next/link";
 import CloseIcon from "@mui/icons-material/Close";
 import { fontWeight } from "@mui/system";
+import { formDataReport } from "../../interfaces/typesReport";
 
 const theme = createTheme({
   components: {
@@ -25,14 +26,14 @@ const theme = createTheme({
       styleOverrides: {
         root: {
           "& .MuiInputBase-root": {
-            color: "#ffff",
+            color: "var(--text-color)",
           },
           "& .MuiInputLabel-outlined": {
-            color: "#ffff",
+            color: "var(--text-color)",
             fontWeight: "bold",
           },
           "& .MuiOutlinedInput-notchedOutline": {
-            borderColor: "#ffff", 
+            borderColor: "#ffff",
           },
           "&:hover:not(.Mui-focused)": {
             "& .MuiOutlinedInput-notchedOutline": {
@@ -40,7 +41,7 @@ const theme = createTheme({
             },
           },
           "& .MuiInputLabel-outlined.Mui-focused": {
-            color: "#ffff",
+            color: "var(--text-color)",
           },
           "& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline":
             {
@@ -51,11 +52,11 @@ const theme = createTheme({
     },
     MuiInputLabel: {
       styleOverrides: {
-        root: {          
-          color: "#ffff",
+        root: {
+          color: "var(--text-color)",
           "&.Mui-focused": {
-            color: "#ffff",
-            fontWeight:"bold",
+            color: "var(--text-color)",
+            fontWeight: "bold",
           },
         },
       },
@@ -64,10 +65,10 @@ const theme = createTheme({
       styleOverrides: {
         root: {
           "& .MuiInputBase-root": {
-            color: "#ffff", 
+            color: "var(--text-color)",
           },
           "& .MuiInputLabel-outlined": {
-            color: "#ffff",
+            color: "var(--text-color)",
             fontWeight: "bold",
           },
           "& .MuiOutlinedInput-notchedOutline": {
@@ -79,7 +80,7 @@ const theme = createTheme({
             },
           },
           "&.MuiInputLabel-outlined.Mui-focused": {
-            color: "#ffff", 
+            color: "var(--text-color)",
           },
           "& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline":
             {
@@ -92,29 +93,57 @@ const theme = createTheme({
 });
 
 export default function Report() {
-  const [images, setImages] = React.useState<string[]>([]);
+  const [name, setName] = useState<string>("");
+  const [phone, setPhone] = useState<string>("");
+  const [location, setLocation] = useState<string>("");
+  const [description, setDescription] = useState<string>("");
+  const [age, setAge] = useState<string>("");
+  const [images, setImages] = useState<string[]>([]);
+  const [status, setStatus] = useState<string>("perdida");
 
   const handleImageUpload = (event: ChangeEvent<HTMLInputElement>) => {
     if (event.target.files) {
-      const files = Array.from(event.target.files); 
-      const newImages = files.map((file) => URL.createObjectURL(file)); 
-      setImages((prevImages) => [...prevImages, ...newImages]); 
+      const files = Array.from(event.target.files);
+      const newImages = files.map((file) => URL.createObjectURL(file));
+      setImages((prevImages) => [...prevImages, ...newImages]);
     }
   };
 
   const handleRemoveImage = (index: number) => {
-    setImages((prevImages) => prevImages.filter((_, i) => i !== index)); 
+    setImages((prevImages) => prevImages.filter((_, i) => i !== index));
   };
 
-  const [age, setAge] = React.useState("");
   const handleChange = (event: SelectChangeEvent) => {
-    setAge(event.target.value as string);
+    setAge(event.target.value);
+  };
+
+  // Handler para el cambio en el texto
+  const handleTextChange =
+    (setter: React.Dispatch<React.SetStateAction<string>>) =>
+    (event: ChangeEvent<HTMLInputElement>) =>
+      setter(event.target.value);
+
+  console.log(name, phone, location, description, age, status);
+
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const formData = {
+      id: crypto.randomUUID().toString(),
+      name,
+      phone,
+      location,
+      description,
+      age,
+      status,
+      images,
+    };
+    console.log(formData)
   };
 
   return (
     <Box
       sx={{
-        color: "#ffff",
+        color: "var(--text-color)",
         padding: "20px",
         borderRadius: "10px",
         display: "flex",
@@ -125,7 +154,7 @@ export default function Report() {
     >
       <Box
         sx={{
-          backgroundColor: "#25273e",
+          backgroundColor: "var(--primary-color)",
           paddingX: 20,
           paddingY: 5,
           borderRadius: "20px",
@@ -144,14 +173,13 @@ export default function Report() {
         <p>
           Por favor, complete el formulario para reportar la mascota perdida o
           abandonada. Los datos proporcionados en este formulario serán
-          utilizados únicamente para reportar el problema y podrán ser
-          utilizados posteriormente por el equipo de la veterinaria para atender
-          el caso.
+          utilizados únicamente para reportar el problema.
         </p>
 
         {/* Formulario */}
         <Box
           component="form"
+          onSubmit={handleSubmit}
           sx={{
             display: "flex",
             flexDirection: "column",
@@ -165,18 +193,24 @@ export default function Report() {
               fullWidth
               label="Nombre del reportante"
               variant="outlined"
+              value={name}
+              onChange={handleTextChange(setName)}
               required
             />
             <TextField
               fullWidth
               label="Teléfono de contacto"
               variant="outlined"
+              value={phone}
+              onChange={handleTextChange(setPhone)}
               required
             />
             <TextField
               fullWidth
               label="Ubicación de la mascota"
               variant="outlined"
+              value={location}
+              onChange={handleTextChange(setLocation)}
               required
             />
             <TextField
@@ -185,21 +219,28 @@ export default function Report() {
               variant="outlined"
               multiline
               rows={4}
+              value={description}
+              onChange={handleTextChange(setDescription)}
               required
             />
             <FormControl fullWidth>
-              <InputLabel id="demo-simple-select-label">Edad de la mascota</InputLabel>
+              <InputLabel id="demo-simple-select-label">
+                Edad de la mascota
+              </InputLabel>
               <Select
                 labelId="demo-simple-select-label"
                 id="demo-simple-select"
                 value={age}
                 label="age"
                 onChange={handleChange}
-                style={{ color: "#fff" }}
+                style={{ color: "var(--text-color)" }}
+                required
               >
-                <MenuItem value={3}>Menor de 3 años</MenuItem>
-                <MenuItem value={5}>Mayor que 3 y menor que 5 años</MenuItem>
-                <MenuItem value={6}>Mayor que 5 años</MenuItem>
+                <MenuItem value="Menor de 3 años">Menor de 3 años</MenuItem>
+                <MenuItem value="Mayor a 3 años y menor que 6 años">
+                  Mayor a 3 años y menor que 6 años
+                </MenuItem>
+                <MenuItem value="Mayor de 6 años">Mayor de 6 años</MenuItem>
               </Select>
             </FormControl>
           </ThemeProvider>
@@ -256,12 +297,14 @@ export default function Report() {
           </Box>
           <p>¿Las mascota esta perdida o abandonada?</p>
           <RadioGroup
-            aria-labelledby="demo-radio-buttons-group-label"
+            aria-labelledby="status"
             defaultValue="perdida"
-            name="radio-buttons-group"
+            name="status"
+            value={status || "perdida"}
+            onChange={(event) => setStatus(event.target.value)}
             sx={{
               "& .MuiSvgIcon-root": {
-                color: "#ee3a57",
+                color: "var(--secondary-color)",
               },
             }}
           >
@@ -283,7 +326,7 @@ export default function Report() {
             color="primary"
             sx={{
               alignSelf: "center",
-              backgroundColor: "#ee3a57",
+              backgroundColor: "var(--secondary-color)",
               padding: "10px 20px",
               width: "300px",
             }}
