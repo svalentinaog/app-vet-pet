@@ -1,5 +1,5 @@
   //TODO Reporte para la lista de historial:
-  export interface Report {
+  export interface formDataReport {
     id: string;                   
     name: string;
     phone: string,
