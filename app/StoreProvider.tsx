@@ -10,7 +10,7 @@ export default function StoreProvider({
 }) {
   const storeRef = useRef<AppStore>();
   if (!storeRef.current) {
-    // Crea la instancia de la store la primera vez que se renderiza
+    // Se crea la instancia de la store la primera vez que se renderiza
     storeRef.current = makeStore();
   }
 
