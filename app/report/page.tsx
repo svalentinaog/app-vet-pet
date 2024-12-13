@@ -296,7 +296,7 @@ export default function Report() {
                 marginBottom: "20px",
               }}
             >
-              Subir imagenes de la mascota
+              Subir fotos de la mascota
               <input
                 type="file"
                 accept="image/*"
