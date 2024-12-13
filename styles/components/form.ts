@@ -7,7 +7,6 @@ import { Grid } from "@mui/system";
 export const Fields = styled(Box)`
   font-family: var(--font-poppins);
   text-align: center;
-  color: var(--light-color);
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -27,7 +26,7 @@ export const Fields = styled(Box)`
 `;
 
 export const FormContainer = styled(Grid)`
-  color: var(--light-color);
+  color: var(--title-color);
   font-weight: normal;
   display: flex;
   flex-direction: column;
@@ -69,15 +68,14 @@ export const FormContainerTwo = styled(Grid)`
 export const InputTextField = styled(TextField)`
   font-family: var(--font-poppins);
   width: 100%;
-  border-radius: 16px;
-  color: var(--text-color);
+  border-radius: 100px;
 
   & .MuiOutlinedInput-root {
-    border-radius: 16px;
+    border-radius: 100px;
   }
 
   & .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline {
-    border-color: var(--secondary-color);
+    border-color: var(--primary-color);
   }
 
   & .MuiInputLabel-root {
@@ -93,14 +91,14 @@ export const InputTextField = styled(TextField)`
 // Entrada de texto para contraseñas
 export const InputPassField = styled(FormControl)`
   font-family: var(--font-poppins);
-  border-radius: 16px;
+  border-radius: 100px;
 
   & .MuiOutlinedInput-root {
-    border-radius: 16px;
+    border-radius: 100px;
   }
 
   & .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline {
-    border-color: var(--secondary-color);
+    border-color: var(--primary-color);
   }
 
   & .MuiInputLabel-root {
@@ -115,7 +113,7 @@ export const InputPassField = styled(FormControl)`
 
 export const FormActions = styled(Box)`
 font-family: var(--font-poppins);
-  color: var(--gray-color);
+  color: var(--title-color);
   display: flex;
   flex-direction: column;
   justify-content: center;

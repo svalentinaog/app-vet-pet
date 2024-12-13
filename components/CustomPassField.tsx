@@ -43,9 +43,9 @@ export default function CustomPassField({
               onMouseDown={handleMouseDownPassword}
             >
               {showPassword ? (
-                <VisibilityOff sx={{ color: "var(--lilac)" }} />
+                <VisibilityOff sx={{ color: "var(--subprimary-color)" }} />
               ) : (
-                <Visibility sx={{ color: "var(--lilac)" }} />
+                <Visibility sx={{ color: "var(--subprimary-color)" }} />
               )}
             </IconButton>
           </InputAdornment>
