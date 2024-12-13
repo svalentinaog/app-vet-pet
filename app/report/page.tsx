@@ -1,15 +1,23 @@
 "use client";
 import React, { ChangeEvent } from "react";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-import { Box, TextField, Button, Typography, FormControl, IconButton } from "@mui/material";
-import Radio from "@mui/material/Radio";
-import RadioGroup from "@mui/material/RadioGroup";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import InputLabel from "@mui/material/InputLabel";
-import MenuItem from "@mui/material/MenuItem";
+import {
+  Box,
+  TextField,
+  Button,
+  Typography,
+  FormControl,
+  IconButton,
+  Radio,
+  RadioGroup,
+  FormControlLabel,
+  InputLabel,
+  MenuItem
+} from "@mui/material";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
 import Link from "next/link";
 import CloseIcon from "@mui/icons-material/Close";
+import { fontWeight } from "@mui/system";
 
 const theme = createTheme({
   components: {
@@ -17,14 +25,14 @@ const theme = createTheme({
       styleOverrides: {
         root: {
           "& .MuiInputBase-root": {
-            color: "#ffff", // Color del texto en el campo
+            color: "#ffff",
           },
           "& .MuiInputLabel-outlined": {
-            color: "#ffff", // Color del label normal
+            color: "#ffff",
             fontWeight: "bold",
           },
           "& .MuiOutlinedInput-notchedOutline": {
-            borderColor: "#ffff", // Color del borde normal
+            borderColor: "#ffff", 
           },
           "&:hover:not(.Mui-focused)": {
             "& .MuiOutlinedInput-notchedOutline": {
@@ -32,7 +40,7 @@ const theme = createTheme({
             },
           },
           "& .MuiInputLabel-outlined.Mui-focused": {
-            color: "#ffff", // Color del label al enfocar
+            color: "#ffff",
           },
           "& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline":
             {
@@ -43,11 +51,11 @@ const theme = createTheme({
     },
     MuiInputLabel: {
       styleOverrides: {
-        root: {
-          // Color por defecto
+        root: {          
           color: "#ffff",
           "&.Mui-focused": {
-            color: "#ffff", // Color cuando está enfocado
+            color: "#ffff",
+            fontWeight:"bold",
           },
         },
       },
@@ -56,14 +64,14 @@ const theme = createTheme({
       styleOverrides: {
         root: {
           "& .MuiInputBase-root": {
-            color: "#ffff", // Color del texto en el campo
+            color: "#ffff", 
           },
           "& .MuiInputLabel-outlined": {
-            color: "#ffff", // Color del label normal
+            color: "#ffff",
             fontWeight: "bold",
           },
           "& .MuiOutlinedInput-notchedOutline": {
-            borderColor: "#ffff", // Color del borde normal
+            borderColor: "#ffff",
           },
           "&:hover:not(.Mui-focused)": {
             "& .MuiOutlinedInput-notchedOutline": {
@@ -71,7 +79,7 @@ const theme = createTheme({
             },
           },
           "&.MuiInputLabel-outlined.Mui-focused": {
-            color: "#ffff", // Color del label al enfocar
+            color: "#ffff", 
           },
           "& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline":
             {
@@ -88,14 +96,14 @@ export default function Report() {
 
   const handleImageUpload = (event: ChangeEvent<HTMLInputElement>) => {
     if (event.target.files) {
-      const files = Array.from(event.target.files); // Convierte los archivos en un array
-      const newImages = files.map((file) => URL.createObjectURL(file)); // Crea una URL para previsualización
-      setImages((prevImages) => [...prevImages, ...newImages]); // Agrega las nuevas imágenes al array existente
+      const files = Array.from(event.target.files); 
+      const newImages = files.map((file) => URL.createObjectURL(file)); 
+      setImages((prevImages) => [...prevImages, ...newImages]); 
     }
   };
 
   const handleRemoveImage = (index: number) => {
-    setImages((prevImages) => prevImages.filter((_, i) => i !== index)); // Elimina una imagen del array
+    setImages((prevImages) => prevImages.filter((_, i) => i !== index)); 
   };
 
   const [age, setAge] = React.useState("");
@@ -118,17 +126,20 @@ export default function Report() {
       <Box
         sx={{
           backgroundColor: "#25273e",
-          paddingX: 40,
+          paddingX: 20,
+          paddingY: 5,
           borderRadius: "20px",
           display: "flex",
           justifyContent: "flex-start",
           alignItems: "center",
           flexDirection: "column",
           gap: "10px",
-          width: "90%",
+          width: "70%",
           height: "auto",
         }}
       >
+        <Link href={"/"}>👉Volver al home</Link>
+
         <h1>Reporte de mascota perdida o abandonada.</h1>
         <p>
           Por favor, complete el formulario para reportar la mascota perdida o
@@ -177,7 +188,7 @@ export default function Report() {
               required
             />
             <FormControl fullWidth>
-              <InputLabel id="demo-simple-select-label">Edad</InputLabel>
+              <InputLabel id="demo-simple-select-label">Edad de la mascota</InputLabel>
               <Select
                 labelId="demo-simple-select-label"
                 id="demo-simple-select"
@@ -244,28 +255,28 @@ export default function Report() {
             </Box>
           </Box>
           <p>¿Las mascota esta perdida o abandonada?</p>
-            <RadioGroup
-              aria-labelledby="demo-radio-buttons-group-label"
-              defaultValue="perdida"
-              name="radio-buttons-group"
-              sx={{
-                "& .MuiSvgIcon-root": {
-                  color: "#ee3a57",
-                },
-              }}
-            >
-              <FormControlLabel
-                value="perdida"
-                color="secondary"
-                control={<Radio />}
-                label="Perdida"
-              />
-              <FormControlLabel
-                value="abandonada"
-                control={<Radio />}
-                label="Abandonada"
-              />
-            </RadioGroup>
+          <RadioGroup
+            aria-labelledby="demo-radio-buttons-group-label"
+            defaultValue="perdida"
+            name="radio-buttons-group"
+            sx={{
+              "& .MuiSvgIcon-root": {
+                color: "#ee3a57",
+              },
+            }}
+          >
+            <FormControlLabel
+              value="perdida"
+              color="secondary"
+              control={<Radio />}
+              label="Perdida"
+            />
+            <FormControlLabel
+              value="abandonada"
+              control={<Radio />}
+              label="Abandonada"
+            />
+          </RadioGroup>
           <Button
             type="submit"
             variant="contained"
@@ -280,8 +291,6 @@ export default function Report() {
             Enviar reporte
           </Button>
         </Box>
-
-        <Link href={"/"}>👉Volver al home</Link>
       </Box>
     </Box>
   );
