@@ -1,29 +1,27 @@
-import { createSlice, PayloadAction  } from "@reduxjs/toolkit";
-import { UserState, User } from "../../interfaces/typesUser";
-
-const initialState: UserState = {
-  user: null,
-  isAuthenticated: false,
-}
-
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import UserState, { IUserState, UserStateUpdate } from "./userState.types";
 
 const userSlice = createSlice({
   name: "user",
-  initialState,
+  initialState: UserState,
   reducers: {
-    login(state, action: PayloadAction<User>) {
-      state.user = action.payload
-      state.isAuthenticated = true;
+    setAuthenticated: (state: IUserState, action: PayloadAction<boolean>) => {
+      state.isAuthenticated = action.payload;
     },
-    logout(state) {
-      state.user = null; 
-      state.isAuthenticated = false;
+    setUser: (state: IUserState, action: PayloadAction<IUserState["user"]>) => {
+      state.user = action.payload;
     },
-    updateProfile(state, action) {
-      state.user = { ...state.user, ...action.payload }; // Actualizar solo los campos proporcionados
+    updateUserStateByKey: (
+      state: IUserState,
+      action: PayloadAction<UserStateUpdate>
+    ) => {
+      if (state.user) {
+        state.user[action.payload.key] = action.payload.value;
+      }
     },
   },
 });
 
-export const { login, logout, updateProfile } = userSlice.actions;
+export const { updateUserStateByKey, setAuthenticated, setUser } =
+  userSlice.actions;
 export default userSlice.reducer;
