@@ -118,6 +118,7 @@ export default function Navbar() {
           {/* Navbar Tabs (Desktop) */}
           <Box
             sx={{
+              width: "50%",
               display: { xs: "none", md: "flex" },
               alignItems: "center",
               gap: 6,
