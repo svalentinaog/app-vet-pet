@@ -2,7 +2,7 @@
 
 import { MainButton } from "@/styles/mui";
 import { Typography } from "@mui/material";
-import { Box, Container } from "@mui/system";
+import { Box } from "@mui/system";
 import React from "react";
 
 function Entry() {
@@ -29,57 +29,56 @@ function Entry() {
           display: "flex",
           justifyContent: "center",
           alignItems: "center",
-          padding: { xs: "8em 1em 6em", sm: "5em", md: "5em" },
+          padding: { xs: "3em", sm: "5em", md: "15em" },
         }}
       >
-        <Container maxWidth="xl">
+        <Box
+          sx={{
+            width: { xs: "90%", sm: "60%", md: "50%" },
+            display: "flex",
+            flexDirection: "column",
+            gap: 4,
+            justifyContent: "flex-start",
+          }}
+        >
           <Box
             sx={{
-              width: { xs: "90%", sm: "60%", md: "50%" },
               display: "flex",
               flexDirection: "column",
-              gap: 4,
-              justifyContent: "flex-start",
+              gap: 2,
             }}
           >
-            <Box
+            <Typography
+              variant="h3"
               sx={{
-                display: "flex",
-                flexDirection: "column",
-                gap: 2,
+                lineHeight: "1.5em",
+                fontWeight: "bold",
+                color: "var(--light-color)",
+                fontSize: { xs: "1.5em", sm: "2em", md: "2.5em" },
               }}
             >
-              <Typography
-                variant="h3"
-                sx={{
-                  lineHeight: "1.5em",
-                  fontWeight: "bold",
-                  color: "var(--light-color)",
-                  fontSize: { xs: "1.5em", sm: "2em", md: "2.5em" },
-                }}
-              >
-                Bienvenido a VetPet <br />
-                ¡Nos encanta tenerte aquí!
-              </Typography>
-            </Box>
-            <MainButton
-              sx={{
-                maxWidth: { xs: "150px", sm: "300px", md: "300px" },
-                fontSize: { xs: "1em", sm: "1.5em" },
-              }}
-            >
-              Ver Amigos
-            </MainButton>
+              Bienvenido a VetPet <br />
+              ¡Nos encanta tenerte aquí!
+            </Typography>
           </Box>
-          <Box
+          <MainButton
+            href="#functions"
             sx={{
-              width: { xs: "0", sm: "50%" },
-              display: { xs: "none", sm: "block" },
+              maxWidth: { xs: "150px", sm: "300px", md: "300px" },
+              fontSize: { xs: "1em", sm: "1.5em" },
             }}
           >
-            {/* Espacio vacío para division */}
-          </Box>
-        </Container>
+            Conoce más
+          </MainButton>
+        </Box>
+        <Box
+          sx={{
+            width: { xs: "0", sm: "50%" },
+            display: { xs: "none", sm: "block" },
+          }}
+        >
+          {/* Espacio vacío para division */}
+        </Box>
       </Box>
     </Box>
   );

@@ -5,7 +5,7 @@ export const MainButton = styled(Button)({
   width: "100%",
   color: "white",
   background: "var(--secondary-color)",
-  textTransform: "capitalize",
+  textTransform: "initial",
   borderRadius: "100px",
   padding: 16,
   position: "initial",
