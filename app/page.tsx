@@ -1,9 +1,11 @@
+"use client";
 import Entry from "@/components/landingPage/Entry";
+import BaseLayout from "@/components/layout/BaseLayout";
 // import Link from "next/link";
 
 export default function Home() {
   return (
-    <div>
+    <BaseLayout>
       <Entry />
       {/* <h1>Hola soy la página de inicio</h1>
 
@@ -14,6 +16,6 @@ export default function Home() {
         <Link href={"/profile"}>Perfil de Usuario</Link>
         <Link href={"/map"}>Mapa de localización</Link>
       </button> */}
-    </div>
+    </BaseLayout>
   );
 }
