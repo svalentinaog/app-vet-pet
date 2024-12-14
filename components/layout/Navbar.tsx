@@ -23,6 +23,7 @@ function LinkTab(props: LinkTabProps) {
           props.href === window.location.pathname ? "page" : undefined
         }
         {...props}
+        sx={{ color: "white" }}
       />
     </Link>
   );
@@ -36,7 +37,14 @@ export default function Navbar() {
   };
 
   return (
-    <AppBar position="fixed" sx={{ background: "transparent", padding: "1em" }}>
+    <AppBar
+      position="fixed"
+      sx={{
+        background: "transparent",
+        padding: "1em",
+        boxShadow: "inherit",
+      }}
+    >
       <Container maxWidth="xl">
         <Toolbar
           disableGutters
@@ -50,7 +58,6 @@ export default function Navbar() {
           <Box>
             <AdbIcon />
           </Box>
-
           <Box
             sx={{
               width: "50%",

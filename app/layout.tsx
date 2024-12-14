@@ -4,6 +4,8 @@ import { Toaster } from "sonner";
 import { Poppins } from "next/font/google";
 import StoreProvider from "./StoreProvider";
 import BaseLayout from "@/components/layout/BaseLayout";
+import { ThemeProvider } from "@mui/system";
+import { theme } from "@/styles/theme";
 
 export const metadata: Metadata = {
   title: "VETPET",
@@ -20,13 +22,15 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={poppins.className}>
-      <body className={poppins.className}>
-        <BaseLayout>
-          <Toaster position="top-center" richColors />
-          <StoreProvider>{children}</StoreProvider>
-        </BaseLayout>
-      </body>
-    </html>
+    <ThemeProvider theme={theme}>
+      <html lang="en" className={poppins.className}>
+        <body className={poppins.className}>
+          <BaseLayout>
+            <Toaster position="top-center" richColors />
+            <StoreProvider>{children}</StoreProvider>
+          </BaseLayout>
+        </body>
+      </html>
+    </ThemeProvider>
   );
 }
