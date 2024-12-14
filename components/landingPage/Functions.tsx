@@ -34,9 +34,11 @@ export default function Functions() {
   return (
     <Box
       sx={{
-        height: "70vh",
+        height: "auto",
+        minHeight: "70vh",
         alignContent: "center",
         background: "var(--gradient-lineal)",
+        paddingY: { xs: "3em", sm: "5em" },
       }}
       id="functions"
     >
@@ -44,24 +46,23 @@ export default function Functions() {
         <Box>
           <Typography
             variant="h3"
-            sx={{ color: "var(--title-color)", marginBottom: "2em" }}
+            sx={{
+              color: "var(--title-color)",
+              marginBottom: { xs: "1.5em", sm: "2em" },
+              fontSize: { xs: "1.5em", sm: "2.5em" },
+            }}
           >
             Funcionalidades clave
           </Typography>
         </Box>
         <Grid container spacing={4}>
           {elements.map((element, index) => (
-            <Grid
-              item
-              key={index}
-              xs={12} // Ajustar para pantallas pequeñas
-              sm={4} // 3 columnas en pantallas medianas
-            >
+            <Grid item key={index} xs={12} sm={4}>
               <Box
                 sx={{
                   display: "flex",
                   flexDirection: "row",
-                  gap: 2,
+                  gap: { xs: 1, sm: 2 },
                   alignItems: "center",
                 }}
               >
@@ -69,7 +70,7 @@ export default function Functions() {
                   sx={{
                     backgroundColor: element.bgcolor,
                     color: "white",
-                    padding: 3,
+                    padding: { xs: 2, sm: 3 },
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "center",
@@ -80,18 +81,22 @@ export default function Functions() {
                 </Box>
                 <Box>
                   <Typography
-                    variant="h5"
+                    variant="h6"
                     sx={{
                       color: "var(--title-color)",
                       marginBottom: "0.25em",
                       fontWeight: "bold",
+                      fontSize: { xs: "1em", sm: "1.5em" },
                     }}
                   >
                     {element.title}
                   </Typography>
                   <Typography
-                    variant="body1"
-                    sx={{ color: "var(--text-color)" }}
+                    variant="body2"
+                    sx={{
+                      color: "var(--text-color)",
+                      fontSize: { xs: "0.75em", sm: "1em" },
+                    }}
                   >
                     {element.description}
                   </Typography>

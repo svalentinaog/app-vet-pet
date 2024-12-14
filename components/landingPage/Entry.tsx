@@ -11,7 +11,7 @@ function Entry() {
       sx={{
         width: "100%",
         background: "var(--gradient-round)",
-        height: { xs: "auto", sm: "90vh", md: "90vh" },
+        height: { xs: "50vh", sm: "90vh", md: "90vh" },
       }}
     >
       <Box
@@ -29,7 +29,7 @@ function Entry() {
           display: "flex",
           justifyContent: "center",
           alignItems: "center",
-          padding: { xs: "3em", sm: "5em", md: "15em" },
+          padding: { xs: "6em 0 4em", sm: "5em", md: "15em" },
         }}
       >
         <Box
@@ -37,7 +37,7 @@ function Entry() {
             width: { xs: "90%", sm: "60%", md: "50%" },
             display: "flex",
             flexDirection: "column",
-            gap: 4,
+            gap: { xs: 2, md: 4 },
             justifyContent: "flex-start",
           }}
         >

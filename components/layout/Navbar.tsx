@@ -25,9 +25,9 @@ interface LinkTabProps {
 
 export default function Navbar() {
   const pathname = usePathname();
-
   const [value, setValue] = React.useState(0);
   const [drawerOpen, setDrawerOpen] = React.useState(false);
+  const [scrolled, setScrolled] = React.useState(false); // Estado para controlar el scroll
 
   const handleChange = (_event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
@@ -90,10 +90,33 @@ export default function Navbar() {
     </Box>
   );
 
+  // Función para monitorear el scroll y aplicar el efecto blur
+  React.useEffect(() => {
+    const handleScroll = () => {
+      if (window.scrollY > 50) {
+        setScrolled(true); // Activa el fondo blur
+      } else {
+        setScrolled(false); // Desactiva el fondo blur
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll);
+
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
+
   return (
     <AppBar
       position="fixed"
-      sx={{ background: "transparent", padding: "1em", boxShadow: "inherit" }}
+      sx={{
+        background: scrolled ? "rgba(0, 0, 0, 0.1)" : "transparent",
+        padding: "1em 0 1em",
+        boxShadow: scrolled ? "0 1px 1px rgba(255, 255, 255, 0.1)" : "inherit",
+        backdropFilter: scrolled ? "blur(2px)" : "none",
+        transition: "background 0.3s, box-shadow 0.3s, backdrop-filter 0.3s",
+      }}
     >
       <Container maxWidth="xl">
         <Toolbar
@@ -127,7 +150,7 @@ export default function Navbar() {
             <Tabs
               value={value}
               onChange={handleChange}
-              textColor="secondary"
+              textColor="primary"
               indicatorColor="secondary"
             >
               <LinkTab label="Inicio" href="/" />
