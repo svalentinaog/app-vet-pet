@@ -34,11 +34,10 @@ export default function Functions() {
   return (
     <Box
       sx={{
-        height: "auto",
-        minHeight: "70vh",
+        height: { xs: "50vh", md: "70vh" },
+
         alignContent: "center",
         background: "var(--gradient-lineal)",
-        paddingY: { xs: "3em", sm: "5em" },
       }}
       id="functions"
     >
@@ -50,6 +49,7 @@ export default function Functions() {
               color: "var(--title-color)",
               marginBottom: { xs: "1.5em", sm: "2em" },
               fontSize: { xs: "1.5em", sm: "2.5em" },
+              fontWeight: "bold",
             }}
           >
             Funcionalidades clave
@@ -62,7 +62,7 @@ export default function Functions() {
                 sx={{
                   display: "flex",
                   flexDirection: "row",
-                  gap: { xs: 1, sm: 2 },
+                  gap: 2,
                   alignItems: "center",
                 }}
               >
@@ -70,7 +70,7 @@ export default function Functions() {
                   sx={{
                     backgroundColor: element.bgcolor,
                     color: "white",
-                    padding: { xs: 2, sm: 3 },
+                    padding: 3,
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "center",
