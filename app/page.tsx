@@ -1,11 +1,12 @@
 import Entry from "@/components/landingPage/Entry";
 import ReportedAnimals from "@/components/landingPage/ReportedAnimals";
 import Functions from "@/components/landingPage/Functions";
+import BaseLayout from "@/components/layout/BaseLayout";
 // import Link from "next/link";
 
 export default function Home() {
   return (
-    <>
+    <BaseLayout>
       <Entry />
       <Functions />
       <ReportedAnimals />
@@ -18,6 +19,6 @@ export default function Home() {
         <Link href={"/profile"}>Perfil de Usuario</Link>
         <Link href={"/map"}>Mapa de localización</Link>
       </button> */}
-    </>
+    </BaseLayout>
   );
 }
