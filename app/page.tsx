@@ -1,10 +1,14 @@
 import Entry from "@/components/landingPage/Entry";
+import ReportedAnimals from "@/components/landingPage/ReportedAnimals";
+import Functions from "@/components/landingPage/Functions";
 // import Link from "next/link";
 
 export default function Home() {
   return (
-    <div>
+    <>
       <Entry />
+      <Functions />
+      <ReportedAnimals />
       {/* <h1>Hola soy la página de inicio</h1>
 
       <button>
@@ -14,6 +18,6 @@ export default function Home() {
         <Link href={"/profile"}>Perfil de Usuario</Link>
         <Link href={"/map"}>Mapa de localización</Link>
       </button> */}
-    </div>
+    </>
   );
 }

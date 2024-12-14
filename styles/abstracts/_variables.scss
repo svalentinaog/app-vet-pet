@@ -18,6 +18,7 @@ $light-color: #E8EAFF;
 $gray-color: #a1a1aa;
 /// @type Color
 $gradient-round: radial-gradient(circle, #aeb4e2, #8d95d6);
+$gradient-lineal: linear-gradient(to bottom, #EAEDFF, #FFFFFF);
 
 :root {
   --bg-color: #{$bg-color};
@@ -30,5 +31,6 @@ $gradient-round: radial-gradient(circle, #aeb4e2, #8d95d6);
   --light-color: #{$light-color};
   --gray-color: #{$gray-color};
   --gradient-round: #{$gradient-round};
+  --gradient-lineal: #{$gradient-lineal};
   --bg-paws: url('/assets/paws.svg');
 }

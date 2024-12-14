@@ -62,12 +62,13 @@ function Entry() {
             </Typography>
           </Box>
           <MainButton
+            href="#functions"
             sx={{
               maxWidth: { xs: "150px", sm: "300px", md: "300px" },
               fontSize: { xs: "1em", sm: "1.5em" },
             }}
           >
-            Ver Amigos
+            Conoce más
           </MainButton>
         </Box>
         <Box
