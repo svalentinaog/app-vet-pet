@@ -34,7 +34,8 @@ export default function Functions() {
   return (
     <Box
       sx={{
-        height: "70vh",
+        height: { xs: "50vh", md: "70vh" },
+
         alignContent: "center",
         background: "var(--gradient-lineal)",
       }}
@@ -44,19 +45,19 @@ export default function Functions() {
         <Box>
           <Typography
             variant="h3"
-            sx={{ color: "var(--title-color)", marginBottom: "2em" }}
+            sx={{
+              color: "var(--title-color)",
+              marginBottom: { xs: "1.5em", sm: "2em" },
+              fontSize: { xs: "1.5em", sm: "2.5em" },
+              fontWeight: "bold",
+            }}
           >
             Funcionalidades clave
           </Typography>
         </Box>
         <Grid container spacing={4}>
           {elements.map((element, index) => (
-            <Grid
-              item
-              key={index}
-              xs={12} // Ajustar para pantallas pequeñas
-              sm={4} // 3 columnas en pantallas medianas
-            >
+            <Grid item key={index} xs={12} sm={4}>
               <Box
                 sx={{
                   display: "flex",
@@ -80,18 +81,22 @@ export default function Functions() {
                 </Box>
                 <Box>
                   <Typography
-                    variant="h5"
+                    variant="h6"
                     sx={{
                       color: "var(--title-color)",
                       marginBottom: "0.25em",
                       fontWeight: "bold",
+                      fontSize: { xs: "1em", sm: "1.5em" },
                     }}
                   >
                     {element.title}
                   </Typography>
                   <Typography
-                    variant="body1"
-                    sx={{ color: "var(--text-color)" }}
+                    variant="body2"
+                    sx={{
+                      color: "var(--text-color)",
+                      fontSize: { xs: "0.75em", sm: "1em" },
+                    }}
                   >
                     {element.description}
                   </Typography>
