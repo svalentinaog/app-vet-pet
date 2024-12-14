@@ -82,7 +82,9 @@ export default function Navbar() {
           </ListItem>
         ))}
         <ListItem>
-          <MainButton fullWidth>INICIAR SESIÓN</MainButton>
+          <MainButton fullWidth href="/login">
+            INICIAR SESIÓN
+          </MainButton>
         </ListItem>
       </List>
     </Box>
@@ -119,7 +121,7 @@ export default function Navbar() {
               width: "50%",
               display: { xs: "none", md: "flex" },
               alignItems: "center",
-              gap: 6,
+              gap: 4,
             }}
           >
             <Tabs
@@ -134,7 +136,9 @@ export default function Navbar() {
               <LinkTab label="Localizar" href="/map" />
             </Tabs>
 
-            <MainButton sx={{ maxWidth: "200px" }}>INICIAR SESIÓN</MainButton>
+            <MainButton sx={{ maxWidth: "200px" }} href="/login">
+              INICIAR SESIÓN
+            </MainButton>
           </Box>
 
           {/* Menu de Hamburguesa (Mobile) */}
