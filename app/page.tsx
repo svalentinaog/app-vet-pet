@@ -1,5 +1,5 @@
 import Entry from "@/components/landingPage/Entry";
-import ReportedAnimals from "@/components/landingPage/ReportedAnimals";
+import Reports from "@/components/landingPage/Reports";
 import Functions from "@/components/landingPage/Functions";
 import BaseLayout from "@/components/layout/BaseLayout";
 // import Link from "next/link";
@@ -9,7 +9,7 @@ export default function Home() {
     <BaseLayout>
       <Entry />
       <Functions />
-      <ReportedAnimals />
+      <Reports />
       {/* <h1>Hola soy la página de inicio</h1>
 
       <button>

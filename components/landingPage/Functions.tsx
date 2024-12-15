@@ -69,7 +69,7 @@ export default function Functions() {
                 <Box
                   sx={{
                     backgroundColor: element.bgcolor,
-                    color: "white",
+                    color: "rgba(0, 0, 0, 0.1)",
                     padding: 3,
                     display: "flex",
                     alignItems: "center",

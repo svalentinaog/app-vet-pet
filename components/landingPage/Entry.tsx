@@ -54,11 +54,10 @@ function Entry() {
                 lineHeight: "1.5em",
                 fontWeight: "bold",
                 color: "var(--light-color)",
-                fontSize: { xs: "1.5em", sm: "2em", md: "2.5em" },
+                fontSize: { xs: "1.5em", sm: "2em", md: "3em" },
               }}
             >
-              Bienvenido a VetPet <br />
-              ¡Nos encanta tenerte aquí!
+              Bienvenido a VetPet ¡Nos encanta tenerte aquí!
             </Typography>
           </Box>
           <MainButton
