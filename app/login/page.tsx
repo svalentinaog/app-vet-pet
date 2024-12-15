@@ -1,11 +1,50 @@
+"use client";
+
+import CustomPassField from "@/components/CustomPassField";
+import CustomTextField from "@/components/CustomTextField";
+import useUserAuthentication from "@/hooks/useUserAuthentication";
+import { FormContainer, Fields, FormActions, MainButton } from "@/styles/mui";
+import { Typography } from "@mui/material";
 import Link from "next/link";
 
 export default function Login() {
-  return (
-    <div>
-      <h1>Formulario de Iniciar Sesión</h1>
+  const {
+    user: { email, password },
+    methods: { updateField },
+  } = useUserAuthentication();
 
-      <Link href={"/"}>👉Volver al home</Link>
-    </div>
+  return (
+    <FormContainer size={{ sm: 6, xs: 12 }}>
+      <Typography variant="h4" sx={{ fontWeight: 700 }}>
+        Iniciar sesión
+      </Typography>
+      <Fields>
+        <CustomTextField
+          label="Correo electrónico"
+          value={email}
+          onChange={updateField("email")}
+        />
+
+        <CustomPassField
+          label="Contraseña"
+          value={password}
+          onChange={updateField("password")}
+        />
+      </Fields>
+      <FormActions>
+        {/* Botón de iniciar sesión */}
+        <MainButton
+          onClick={() => {
+            console.log("Iniciar sesión");
+          }}
+        >
+          Acceder
+        </MainButton>
+        {/* Enlace a la página de registro */}
+        <Typography variant="subtitle1" sx={{ lineHeight: "normal" }}>
+          ¿No tienes una cuenta? <Link href="/register">Registrate</Link>
+        </Typography>
+      </FormActions>
+    </FormContainer>
   );
 }

@@ -1,17 +1,25 @@
-import Link from "next/link";
+import Entry from "@/components/landingPage/Entry";
+import Reports from "@/components/landingPage/Reports";
+import Functions from "@/components/landingPage/Functions";
+import BaseLayout from "@/components/layout/BaseLayout";
+import { Box } from "@mui/system";
+import Mission from "@/components/landingPage/Mission";
 
 export default function Home() {
   return (
-    <div>
-      <h1>Hola soy la página de inicio</h1>
-
-      <button>
-        <Link href={"/login"}>Iniciar sesión</Link>
-        <Link href={"/register"}>Registrate</Link>
-        <Link href={"/chatbot"}>Chat de Consultas</Link>
-        <Link href={"/profile"}>Perfil de Usuario</Link>
-        <Link href={"/map"}>Mapa de localización</Link>
-      </button>
-    </div>
+    <BaseLayout>
+      <Entry />
+      <Box
+        display="flex"
+        flexDirection="column"
+        sx={{
+          gap: { xs: 10, md: 4 },
+        }}
+      >
+        <Functions />
+        <Reports />
+        <Mission />
+      </Box>
+    </BaseLayout>
   );
 }

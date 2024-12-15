@@ -3,6 +3,8 @@ import { Metadata } from "next";
 import { Toaster } from "sonner";
 import { Poppins } from "next/font/google";
 import StoreProvider from "./StoreProvider";
+import { ThemeProvider } from "@mui/system";
+import { theme } from "@/styles/theme";
 
 export const metadata: Metadata = {
   title: "VETPET",
@@ -21,8 +23,12 @@ export default function RootLayout({
   return (
     <html lang="en" className={poppins.className}>
       <body className={poppins.className}>
-        <Toaster position="top-center" richColors />
-        <StoreProvider>{children}</StoreProvider>
+        <ThemeProvider theme={theme}>
+          <StoreProvider>
+            <Toaster position="top-center" richColors />
+            {children}
+          </StoreProvider>
+        </ThemeProvider>
       </body>
     </html>
   );
