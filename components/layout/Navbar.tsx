@@ -11,6 +11,7 @@ import {
   List,
   ListItem,
   ListItemText,
+  Divider,
 } from "@mui/material";
 import MenuOpenIcon from "@mui/icons-material/MenuOpen";
 import { MainButton } from "@/styles/mui";
@@ -51,13 +52,18 @@ export default function Navbar() {
 
   const drawerContent = (
     <Box
-      sx={{ width: 250, height: "100vh", background: "var(--primary-color)" }}
+      sx={{
+        width: 250,
+        height: "100vh",
+        background: "var(--primary-color)",
+        alignItems: "center",
+      }}
       role="presentation"
       onClick={toggleDrawer(false)}
     >
       <List>
         <ListItem>
-          <Box sx={{ display: "flex", alignItems: "center" }}>
+          <Box sx={{ display: "flex", alignItems: "center", marginBottom: 1 }}>
             <Image
               src="/assets/logo.svg"
               alt="Logo"
@@ -67,22 +73,26 @@ export default function Navbar() {
             />
           </Box>
         </ListItem>
+        <Divider />
 
         {[
           { label: "Inicio", href: "/" },
+          // start Menu desplegable llamado funcionalidades
           { label: "Informar", href: "#report" },
           { label: "Consultar", href: "/chatbot" },
           { label: "Localizar", href: "/map" },
+          // end Menu desplegable llamado funcionalidades
         ].map((item, index) => (
           <ListItem key={index} component={Link} href={item.href}>
             <ListItemText
               primary={item.label}
-              sx={{ color: "var(--light-color)" }}
+              sx={{ color: "var(--light-color)", textTransform: "uppercase" }}
             />
           </ListItem>
         ))}
+        <Divider />
         <ListItem>
-          <MainButton fullWidth href="/login">
+          <MainButton href="/login" sx={{ marginTop: 1 }}>
             INICIAR SESIÓN
           </MainButton>
         </ListItem>
@@ -154,9 +164,13 @@ export default function Navbar() {
               indicatorColor="secondary"
             >
               <LinkTab label="Inicio" href="/" />
+
+              {/* Menú desplegable */}
+              {/* start Menu desplegable llamado funcionalidades */}
               <LinkTab label="Informar" href="#report" />
               <LinkTab label="Consultar" href="/chatbot" />
               <LinkTab label="Localizar" href="/map" />
+              {/* end Menu desplegable llamado funcionalidades */}
             </Tabs>
 
             <MainButton sx={{ maxWidth: "200px" }} href="/login">
