@@ -80,26 +80,24 @@ export default function AnimalCard({ animal }: AnimalCardProps) {
         <Typography variant="body1" color="text.secondary">
           {animal.description}
         </Typography>
-        <Typography variant="body1" sx={{ fontSize: 14 }}>
-          <Typography
-            variant="body2"
-            sx={{
-              display: "flex",
-              textTransform: "uppercase",
-              alignItems: "center",
-              gap: 1,
+        <Typography
+          variant="body2"
+          sx={{
+            display: "flex",
+            textTransform: "uppercase",
+            alignItems: "center",
+            gap: 1,
+          }}
+        >
+          <span
+            style={{
+              color: statusColors[animal.status] || "gray",
+              fontSize: "1.5rem",
             }}
           >
-            <span
-              style={{
-                color: statusColors[animal.status] || "gray",
-                fontSize: "1.5rem",
-              }}
-            >
-              •
-            </span>
-            {animal.status}
-          </Typography>
+            •
+          </span>
+          {animal.status}
         </Typography>
         <CardActions sx={{ display: "flex", justifyContent: "space-between" }}>
           <PetsIcon sx={{ color: "var(--secondary-color)" }} />
