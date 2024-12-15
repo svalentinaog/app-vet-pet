@@ -1,6 +1,13 @@
 "use client";
 
-import { Box, Container, Grid, Pagination, Typography } from "@mui/material";
+import {
+  Box,
+  Container,
+  Grid,
+  Pagination,
+  Typography,
+  useMediaQuery,
+} from "@mui/material";
 import AnimalCard from "../AnimalCard";
 import { useState } from "react";
 
@@ -55,37 +62,36 @@ export default function Reports() {
   ];
 
   const [currentPage, setCurrentPage] = useState(1);
-  const animalsPerPage = 4;
 
-  // Lógica para cambiar de página
+  // Determinar si el dispositivo es móvil
+  const isMobile = useMediaQuery("(max-width:600px)");
+
+  // Determinar el número de animales por página según el tamaño de pantalla
+  const animalsPerPage = isMobile ? 1 : 4;
+
+  // Manejador para cambiar de página
   const handlePageChange = (
-    event: React.ChangeEvent<unknown>,
+    _event: React.ChangeEvent<unknown>,
     value: number
   ) => {
     setCurrentPage(value);
   };
 
-  // Lógica para obtener los animales de la página actual
+  // Obtener los animales de la página actual
   const startIndex = (currentPage - 1) * animalsPerPage;
   const endIndex = startIndex + animalsPerPage;
   const animalsToShow = animals.slice(startIndex, endIndex);
 
   return (
     <Box
+      id="reports"
       sx={{
-        height: { xs: "100vh", md: "100vh" },
-
+        height: { xs: "100%", md: "100vh" },
         alignContent: "center",
         background: "var(--gradient-lineal2)",
       }}
-      id="functions"
     >
-      <Container
-        maxWidth="xl"
-        sx={{
-          padding: 2,
-        }}
-      >
+      <Container maxWidth="xl">
         <Typography
           variant="h3"
           sx={{
@@ -99,7 +105,7 @@ export default function Reports() {
         </Typography>
         {/* Grid contenedor para las tarjetas */}
         <Grid container spacing={2}>
-          {/* Mostrar tarjetas de animales */}
+          {/* Tarjetas de animales */}
           {animalsToShow.map((animal) => (
             <Grid item xs={12} sm={6} md={3} key={animal.id}>
               <AnimalCard animal={animal} />
@@ -107,7 +113,7 @@ export default function Reports() {
           ))}
         </Grid>
 
-        {/* Componente de paginado */}
+        {/* Paginado */}
         <Box
           sx={{
             width: "100%",

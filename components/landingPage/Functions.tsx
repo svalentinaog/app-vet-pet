@@ -33,13 +33,13 @@ export default function Functions() {
 
   return (
     <Box
+      id="functions"
       sx={{
-        height: { xs: "50vh", md: "70vh" },
-
+        height: { xs: "100%", md: "70vh" },
         alignContent: "center",
         background: "var(--gradient-lineal)",
+        padding: { xs: "6em 0 0", md: "6em 0 0" },
       }}
-      id="functions"
     >
       <Container maxWidth="xl">
         <Box>

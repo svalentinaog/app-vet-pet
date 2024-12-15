@@ -5,7 +5,7 @@ import { Typography } from "@mui/material";
 import { Box } from "@mui/system";
 import React from "react";
 
-function Entry() {
+export default function Entry() {
   return (
     <Box
       sx={{
@@ -19,7 +19,6 @@ function Entry() {
           width: "100%",
           backgroundImage: {
             xs: "url('/assets/paws-mobile.svg')",
-            sm: "url('/assets/paws.svg')",
             md: "url('/assets/paws.svg')",
           },
           backgroundSize: "cover",
@@ -82,5 +81,3 @@ function Entry() {
     </Box>
   );
 }
-
-export default Entry;
