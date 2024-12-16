@@ -2,8 +2,9 @@
   export interface formDataReport {
     id: string;                   
     name: string;
+    petName?: string;
     phone: string,
-    location?: string;            
+    location: string;            
     description: string;          
     age : string;
     status: string;
