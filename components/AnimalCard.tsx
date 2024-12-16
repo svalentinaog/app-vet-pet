@@ -8,8 +8,10 @@ import Typography from "@mui/material/Typography";
 import { Box, Button, CardMedia } from "@mui/material";
 import PhoneIcon from "@mui/icons-material/Phone";
 import PetsIcon from "@mui/icons-material/Pets";
+import AnimalModalEdit from "@/components/AnimalModalEdit";
+import AnimalDetail from "@/components/AnimalDetail";
 
-interface Animal {
+export interface Animal {
   id: number;
   image: string;
   name: string;
@@ -24,13 +26,20 @@ interface AnimalCardProps {
 }
 
 export default function AnimalCard({ animal }: AnimalCardProps) {
+  const [openDetail, setOpenDetail] = React.useState(false);
+  const handleDetailOpen = () => setOpenDetail(true); // Abre el modal
+  const handleDetailClose = () => setOpenDetail(false); // Cierra el modal
+
   const statusColors: Record<string, string> = {
     "Sin hogar": "#3DC132",
     Perdido: "#CC818E",
   };
 
+
   return (
+    <>
     <Card
+      onClick={handleDetailOpen} // Abrir modal al hacer click en el card
       sx={{
         width: "100%",
         height: "auto",
@@ -45,10 +54,11 @@ export default function AnimalCard({ animal }: AnimalCardProps) {
         borderColor: "white",
         ":hover": {
           borderColor: "var(--secondary-color)",
-          cursor: "pointer",
         },
       }}
+
     >
+
       <Box
         sx={{
           width: "100%",
@@ -119,5 +129,13 @@ export default function AnimalCard({ animal }: AnimalCardProps) {
         </CardActions>
       </CardContent>
     </Card>
+      {/* Renderizamos el modal hijo */}
+      { openDetail &&
+        <AnimalDetail 
+        open={openDetail} 
+        onClose={handleDetailClose} 
+        animal={animal} />
+      }
+    </>
   );
 }

@@ -55,9 +55,9 @@ export default function Functions() {
             Funcionalidades clave
           </Typography>
         </Box>
-        <Grid container spacing={4}>
+        <Grid container spacing={3}>
           {elements.map((element, index) => (
-            <Grid item key={index} xs={12} sm={4}>
+            <Grid  item key={index} xs={12} sm={4}>
               <Box
                 sx={{
                   display: "flex",
@@ -74,12 +74,18 @@ export default function Functions() {
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "center",
-                    borderRadius: "20px",
+                    borderRadius: "20px"
                   }}
                 >
                   {element.icon}
                 </Box>
-                <Box>
+                <Box
+                sx={{
+                  height: "120px",
+                  justifyContent: "center",
+                  alignItems: "center",
+                }}
+                >
                   <Typography
                     variant="h6"
                     sx={{
@@ -96,6 +102,10 @@ export default function Functions() {
                     sx={{
                       color: "var(--text-color)",
                       fontSize: { xs: "0.75em", sm: "1em" },
+                      textAlign:"justify",
+                      hyphens:"auto",
+                      wordWrap: "break-word",
+                      wordSpacing: '-0.01em',
                     }}
                   >
                     {element.description}

@@ -48,6 +48,10 @@ export default function Mission() {
               color: "var(--text-color)",
               fontSize: { xs: "1em", sm: "1.25em" },
               maxWidth: { xs: "100%", md: "80%" },
+              textAlign:"justify",
+              hyphens:"auto",
+              wordWrap: "break-word",
+              wordSpacing: '-0.01em',
             }}
           >
             En VetPet creemos que cada animal merece una oportunidad de vivir en
