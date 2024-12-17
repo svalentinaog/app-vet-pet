@@ -11,7 +11,7 @@ export default function Entry() {
       sx={{
         width: "100%",
         background: "var(--gradient-round)",
-        height: { xs: "50vh", sm: "90vh", md: "90vh" },
+        height: { xs: "50vh", md: "90vh", sm: "90vh" },
       }}
     >
       <Box
@@ -28,12 +28,12 @@ export default function Entry() {
           display: "flex",
           justifyContent: "center",
           alignItems: "center",
-          padding: { xs: "6em 0 4em", sm: "5em", md: "15em" },
+          padding: { xs: "0 6em 0", md: "0 4em 0", sm: "0 6em 0" },
         }}
       >
         <Box
           sx={{
-            width: { xs: "90%", sm: "60%", md: "50%" },
+            width: { xs: "90%", md: "50%", sm: "60%" },
             display: "flex",
             flexDirection: "column",
             gap: { xs: 2, md: 4 },

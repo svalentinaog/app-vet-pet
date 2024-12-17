@@ -86,12 +86,13 @@ export default function Reports() {
     <Box
       id="reports"
       sx={{
+        width: "100%",
         height: { xs: "100%", md: "100vh" },
         alignContent: "center",
         background: "var(--gradient-lineal2)",
+        padding: { xs: "0 6em 0", md: "0 4em 0", sm: "0 6em 0" },
       }}
     >
-      <Container maxWidth="xl">
         <Typography
           variant="h3"
           sx={{
@@ -112,7 +113,6 @@ export default function Reports() {
             </Grid>
           ))}
         </Grid>
-
         {/* Paginado */}
         <Box
           sx={{
@@ -130,7 +130,6 @@ export default function Reports() {
             showLastButton
           />
         </Box>
-      </Container>
     </Box>
   );
 }
