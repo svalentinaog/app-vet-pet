@@ -65,7 +65,7 @@ export default function AnimalCard({ animal }: AnimalCardProps) {
           alt={animal.name}
           sx={{
             maxWidth: "100%",
-            height: 250,
+            height: {xs: 200, md: 180, sm: 250},
             objectFit: "contain", // "contain" para evitar recortes
             marginTop: 4,
           }}
@@ -77,11 +77,11 @@ export default function AnimalCard({ animal }: AnimalCardProps) {
         <Typography variant="body1" component="div">
           {animal.name}
         </Typography>
-        <Typography variant="body1" color="text.secondary">
+        <Typography variant="body2" color="text.secondary">
           {animal.description}
         </Typography>
         <Typography
-          variant="body2"
+          variant="caption"
           sx={{
             display: "flex",
             textTransform: "uppercase",
@@ -92,7 +92,6 @@ export default function AnimalCard({ animal }: AnimalCardProps) {
           <span
             style={{
               color: statusColors[animal.status] || "gray",
-              fontSize: "1.5rem",
             }}
           >
             •
