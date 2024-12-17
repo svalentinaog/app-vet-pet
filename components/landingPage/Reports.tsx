@@ -87,7 +87,7 @@ export default function Reports() {
       id="reports"
       sx={{
         width: "100%",
-        height: { xs: "100%", md: "100vh" },
+        height: { xs: "100%", md: "100vh", sm: "100vh" },
         alignContent: "center",
         background: "var(--gradient-lineal2)",
         padding: { xs: "0 1em 0", md: "0 4em 0", sm: "0 6em 0" },
@@ -123,6 +123,7 @@ export default function Reports() {
               display: "flex",
               maxWidth: { xs: "100%", sm: "50%", md: "25%" },
               justifyContent: "center",
+              gap: 1,
               flex: "1 1 auto",
             }}
           >
