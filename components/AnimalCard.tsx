@@ -10,6 +10,7 @@ import PhoneIcon from "@mui/icons-material/Phone";
 import PetsIcon from "@mui/icons-material/Pets";
 import AnimalModalEdit from "@/components/AnimalModalEdit";
 import AnimalDetail from "@/components/AnimalDetail";
+import Link from "next/link";
 
 export interface Animal {
   id: number;
@@ -26,9 +27,6 @@ interface AnimalCardProps {
 }
 
 export default function AnimalCard({ animal }: AnimalCardProps) {
-  const [openDetail, setOpenDetail] = React.useState(false);
-  const handleDetailOpen = () => setOpenDetail(true); // Abre el modal
-  const handleDetailClose = () => setOpenDetail(false); // Cierra el modal
 
   const statusColors: Record<string, string> = {
     "Sin hogar": "#3DC132",
@@ -38,8 +36,8 @@ export default function AnimalCard({ animal }: AnimalCardProps) {
 
   return (
     <>
+    <Link href={`/animal-detail/${String(animal.id)}`} legacyBehavior>
     <Card
-      onClick={handleDetailOpen} // Abrir modal al hacer click en el card
       sx={{
         width: "100%",
         height: "auto",
@@ -129,13 +127,7 @@ export default function AnimalCard({ animal }: AnimalCardProps) {
         </CardActions>
       </CardContent>
     </Card>
-      {/* Renderizamos el modal hijo */}
-      { openDetail &&
-        <AnimalDetail 
-        open={openDetail} 
-        onClose={handleDetailClose} 
-        animal={animal} />
-      }
+    </Link>
     </>
   );
 }
