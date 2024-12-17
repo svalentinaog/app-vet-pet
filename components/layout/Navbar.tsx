@@ -125,7 +125,7 @@ export default function Navbar() {
       sx={{
         width: "100%",
         background: scrolled ? "rgba(0, 0, 0, 0.1)" : "transparent",
-        padding: { xs: "1em 6em 1em", md: "1em 4em 1em", sm: "1em 6em 1em" },
+        padding: { xs: "1em 1em 1em", md: "1em 4em 1em", sm: "1em 6em 1em" },
         boxShadow: scrolled ? "0 1px 1px rgba(255, 255, 255, 0.1)" : "inherit",
         backdropFilter: scrolled ? "blur(2px)" : "none",
         transition: "background 0.3s, box-shadow 0.3s, backdrop-filter 0.3s",

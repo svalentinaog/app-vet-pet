@@ -15,7 +15,7 @@ export default function Mission() {
         flexWrap: "wrap",
         alignItems: "center",
         justifyContent: "space-between",
-        padding: { xs: "0 6em 0", md: "0 4em 0", sm: "0 6em 0" },
+        padding: { xs: "0 1em 0", md: "0 4em 0", sm: "0 6em 0" },
       }}
     >
       <Box
