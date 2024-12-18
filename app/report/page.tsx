@@ -1,113 +1,108 @@
 "use client";
-import React, { ChangeEvent, useState, useEffect } from "react";
-import { createTheme, ThemeProvider } from "@mui/material/styles";
+import React, { ChangeEvent, useState } from "react";
 import {
   Box,
   TextField,
-  Button,
+  MenuItem,
   Typography,
+  Grid,
+  Button,
+  Select,
+  SelectChangeEvent,
+  InputLabel,
   FormControl,
   IconButton,
-  Radio,
-  RadioGroup,
-  FormControlLabel,
-  InputLabel,
-  MenuItem,
+  CircularProgress,
+  Alert,
   Snackbar,
   SnackbarCloseReason,
-  Alert,
-  Skeleton,
-  Stack,
-  CircularProgress,
 } from "@mui/material";
-import Select, { SelectChangeEvent } from "@mui/material/Select";
-import Link from "next/link";
 import CloseIcon from "@mui/icons-material/Close";
-//import { formDataReport } from "../../interfaces/typesReport";
 
-const theme = createTheme({
-  components: {
-    MuiTextField: {
-      styleOverrides: {
-        root: {
-          "& .MuiInputBase-root": {
-            color: "var(--text-color)",
-          },
-          "& .MuiInputLabel-outlined": {
-            color: "var(--text-color)",
-            fontWeight: "bold",
-          },
-          "& .MuiOutlinedInput-notchedOutline": {
-            borderColor: "#ffff",
-          },
-          "&:hover:not(.Mui-focused)": {
-            "& .MuiOutlinedInput-notchedOutline": {
-              borderColor: "#ccc",
-            },
-          },
-          "& .MuiInputLabel-outlined.Mui-focused": {
-            color: "var(--text-color)",
-          },
-          "& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline":
-            {
-              borderColor: "#ffff",
-            },
-        },
-      },
-    },
-    MuiInputLabel: {
-      styleOverrides: {
-        root: {
-          color: "var(--text-color)",
-          "&.Mui-focused": {
-            color: "var(--text-color)",
-            fontWeight: "bold",
-          },
-        },
-      },
-    },
-    MuiSelect: {
-      styleOverrides: {
-        root: {
-          "& .MuiInputBase-root": {
-            color: "var(--text-color)",
-          },
-          "& .MuiInputLabel-outlined": {
-            color: "var(--text-color)",
-            fontWeight: "bold",
-          },
-          "& .MuiOutlinedInput-notchedOutline": {
-            borderColor: "#ffff",
-          },
-          "&:hover:not(.Mui-focused)": {
-            "& .MuiOutlinedInput-notchedOutline": {
-              borderColor: "#ccc",
-            },
-          },
-          "&.MuiInputLabel-outlined.Mui-focused": {
-            color: "var(--text-color)",
-          },
-          "& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline":
-            {
-              borderColor: "#ffff",
-            },
-        },
-      },
-    },
-  },
-});
+interface FormDataReport {
+  reportType: "lost" | "found";
+  reporterName: string; // Nombre del reportante
+  phone: string; // Número de teléfono del reportante
+  petType: string; // Tipo de mascota
+  petName?: string; // Nombre de la mascota (para "perdido")
+  foundLocation?: string; // Lugar encontrado
+  description: string;
+  age?: string; // Edad aproximada (solo para "perdido")
+  status?: string; // Estado: Sin hogar, Perdido, etc.
+  images: string[];
+  reward?: string; //Solo para "perdido"
+  dateCreationReport: string; // Fecha de creación del reporte
+}
 
-export default function Report() {
-  const [name, setName] = useState<string>("");
-  const [phone, setPhone] = useState<string>("");
-  const [location, setLocation] = useState<string>("");
-  const [description, setDescription] = useState<string>("");
-  const [age, setAge] = useState<string>("");
-  const [images, setImages] = useState<string[]>([]);
-  const [status, setStatus] = useState<string>("");
-  const [open, setOpen] = useState<boolean>(false);
+const initialFormData: FormDataReport = {
+  reportType: "lost",
+  reporterName: "",
+  phone: "",
+  petType: "",
+  petName: "",
+  foundLocation: "",
+  description: "",
+  age: "",
+  status: "",
+  images: [],
+  reward: "",
+  dateCreationReport: new Date().toString(),
+};
+
+const ReportForm = () => {
+  const [formData, setFormData] = useState<FormDataReport>(initialFormData);
   const [loading, setLoading] = useState<boolean>(false);
-  const [successReport, setSuccessReport] = useState<boolean>(false);
+  const [open, setOpen] = React.useState(false);
+
+  const handleChange = (
+    e:
+      | React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+      | SelectChangeEvent<string>
+  ) => {
+    const { name, value } = e.target;
+
+    if (name === "reward") {
+      // Formatear dinámicamente el campo de recompensa
+      const formattedValue = formatCurrency(value);
+      setFormData((prev) => ({ ...prev, [name]: formattedValue }));
+    } else {
+      setFormData((prev) => ({ ...prev, [name]: value }));
+    }
+  };
+
+  const handleImageUpload = (event: ChangeEvent<HTMLInputElement>) => {
+    if (event.target.files) {
+      const files = Array.from(event.target.files);
+      const newImages = files.map((file) => URL.createObjectURL(file));
+
+      setFormData((prev) => ({
+        ...prev,
+        images: [...prev.images, ...newImages],
+      }));
+    }
+  };
+
+  const handleRemoveImage = (index: number) => {
+    setFormData((prev) => ({
+      ...prev,
+      images: prev.images.filter((_, i) => i !== index),
+    }));
+  };
+
+  const handleReset = () => {
+    setFormData(initialFormData);
+  };
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
+    setTimeout(() => {
+      console.log("Formulario enviado:", formData);
+      setOpen(true);
+      setLoading(false);
+      setFormData(initialFormData);
+    }, 2000);
+  };
 
   const handleClose = (
     event?: React.SyntheticEvent | Event,
@@ -120,181 +115,109 @@ export default function Report() {
     setOpen(false);
   };
 
-  const handleImageUpload = (event: ChangeEvent<HTMLInputElement>) => {
-    if (event.target.files) {
-      const files = Array.from(event.target.files);
-      const newImages = files.map((file) => URL.createObjectURL(file));
-      setImages((prevImages) => [...prevImages, ...newImages]);
-    }
-  };
-
-  const handleRemoveImage = (index: number) => {
-    setImages((prevImages) => prevImages.filter((_, i) => i !== index));
-  };
-
-  const handleChange = (event: SelectChangeEvent) => {
-    setAge(event.target.value);
-  };
-
-  // Handler para el cambio en el texto
-  const handleTextChange =
-    (setter: React.Dispatch<React.SetStateAction<string>>) =>
-    (event: ChangeEvent<HTMLInputElement>) =>
-      setter(event.target.value);
-
-  console.log(name, phone, location, description, age, status);
-
-  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    setLoading(true);
-    setTimeout(() => {
-      setSuccessReport(true);
-      setOpen(true);
-      setLoading(false);
-
-      //Restablcer Campos
-      setName("");
-      setPhone("");
-      setLocation("");
-      setDescription("");
-      setAge("");
-      setImages([]);
-      setStatus("");
-    }, 2000);
-    const formData = {
-      id: crypto.randomUUID().toString(),
-      name,
-      phone,
-      location,
-      description,
-      age,
-      status,
-      images,
-    };
-    console.log(formData);
+  const formatCurrency = (value: string) => {
+    // Remover caracteres no numéricos
+    const numericValue = value.replace(/\D/g, "");
+    // Formatear con separadores de miles y punto decimal
+    return new Intl.NumberFormat("es-CO").format(Number(numericValue));
   };
 
   return (
-    <Box
-      sx={{
-        color: "var(--text-color)",
-        padding: "20px",
-        borderRadius: "10px",
-        display: "flex",
-        justifyContent: "center",
-        width: "100%",
-        height: "auto",
-      }}
-    >
+    <>
       <Box
         sx={{
-          backgroundColor: "var(--primary-color)",
-          paddingX: 20,
-          paddingY: 5,
-          borderRadius: "20px",
-          display: "flex",
-          justifyContent: "flex-start",
-          alignItems: "center",
-          flexDirection: "column",
-          width: "70%",
-          height: "auto",
+          maxWidth: 700,
+          mx: "auto",
+          mt: 4,
+          p: 4,
+          borderRadius: 2,
+          boxShadow: 3,
+          backgroundColor: "#f9f9f9",
         }}
       >
-        <Link href={"/"}>👉Volver al home</Link>
+        <Typography variant="h4" align="center" gutterBottom>
+          Reportar mascota
+        </Typography>
+        <form onSubmit={handleSubmit}>
+          {/* Selector del tipo de reporte */}
+          <FormControl fullWidth margin="normal">
+            <InputLabel>Tipo de reporte</InputLabel>
+            <Select
+              name="reportType"
+              value={formData.reportType}
+              onChange={handleChange}
+            >
+              <MenuItem onClick={handleReset} value="lost">
+                He perdido una mascota
+              </MenuItem>
+              <MenuItem onClick={handleReset} value="found">
+                He encontrado una mascota
+              </MenuItem>
+            </Select>
+          </FormControl>
 
-        <h1>Reporte de mascota perdida o abandonada.</h1>
-        <p>
-          Por favor, complete el formulario para reportar la mascota perdida o
-          abandonada. Los datos proporcionados en este formulario serán
-          utilizados únicamente para reportar el problema.
-        </p>
-
-        {/* Formulario */}
-        <Box
-          component="form"
-          onSubmit={handleSubmit}
-          sx={{
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-            gap: "20px",
-            width: "100%",
-          }}
-        >
-          <ThemeProvider theme={theme}>
-            <TextField
-              fullWidth
-              label="Nombre del reportante"
-              variant="outlined"
-              value={name}
-              onChange={handleTextChange(setName)}
-              required
-            />
-            <TextField
-              fullWidth
-              label="Teléfono de contacto"
-              variant="outlined"
-              value={phone}
-              onChange={handleTextChange(setPhone)}
-              required
-            />
-            <TextField
-              fullWidth
-              label="Ubicación de la mascota"
-              variant="outlined"
-              value={location}
-              onChange={handleTextChange(setLocation)}
-              required
-            />
-            <TextField
-              fullWidth
-              label="Descripción de la mascota (color, tamaño, raza, etc.)"
-              variant="outlined"
-              multiline
-              rows={4}
-              value={description}
-              onChange={handleTextChange(setDescription)}
-              required
-            />
-            <FormControl fullWidth>
-              <InputLabel id="demo-simple-select-label">
-                Edad de la mascota
-              </InputLabel>
-              <Select
-                labelId="demo-simple-select-label"
-                id="demo-simple-select"
-                value={age}
-                label="age"
+          {/* Campos comunes */}
+          <Grid container spacing={2} marginTop={1}>
+            <Grid item xs={12} md={6}>
+              <TextField
+                label="Nombre del reportante"
+                name="reporterName"
+                value={formData.reporterName}
                 onChange={handleChange}
-                style={{ color: "var(--text-color)" }}
+                fullWidth
                 required
-              >
-                <MenuItem value="Menor de 3 años">Menor de 3 años</MenuItem>
-                <MenuItem value="Mayor a 3 años y menor que 6 años">
-                  Mayor a 3 años y menor que 6 años
-                </MenuItem>
-                <MenuItem value="Mayor de 6 años">Mayor de 6 años</MenuItem>
-              </Select>
-            </FormControl>
-          </ThemeProvider>
-          <Box
-            sx={{
-              display: "flex",
-              flexDirection: "column",
-              justifyContent: "space-between",
-              width: "100%",
-            }}
-          >
+              />
+            </Grid>
+            <Grid item xs={12} md={6}>
+              <TextField
+                label="Teléfono de contacto"
+                name="phone"
+                type="tel"
+                value={formData.phone}
+                onChange={handleChange}
+                fullWidth
+                required
+              />
+            </Grid>
+          </Grid>
+
+          <Grid container spacing={2} marginTop={1}>
+            <Grid item xs={12} md={6}>
+              <FormControl fullWidth>
+                <InputLabel>Tipo de Mascota</InputLabel>
+                <Select
+                  name="petType"
+                  value={formData.petType}
+                  onChange={handleChange}
+                >
+                  <MenuItem value="Perro">Perro</MenuItem>
+                  <MenuItem value="Gato">Gato</MenuItem>
+                  <MenuItem value="Ave">Ave</MenuItem>
+                  <MenuItem value="Otro">Otro</MenuItem>
+                </Select>
+              </FormControl>
+            </Grid>
+            <Grid item xs={12} md={6}>
+              <TextField
+                label="Descripción (color, tamaño, raza, etc.)"
+                name="description"
+                value={formData.description}
+                onChange={handleChange}
+                multiline
+                rows={4}
+                fullWidth
+                required
+              />
+            </Grid>
+          </Grid>
+
+          {/* Subir imágenes */}
+          <Box marginTop={2} textAlign="center">
             <Button
               variant="contained"
               component="label"
-              sx={{
-                alignSelf: "center",
-                backgroundColor: "#ee3a57",
-                padding: "10px 20px",
-                width: "300px",
-                marginBottom: "20px",
-              }}
+              color="primary"
+              sx={{ mb: 2 }}
             >
               Subir fotos de la mascota
               <input
@@ -305,26 +228,23 @@ export default function Report() {
                 hidden
               />
             </Button>
-
             <Box
               display="flex"
-              gap={2}
               flexWrap="wrap"
-              sx={{
-                alignItems: "center",
-                justifyContent: "center",
-                borderRadius: "5px",
-              }}
+              justifyContent="center"
+              gap={2}
+              marginTop={1}
             >
-              {images.map((image, index) => (
-                <Box key={index} position="relative" width={100} height={100}>
+              {formData.images.map((image, index) => (
+                <Box key={index} position="relative">
                   <img
                     src={image}
                     alt={`Uploaded ${index}`}
                     style={{
-                      width: "100%",
-                      height: "100%",
+                      width: 100,
+                      height: 100,
                       objectFit: "cover",
+                      borderRadius: "8px",
                     }}
                   />
                   <IconButton
@@ -335,7 +255,6 @@ export default function Report() {
                       right: 0,
                       backgroundColor: "rgba(255, 0, 0, 0.7)",
                       color: "white",
-                      "&:hover": { backgroundColor: "rgba(255, 0, 0, 1)" },
                     }}
                     onClick={() => handleRemoveImage(index)}
                   >
@@ -345,65 +264,161 @@ export default function Report() {
               ))}
             </Box>
           </Box>
-          <p>¿Las mascota esta perdida o abandonada?</p>
-          <RadioGroup
-            aria-labelledby="status"
-            defaultValue="perdida"
-            name="status"
-            value={status || ""}
-            onChange={(event) => setStatus(event.target.value)}
-            sx={{
-              "& .MuiSvgIcon-root": {
-                color: "var(--secondary-color)",
-              },
-              margin: 0,
-            }}
-          >
-            <FormControlLabel
-              value="perdida"
-              color="secondary"
-              control={<Radio />}
-              label="Perdida"
-            />
-            <FormControlLabel
-              value="abandonada"
-              control={<Radio />}
-              label="Abandonada"
-            />
-          </RadioGroup>
-          {loading ? 
-            <CircularProgress size={45} sx={{
-              "&.MuiCircularProgress-root":{
-               color:"var(--secondary-color)" 
-              }
-            }} />
-            :
-            <Button
-            type="submit"
-            variant="contained"
-            color="primary"
-            sx={{
-              alignSelf: "center",
-              backgroundColor: "var(--secondary-color)",
-              padding: "10px 20px",
-              width: "300px",
-            }}
-          >
-            Enviar reporte
-          </Button>
-          }
-          <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
-            <Alert
-              onClose={handleClose}
-              variant="filled"
-              severity={successReport ? "success" : "error"}
-              sx={{ width: "100%" }}
+
+          {/* Campos específicos según el tipo de reporte */}
+          {formData.reportType === "lost" && (
+            <>
+              <TextField
+                label="Nombre de la mascota"
+                name="petName"
+                value={formData.petName || ""}
+                onChange={handleChange}
+                fullWidth
+                margin="normal"
+                required
+              />
+
+              <FormControl margin="normal" fullWidth>
+                <InputLabel id="demo-simple-select-label">
+                  Edad aproximada de la mascota
+                </InputLabel>
+                <Select
+                  name="age"
+                  value={formData.age}
+                  label="age"
+                  onChange={handleChange}
+                  required
+                >
+                  <MenuItem value="Menor de 3 años">Menor de 3 años</MenuItem>
+                  <MenuItem value="Mayor a 3 años y menor que 6 años">
+                    Mayor a 3 años y menor que 6 años
+                  </MenuItem>
+                  <MenuItem value="Mayor de 6 años">Mayor de 6 años</MenuItem>
+                </Select>
+              </FormControl>
+
+              <FormControl margin="normal" fullWidth>
+                <InputLabel>Estado de la mascota</InputLabel>
+                <Select
+                  name="status"
+                  value={formData.status || ""}
+                  onChange={handleChange}
+                  required
+                >
+                  <MenuItem value="Perdido">Perdido</MenuItem>
+                  <MenuItem value="Encontrado">Encontrado</MenuItem>
+                </Select>
+              </FormControl>
+
+              <TextField
+                label="Último lugar donde viste a tu mascota"
+                name="foundLocation"
+                value={formData.foundLocation || ""}
+                onChange={handleChange}
+                fullWidth
+                margin="normal"
+                required
+              />
+              <Box
+              sx={{
+                position:"relative",
+              }}
+              >
+                <Typography
+                sx={{
+                  position:"absolute",
+                  top: "55%",
+                  right: "0%",
+                  transform: "translate(-50%, -50%)",
+                  fontSize: "16px",
+                  fontWeight: 500,
+                  color: "text.secondary",
+                }}
+                >
+                  COP
+                </Typography>
+              <TextField
+                label="Recompensa (opcional)"
+                name="reward"
+                value={formData.reward || ""}
+                onChange={handleChange}
+                fullWidth
+                margin="normal"
+                placeholder="Ingrese una cantidad en dinero"
+                inputProps={{
+                  inputMode: "numeric", // Optimiza el teclado para números en móviles
+                }}
+              />
+              </Box>
+            </>
+          )}
+
+          {formData.reportType === "found" && (
+            <>
+              <FormControl margin="normal" fullWidth>
+                <InputLabel>Estado de la mascota</InputLabel>
+                <Select
+                  name="status"
+                  value={formData.status || ""}
+                  onChange={handleChange}
+                  required
+                >
+                  <MenuItem value="Perdido">Perdido</MenuItem>
+                  <MenuItem value="Sin hogar">Sin hogar</MenuItem>
+                  <MenuItem value="Encontrado">Encontrado</MenuItem>
+                </Select>
+              </FormControl>
+
+              <TextField
+                label="Lugar donde encontraste la mascota"
+                name="foundLocation"
+                value={formData.foundLocation || ""}
+                onChange={handleChange}
+                fullWidth
+                margin="normal"
+                required
+              />
+            </>
+          )}
+
+          {/* Botón de envío */}
+          {loading ? (
+            <Box
+              display="flex"
+              justifyContent="center"
+              alignItems="center"
+              height="100%"
+              width="100%"
+              marginTop={3}
             >
-              Reporte enviado correctamente. Gracias por tu contribución.
-            </Alert>
-          </Snackbar>
-        </Box>
+              <CircularProgress size={30} />
+            </Box>
+          ) : (
+            <Box marginTop={3} textAlign="center">
+              <Button
+                type="submit"
+                variant="contained"
+                color="secondary"
+                sx={{ width: "100%" }}
+              >
+                Enviar reporte
+              </Button>
+            </Box>
+          )}
+        </form>
       </Box>
-    </Box>
+      <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
+        <Alert
+          onClose={handleClose}
+          severity="success"
+          variant="filled"
+          sx={{ width: "100%" }}
+        >
+          ¡Reporte enviado con éxito!
+        </Alert>
+      </Snackbar>
+    </>
   );
-}
+};
+
+export default ReportForm;
