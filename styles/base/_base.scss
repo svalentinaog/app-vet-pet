@@ -16,3 +16,7 @@ body {
   font-family: var(--font-poppins);
   box-sizing: inherit;
 }
+
+.css-1lg07yq-MuiCardContent-root, .css-1um1sdq-MuiGrid-root>.MuiGrid-item {
+  padding: 0 !important;
+}

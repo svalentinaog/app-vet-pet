@@ -1,3 +1,5 @@
+"use client"
+
 import * as React from "react";
 import {
   AppBar,
@@ -121,14 +123,13 @@ export default function Navbar() {
     <AppBar
       position="fixed"
       sx={{
+        width: "100%",
         background: scrolled ? "rgba(0, 0, 0, 0.1)" : "transparent",
-        padding: "1em 0 1em",
+        padding: { xs: "1em 1em 1em", md: "1em 4em 1em", sm: "1em 6em 1em" },
         boxShadow: scrolled ? "0 1px 1px rgba(255, 255, 255, 0.1)" : "inherit",
         backdropFilter: scrolled ? "blur(2px)" : "none",
         transition: "background 0.3s, box-shadow 0.3s, backdrop-filter 0.3s",
-      }}
-    >
-      <Container maxWidth="xl">
+      }}>
         <Toolbar
           disableGutters
           sx={{
@@ -138,7 +139,7 @@ export default function Navbar() {
           }}
         >
           {/* Icono de la App (Logo)*/}
-          <Box>
+          <Box sx={{ width: "100%" }}>
             <Image
               src="/assets/logo.svg"
               alt="Logo"
@@ -147,12 +148,12 @@ export default function Navbar() {
               layout="intrinsic"
             />
           </Box>
-
           {/* Navbar Tabs (Desktop) */}
           <Box
             sx={{
-              width: "50%",
+              width: "100%",
               display: { xs: "none", md: "flex" },
+              justifyContent: "flex-end",
               alignItems: "center",
               gap: 4,
             }}
@@ -162,6 +163,7 @@ export default function Navbar() {
               onChange={handleChange}
               textColor="primary"
               indicatorColor="secondary"
+              sx={{ width: "auto" }}
             >
               <LinkTab label="Inicio" href="/" />
 
@@ -172,7 +174,6 @@ export default function Navbar() {
               <LinkTab label="Localizar" href="/map" />
               {/* end Menu desplegable llamado funcionalidades */}
             </Tabs>
-
             <MainButton sx={{ maxWidth: "200px" }} href="/login">
               INICIAR SESIÓN
             </MainButton>
@@ -189,12 +190,10 @@ export default function Navbar() {
             </IconButton>
           </Box>
         </Toolbar>
-
-        {/* Drawer para el Menú de Navegación en Mobile */}
-        <Drawer anchor="left" open={drawerOpen} onClose={toggleDrawer(false)}>
-          {drawerContent}
-        </Drawer>
-      </Container>
+      {/* Drawer para el Menú de Navegación en Mobile */}
+      <Drawer anchor="left" open={drawerOpen} onClose={toggleDrawer(false)}>
+        {drawerContent}
+      </Drawer>
     </AppBar>
   );
 }

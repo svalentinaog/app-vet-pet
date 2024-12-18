@@ -1,7 +1,7 @@
 "use client";
 
 import { CardMedia, Typography } from "@mui/material";
-import { Box, Container } from "@mui/system";
+import { Box } from "@mui/system";
 import React from "react";
 
 export default function Mission() {
@@ -9,80 +9,67 @@ export default function Mission() {
     <Box
       id="mission"
       sx={{
-        display: "flex",
+        width: "100%",
         height: { xs: "100%", md: "70vh" },
+        display: "flex",
+        flexWrap: "wrap",
         alignItems: "center",
-        padding: { xs: "20px", md: "0" },
+        justifyContent: "space-between",
+        padding: { xs: "0 1em 0", md: "0 4em 0", sm: "0 6em 0" },
       }}
     >
-      <Container
-        maxWidth="xl"
+      <Box
         sx={{
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-          flexWrap: "wrap",
+          flexBasis: { xs: "100%", md: "50%" },
         }}
       >
-        <Box
+        <Typography
+          variant="h3"
           sx={{
-            flexBasis: { xs: "100%", md: "50%" },
-            paddingRight: { xs: "0", md: "20px" },
+            color: "var(--title-color)",
+            marginBottom: 2,
+            fontSize: { xs: "1.5em", sm: "2.5em" },
+            fontWeight: "bold",
+            maxWidth: { xs: "100%", md: "80%" },
           }}
         >
-          <Typography
-            variant="h3"
-            sx={{
-              color: "var(--title-color)",
-              marginBottom: 2,
-              fontSize: { xs: "1.5em", sm: "2.5em" },
-              fontWeight: "bold",
-              maxWidth: { xs: "100%", md: "80%" },
-            }}
-          >
-            Transformando el cuidado animal
-          </Typography>
-          <Typography
-            variant="body1"
-            sx={{
-              color: "var(--text-color)",
-              fontSize: { xs: "1em", sm: "1.25em" },
-              maxWidth: { xs: "100%", md: "80%" },
-              textAlign:"justify",
-              hyphens:"auto",
-              wordWrap: "break-word",
-              wordSpacing: '-0.01em',
-            }}
-          >
-            En VetPet creemos que cada animal merece una oportunidad de vivir en
-            un entorno seguro y amoroso. Nuestra app conecta personas con
-            recursos y herramientas que ayudan a proteger y mejorar la vida de
-            los animales en su comunidad.
-          </Typography>
-        </Box>
-        <Box
+          Transformando el cuidado animal
+        </Typography>
+        <Typography
+          variant="body1"
           sx={{
-            flexBasis: { xs: "100%", md: "50%" },
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            paddingLeft: { xs: "0", md: "20px" },
+            color: "var(--text-color)",
+            fontSize: { xs: "1em", sm: "1.25em" },
+            maxWidth: { xs: "100%", md: "80%" },
           }}
         >
-          <CardMedia
-            component="img"
-            alt="Imagen de fondo"
-            height="100%"
-            image="/assets/img-mission.png"
-            sx={{
-              objectFit: "cover",
-              borderRadius: "8px",
-              width: "100%",
-              maxHeight: "100%",
-            }}
-          />
-        </Box>
-      </Container>
+          En VetPet creemos que cada animal merece una oportunidad de vivir en
+          un entorno seguro y amoroso. Nuestra app conecta personas con
+          recursos y herramientas que ayudan a proteger y mejorar la vida de
+          los animales en su comunidad.
+        </Typography>
+      </Box>
+      <Box
+        sx={{
+          flexBasis: { xs: "100%", md: "50%" },
+          // display: "flex",
+          // justifyContent: "center",
+          // alignItems: "center",
+        }}
+      >
+        <CardMedia
+          component="img"
+          alt="Imagen de fondo"
+          height="100%"
+          image="/assets/img-mission.png"
+          sx={{
+            objectFit: "cover",
+            borderRadius: "8px",
+            width: "100%",
+            maxHeight: "100%",
+          }}
+        />
+      </Box>
     </Box>
   );
 }

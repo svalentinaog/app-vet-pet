@@ -29,8 +29,9 @@ export const FormContainer = styled(Grid)`
   color: var(--title-color);
   font-weight: normal;
   display: flex;
-  flex-direction: column;
   align-items: center;
+  justify-content: center;
+  flex-direction: column;
   padding: 16px 16px 0;
 
   @media (max-width: 600px) {
@@ -68,13 +69,14 @@ export const FormContainerTwo = styled(Grid)`
 export const InputTextField = styled(TextField)`
   font-family: var(--font-poppins);
   width: 100%;
-  border-radius: 100px;
 
   & .MuiOutlinedInput-root {
-    border-radius: 100px;
-  }
-
-  & .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline {
+    border-radius: 0px;
+    }
+    
+    & .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline {
+    border: none;
+    border-bottom: 2px solid !important;
     border-color: var(--primary-color);
   }
 
@@ -84,7 +86,7 @@ export const InputTextField = styled(TextField)`
 
   & .MuiInputBase-input {
     background-color: var(--bg-color);
-    color: var(--light-color);
+    color: var(--title-color);
   }
 `;
 
@@ -94,10 +96,12 @@ export const InputPassField = styled(FormControl)`
   border-radius: 100px;
 
   & .MuiOutlinedInput-root {
-    border-radius: 100px;
+    border-radius: 0px;
   }
 
   & .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline {
+    border: none;
+    border-bottom: 2px solid !important;
     border-color: var(--primary-color);
   }
 
@@ -107,7 +111,7 @@ export const InputPassField = styled(FormControl)`
 
   & .MuiInputBase-input {
     background-color: var(--bg-color);
-    color: var(--light-color);
+    color: var(--title-color);
   }
 `;
 

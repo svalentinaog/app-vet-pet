@@ -39,9 +39,9 @@ export default function AnimalCard({ animal }: AnimalCardProps) {
     <Link href={`/animal-detail/${String(animal.id)}`} legacyBehavior>
     <Card
       sx={{
-        width: "100%",
+        width: {xs: 300, md: 300, sm: 500}, // Ancho fijo
         height: "auto",
-        marginBottom: 2,
+        aspectRatio: "4 / 5", // Relación de aspecto
         backgroundColor: "white",
         boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.1)",
         borderRadius: 4,
@@ -53,6 +53,12 @@ export default function AnimalCard({ animal }: AnimalCardProps) {
         ":hover": {
           borderColor: "var(--secondary-color)",
         },
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        justifyContent: "space-between",
+        gap: 1,
+        padding: 3
       }}
 
     >
@@ -60,11 +66,11 @@ export default function AnimalCard({ animal }: AnimalCardProps) {
       <Box
         sx={{
           width: "100%",
-          height: "auto", // Altura fija del contenedor
+          flex: 1,
           display: "flex",
           justifyContent: "center",
           alignItems: "center",
-          overflow: "hidden", // Asegura que no haya desbordamiento
+          overflow: "hidden",
         }}
       >
         <CardMedia
@@ -73,23 +79,32 @@ export default function AnimalCard({ animal }: AnimalCardProps) {
           alt={animal.name}
           sx={{
             maxWidth: "100%",
-            height: 250,
-            objectFit: "contain", // "contain" para evitar recortes
-            marginTop: 4,
+            maxHeight: "100%",
+            objectFit: "contain",
           }}
         />
       </Box>
       <CardContent
-        sx={{ padding: 4, gap: 1, display: "flex", flexDirection: "column" }}
+        sx={{
+          width: "100%",
+          height: "auto",
+          paddingTop: 0,
+          paddingBottom: 0,
+          paddingLeft: 0,
+          paddingRight: 0,
+          gap: 1,
+          display: "flex",
+          flexDirection: "column",
+        }}
       >
         <Typography variant="body1" component="div">
           {animal.name}
         </Typography>
-        <Typography variant="body1" color="text.secondary">
+        <Typography variant="body2" color="text.secondary">
           {animal.description}
         </Typography>
         <Typography
-          variant="body2"
+          variant="caption"
           sx={{
             display: "flex",
             textTransform: "uppercase",
@@ -100,22 +115,20 @@ export default function AnimalCard({ animal }: AnimalCardProps) {
           <span
             style={{
               color: statusColors[animal.status] || "gray",
-              fontSize: "1.5rem",
             }}
           >
             •
           </span>
           {animal.status}
         </Typography>
-        <CardActions sx={{ display: "flex", justifyContent: "space-between" }}>
+        <CardActions sx={{ display: "flex", justifyContent: "space-between", width: "100%" }}>
           <PetsIcon sx={{ color: "var(--secondary-color)" }} />
           <a href={`tel:${animal.phone}`}>
             <Button
               sx={{
-                borderRadius: "50px",
-                minWidth: "50px",
-                height: "50px",
-                alignContent: "center",
+                borderRadius: "50%",
+                width: 40,
+                height: 40,
                 display: "flex",
                 justifyContent: "center",
                 alignItems: "center",

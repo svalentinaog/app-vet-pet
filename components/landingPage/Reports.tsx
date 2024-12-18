@@ -86,51 +86,68 @@ export default function Reports() {
     <Box
       id="reports"
       sx={{
-        height: { xs: "100%", md: "100vh" },
+        width: "100%",
+        height: { xs: "100%", md: "100vh", sm: "100vh" },
         alignContent: "center",
         background: "var(--gradient-lineal2)",
+        padding: { xs: "0 1em 0", md: "0 4em 0", sm: "0 6em 0" },
       }}
     >
-      <Container maxWidth="xl">
-        <Typography
-          variant="h3"
-          sx={{
-            color: "var(--title-color)",
-            marginBottom: { xs: "1.5em", sm: "2em" },
-            fontSize: { xs: "1.5em", sm: "2.5em" },
-            fontWeight: "bold",
-          }}
-        >
-          Reportes más recientes{" "}
-        </Typography>
-        {/* Grid contenedor para las tarjetas */}
-        <Grid container spacing={2}>
-          {/* Tarjetas de animales */}
-          {animalsToShow.map((animal) => (
-            <Grid item xs={12} sm={6} md={3} key={animal.id}>
-              <AnimalCard animal={animal} />
-            </Grid>
-          ))}
-        </Grid>
-
-        {/* Paginado */}
-        <Box
-          sx={{
-            width: "100%",
-            display: "flex",
-            justifyContent: "center",
-            marginTop: 2,
-          }}
-        >
-          <Pagination
-            count={Math.ceil(animals.length / animalsPerPage)}
-            page={currentPage}
-            onChange={handlePageChange}
-            showFirstButton
-            showLastButton
-          />
-        </Box>
-      </Container>
+      <Typography
+        variant="h3"
+        sx={{
+          color: "var(--title-color)",
+          marginBottom: { xs: "1.5em", sm: "2em" },
+          fontSize: { xs: "1.5em", sm: "2.5em" },
+          fontWeight: "bold",
+        }}
+      >
+        Reportes más recientes{" "}
+      </Typography>
+      {/* Grid contenedor para las tarjetas */}
+      <Grid
+        container
+        spacing={2}
+        sx={{
+          width: "100%",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        {animalsToShow.map((animal) => (
+          <Grid
+            item
+            key={animal.id}
+            sx={{
+              display: "flex",
+              maxWidth: { xs: "100%", sm: "50%", md: "25%" },
+              justifyContent: "center",
+              gap: 1,
+              flex: "1 1 auto",
+            }}
+          >
+            <AnimalCard animal={animal} />
+          </Grid>
+        ))}
+      </Grid>
+      {/* Paginado */}
+      <Box
+        sx={{
+          width: "100%",
+          display: "flex",
+          justifyContent: "center",
+          marginTop: 2,
+        }}
+      >
+        <Pagination
+          count={Math.ceil(animals.length / animalsPerPage)}
+          page={currentPage}
+          onChange={handlePageChange}
+          showFirstButton
+          showLastButton
+        />
+      </Box>
     </Box>
   );
 }
