@@ -32,7 +32,7 @@ export default function AnimalCard({ animal }: AnimalCardProps) {
   return (
     <Card
       sx={{
-        width: 300, // Ancho fijo
+        width: {xs: 300, md: 300, sm: 500}, // Ancho fijo
         height: "auto",
         aspectRatio: "4 / 5", // Relación de aspecto
         backgroundColor: "white",
