@@ -7,7 +7,7 @@ export const ChatContainer = styled(Box)({
   justifyContent: "center",
   paddingBottom: "5rem",
   height: "100dvh",
-  backgroundColor: "var(--bg-color)",
+  backgroundColor: "var(--primary-color)",
 });
 
 export const ChatInnerContainer = styled(Box)({
@@ -89,14 +89,14 @@ export const LoadingIcon = styled(Box)({
   justifyContent: "center",
   alignItems: "center",
   flexShrink: 0,
-  color: "#a1a1aa",
+  color: "var (--subprimary-color) !important",
 });
 
 export const LoadingText = styled(Box)({
   display: "flex",
   flexDirection: "column",
   gap: "0.25rem",
-  color: "#a1a1aa",
+  color: "var (--subprimary-color)",
 });
 
 export const WelcomeMessage = styled(Box)({
@@ -121,7 +121,7 @@ export const WelcomeIcons = styled(Box)({
 
 export const MessageBox = styled(Box)({
   fontFamily: "var(--font-raleway) !important",
-  border: "1px solid var(--primary-color)",
+  border: "1px solid var(--subprimary-color)",
   borderRadius: "0.5rem",
   padding: "1.5rem",
   display: "flex",
@@ -145,7 +145,7 @@ export const InputContainer = styled(Box)({
   alignItems: "center",
   width: "100%",
   maxWidth: "calc(100vw - 32px)",
-  backgroundColor: "var(--primary-color)",
+  backgroundColor: "var(--subprimary-color)",
   borderRadius: "100px",
   padding: "0.5rem 1rem",
   "@media (min-width: 768px)": {
@@ -160,13 +160,13 @@ export const ChatInput = styled("input")({
   border: "none",
   outline: "none",
   "::placeholder": {
-    color: "var(--gray-color)",
+    color: "var(--light-color)",
   },
 });
 
 export const SendContent = styled(Box)({
   display: "flex",
   alignItems: "center",
-  color: "var(--gray-color)",
+  color: "var(--light-color)",
   cursor: "default",
 });
