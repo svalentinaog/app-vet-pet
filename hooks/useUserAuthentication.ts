@@ -1,5 +1,6 @@
 import { useDispatch, useSelector } from "react-redux";
 import type { RootState } from "@/lib/store";
+import { signIn } from "@/lib/firebase";
 import { updateUserStateByKey, setUser } from "@/lib/features/userSlice";
 import { UserKeys } from "@/lib/features/userState.types";
 
@@ -17,6 +18,12 @@ export default function useUserAuthentication() {
       }
     };
   };
+
+  const handleSignInForm = async () => {
+    const { email, password } = user;
+    const loginData = await signIn({ email, password })
+    console.log(loginData)
+  }
 
   // Registro
   const handleSignUpForm = async () => {
@@ -44,6 +51,6 @@ export default function useUserAuthentication() {
 
   return {
     user,
-    methods: { updateField, handleSignUpForm },
+    methods: { updateField, handleSignUpForm, handleSignInForm },
   };
 }
