@@ -55,10 +55,12 @@ export default function Login() {
           alignContent: "center",
           textAlign: "center",
           color: "white",
-          background: "rgba(0, 0, 0, 0.075)",
-          borderRadius: "10px",
+          background: "rgba(0, 0, 0, 0)",
+          border: "1px solid rgba(0,0,0,.135)",
+          borderRadius: "50px",
           ":hover": {
-            background: "rgba(0, 0, 0, 0.1)",
+            border: "1px solid rgba(0,0,0,0)",
+            background: "rgba(0, 0, 0, 0.075)",
             cursor: "pointer",
           },
         }}>
