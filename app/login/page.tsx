@@ -4,7 +4,7 @@ import CustomPassField from "@/components/CustomPassField";
 import CustomTextField from "@/components/CustomTextField";
 import useUserAuthentication from "@/hooks/useUserAuthentication";
 import { FormContainer, Fields, FormActions, MainButton, BtnGoogle } from "@/styles/mui";
-import { Button, CardMedia, Typography } from "@mui/material";
+import { CardMedia, Typography } from "@mui/material";
 import Link from "next/link";
 
 export default function Login() {
@@ -57,6 +57,7 @@ export default function Login() {
         <Typography variant="subtitle1" sx={{ lineHeight: "normal" }}>
           ¿No tienes una cuenta? <Link href="/register">Registrate</Link>
         </Typography>
+        {/* me falto añadir boton ir atras link a home y view de register */}
       </FormActions>
     </FormContainer>
   );

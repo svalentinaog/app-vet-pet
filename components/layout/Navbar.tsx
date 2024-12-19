@@ -20,6 +20,8 @@ import { MainButton } from "@/styles/mui";
 import { usePathname } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
+import { useSelector } from "react-redux"; 
+import { RootState } from "@/lib/store";  
 
 interface LinkTabProps {
   label?: string;
@@ -39,6 +41,9 @@ export default function Navbar() {
   const toggleDrawer = (open: boolean) => () => {
     setDrawerOpen(open);
   };
+
+  // Obtener el estado de autenticación del usuario
+  const isAuthenticated = useSelector((state: RootState) => state.user.isAuthenticated);
 
   const LinkTab = (props: LinkTabProps) => {
     const isActive = pathname === props.href;
@@ -94,8 +99,8 @@ export default function Navbar() {
         ))}
         <Divider />
         <ListItem>
-          <MainButton href="/login" sx={{ marginTop: 1 }}>
-            INICIAR SESIÓN
+          <MainButton href={isAuthenticated ? "/" : "/login"} sx={{ marginTop: 1 }}>
+            {isAuthenticated ? "SESIÓN INICIADA" : "INICIAR SESIÓN"}
           </MainButton>
         </ListItem>
       </List>
@@ -174,8 +179,8 @@ export default function Navbar() {
               <LinkTab label="Localizar" href="/map" />
               {/* end Menu desplegable llamado funcionalidades */}
             </Tabs>
-            <MainButton sx={{ maxWidth: "200px" }} href="/login">
-              INICIAR SESIÓN
+            <MainButton sx={{ maxWidth: "200px" }} href={isAuthenticated ? "/" : "/login"}>
+              {isAuthenticated ? "SESIÓN INICIADA" : "INICIAR SESIÓN"}
             </MainButton>
           </Box>
 

@@ -1,56 +1,71 @@
 import { useDispatch, useSelector } from "react-redux";
 import type { RootState } from "@/lib/store";
-import { signIn } from "@/lib/firebase";
+import { auth, signIn } from "@/lib/firebase";
 import { updateUserStateByKey, setUser } from "@/lib/features/userSlice";
 import { UserKeys } from "@/lib/features/userState.types";
+import { onAuthStateChanged } from "firebase/auth";
 
 export default function useUserAuthentication() {
   const dispatch = useDispatch();
 
   const user = useSelector((state: RootState) => state.user.user);
+  const isAuthenticated = useSelector((state: RootState) => state.user.isAuthenticated);
 
-  // Actualizar entrada de texto
   const updateField = (key: UserKeys) => {
     return (event: React.ChangeEvent<HTMLInputElement>) => {
       if (user) {
-        console.log("Actualizando campo:", key, "Valor:", event.target.value);
+        // console.log("Actualizando campo:", key, "Valor:", event.target.value);
         dispatch(updateUserStateByKey({ key, value: event.target.value }));
       }
     };
   };
-
+  
   const handleSignInForm = async () => {
     const { email, password } = user;
-    const loginData = await signIn({ email, password })
-    console.log(loginData)
-  }
-
-  // Registro
-  const handleSignUpForm = async () => {
-    if (user) {
-      const { name, email, phone, password } = user;
-
-      try {
-        const response = await fetch("/api/register", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ name, email, phone, password }),
-        });
-
-        if (response.ok) {
-          const data = await response.json();
-          dispatch(setUser(data));
+    try {
+      const loginData = await signIn({ email, password });
+      console.log("Inicio de sesión exitoso:", loginData);
+      const unsubscribe = onAuthStateChanged(auth, (user) => {
+        console.log("^=.=^", user)
+        if (user) {
+          dispatch(setUser({ 
+            user: {
+              email: user.email || "",
+              name: user.displayName || "Nombre por default",
+              phone: user.phoneNumber || "",
+              password: "",
+              pets: [],
+              profilePictureUrl: user.photoURL || "",
+              role: "user", // rol predeterminado
+            },
+            isAuthenticated: true, // Usuario autenticado
+          }));
         } else {
-          console.error("Error al registrar el usuario");
+          dispatch(setUser({
+            user: {
+              email: "",
+              name: "",
+              phone: "",
+              password: "",
+              pets: [],
+              profilePictureUrl: "",
+              role: undefined,
+            },
+            isAuthenticated: false, // Usuario no autenticado
+          }));
         }
-      } catch (error) {
-        console.error("Error en la solicitud:", error);
-      }
+      });
+    
+      return () => unsubscribe(); 
+      // window.location.href = "/"; // Redirige a la página protegida
+    } catch (error) {
+      console.error("Error al iniciar sesión:", error);
     }
   };
-
+  
   return {
     user,
-    methods: { updateField, handleSignUpForm, handleSignInForm },
+    isAuthenticated,
+    methods: { updateField, handleSignInForm },
   };
 }
