@@ -3,10 +3,8 @@
 import CustomPassField from "@/components/CustomPassField";
 import CustomTextField from "@/components/CustomTextField";
 import useUserAuthentication from "@/hooks/useUserAuthentication";
-import { FormContainer, Fields, FormActions, MainButton } from "@/styles/mui";
-import { Button, CardMedia, Typography } from "@mui/material";
-import GoogleIcon from '@mui/icons-material/Google';
-import { signIn } from "@/lib/firebase";
+import { FormContainer, Fields, FormActions, MainButton, BtnGoogle } from "@/styles/mui";
+import { CardMedia, Typography } from "@mui/material";
 import Link from "next/link";
 
 export default function Login() {
@@ -43,27 +41,8 @@ export default function Login() {
         <Typography variant="subtitle1" sx={{ lineHeight: "normal" }}>
           ó continua con
         </Typography>
-        <Button sx={{
-          minWidth: "50px",
-          minHeight: "50px",
-          width: "50px",
-          height: "50px",
-          padding: "0.75em",
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          alignContent: "center",
-          textAlign: "center",
-          color: "white",
-          background: "rgba(0, 0, 0, 0)",
-          border: "1px solid rgba(0,0,0,.135)",
-          borderRadius: "50px",
-          ":hover": {
-            border: "1px solid rgba(0,0,0,0)",
-            background: "rgba(0, 0, 0, 0.075)",
-            cursor: "pointer",
-          },
-        }}>
+        {/* Iniciar sesión con Google */}
+        <BtnGoogle>
           <CardMedia
             component="img"
             image="/assets/google.png"
@@ -73,11 +52,12 @@ export default function Login() {
               maxHeight: "100%",
               objectFit: "contain",
             }}/>
-        </Button>
+        </BtnGoogle>
         {/* Enlace a la página de registro */}
         <Typography variant="subtitle1" sx={{ lineHeight: "normal" }}>
           ¿No tienes una cuenta? <Link href="/register">Registrate</Link>
         </Typography>
+        {/* me falto añadir boton ir atras link a home y view de register */}
       </FormActions>
     </FormContainer>
   );

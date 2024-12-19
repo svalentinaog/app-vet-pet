@@ -8,8 +8,11 @@ import Typography from "@mui/material/Typography";
 import { Box, Button, CardMedia } from "@mui/material";
 import PhoneIcon from "@mui/icons-material/Phone";
 import PetsIcon from "@mui/icons-material/Pets";
+import AnimalModalEdit from "@/components/AnimalModalEdit";
+import AnimalDetail from "@/components/AnimalDetail";
+import Link from "next/link";
 
-interface Animal {
+export interface Animal {
   id: number;
   image: string;
   name: string;
@@ -24,12 +27,16 @@ interface AnimalCardProps {
 }
 
 export default function AnimalCard({ animal }: AnimalCardProps) {
+
   const statusColors: Record<string, string> = {
     "Sin hogar": "#3DC132",
     Perdido: "#CC818E",
   };
 
+
   return (
+    <>
+    <Link href={`/animal-detail/${String(animal.id)}`} legacyBehavior>
     <Card
       sx={{
         width: {xs: 300, md: 300, sm: 500}, // Ancho fijo
@@ -45,7 +52,6 @@ export default function AnimalCard({ animal }: AnimalCardProps) {
         borderColor: "white",
         ":hover": {
           borderColor: "var(--secondary-color)",
-          cursor: "pointer",
         },
         display: "flex",
         flexDirection: "column",
@@ -54,7 +60,9 @@ export default function AnimalCard({ animal }: AnimalCardProps) {
         gap: 1,
         padding: 3
       }}
+
     >
+
       <Box
         sx={{
           width: "100%",
@@ -132,5 +140,7 @@ export default function AnimalCard({ animal }: AnimalCardProps) {
         </CardActions>
       </CardContent>
     </Card>
+    </Link>
+    </>
   );
 }

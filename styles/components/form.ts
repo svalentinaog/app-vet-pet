@@ -1,5 +1,5 @@
 import styled from "@emotion/styled";
-import { FormControl, TextField, Box } from "@mui/material";
+import { FormControl, TextField, Box, Button } from "@mui/material";
 import { Grid } from "@mui/system";
 
 // Formulario
@@ -134,4 +134,27 @@ font-family: var(--font-poppins);
 
   @media (max-width: 600px) {
     justify-content: flex-end
+`;
+
+export const BtnGoogle = styled(Button)`
+  min-width: 50px;
+  min-height: 50px;
+  width: 50px;
+  height: 50px;
+  padding: 0.75em;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  align-content: center;
+  text-align: center;
+  color: white;
+  background: rgba(0, 0, 0, 0);
+  border: 1px solid rgba(0, 0, 0, 0.135);
+  border-radius: 50px;
+
+  &:hover {
+    border: 1px solid rgba(0, 0, 0, 0);
+    background: rgba(0, 0, 0, 0.075);
+    cursor: pointer;
+  }
 `;
