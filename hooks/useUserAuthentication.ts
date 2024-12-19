@@ -4,9 +4,12 @@ import { auth, signIn } from "@/lib/firebase";
 import { updateUserStateByKey, setUser } from "@/lib/features/userSlice";
 import { UserKeys } from "@/lib/features/userState.types";
 import { onAuthStateChanged } from "firebase/auth";
+import { useRouter } from "next/navigation"
 
 export default function useUserAuthentication() {
   const dispatch = useDispatch();
+
+  const navigation = useRouter();
 
   const user = useSelector((state: RootState) => state.user.user);
   const isAuthenticated = useSelector((state: RootState) => state.user.isAuthenticated);
@@ -19,16 +22,16 @@ export default function useUserAuthentication() {
       }
     };
   };
-  
+
   const handleSignInForm = async () => {
     const { email, password } = user;
     try {
       const loginData = await signIn({ email, password });
       console.log("Inicio de sesión exitoso:", loginData);
       const unsubscribe = onAuthStateChanged(auth, (user) => {
-        console.log("^=.=^", user)
+        console.log("=^.^=", user)
         if (user) {
-          dispatch(setUser({ 
+          dispatch(setUser({
             user: {
               email: user.email || "",
               name: user.displayName || "Nombre por default",
@@ -38,7 +41,7 @@ export default function useUserAuthentication() {
               profilePictureUrl: user.photoURL || "",
               role: "user", // rol predeterminado
             },
-            isAuthenticated: true, // Usuario autenticado
+            isAuthenticated: true, // usuario autenticado
           }));
         } else {
           dispatch(setUser({
@@ -51,18 +54,20 @@ export default function useUserAuthentication() {
               profilePictureUrl: "",
               role: undefined,
             },
-            isAuthenticated: false, // Usuario no autenticado
+            isAuthenticated: false, // usuario no autenticado
           }));
         }
       });
-    
-      return () => unsubscribe(); 
-      // window.location.href = "/"; // Redirige a la página protegida
+
+      navigation.push("/")
+
+      return () => unsubscribe();
+      
     } catch (error) {
       console.error("Error al iniciar sesión:", error);
     }
   };
-  
+
   return {
     user,
     isAuthenticated,
