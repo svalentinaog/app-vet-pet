@@ -30,11 +30,7 @@ setPersistence(auth, browserLocalPersistence).catch((error) => {
 
 export default app;
 
-// =========== Inicio de sesión con E-mail y Contraseña =========== //
-// export const signIn = (user: { email: string; password: string }) => {
-//   return signInWithEmailAndPassword(auth, user.email, user.password);
-// };
-
+// ============== Inicio de sesión con E-mail y Contraseña ============== //
 export const signIn = async (user: { email: string; password: string }) => {
   const userCredential = await signInWithEmailAndPassword(auth, user.email, user.password);
   const token = await getIdToken(userCredential.user);

@@ -17,7 +17,7 @@ import {
 } from "@mui/material";
 import MenuOpenIcon from "@mui/icons-material/MenuOpen";
 import { MainButton } from "@/styles/mui";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
 import { useSelector } from "react-redux"; 
@@ -29,10 +29,20 @@ interface LinkTabProps {
 }
 
 export default function Navbar() {
-  const pathname = usePathname();
   const [value, setValue] = React.useState(0);
   const [drawerOpen, setDrawerOpen] = React.useState(false);
-  const [scrolled, setScrolled] = React.useState(false); // Estado para controlar el scroll
+  const [scrolled, setScrolled] = React.useState(false); 
+  const pathname = usePathname();
+  const navigation = useRouter();
+  const isAuthenticated = useSelector((state: RootState) => state.user.isAuthenticated);  
+
+  const handleAuthButtonClick = () => {
+    if (isAuthenticated) {
+      navigation.push("/profile");
+    } else {
+      navigation.push("/login");
+    }
+  };
 
   const handleChange = (_event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
@@ -41,9 +51,6 @@ export default function Navbar() {
   const toggleDrawer = (open: boolean) => () => {
     setDrawerOpen(open);
   };
-
-  // Obtener el estado de autenticación del usuario
-  const isAuthenticated = useSelector((state: RootState) => state.user.isAuthenticated);
 
   const LinkTab = (props: LinkTabProps) => {
     const isActive = pathname === props.href;
@@ -99,7 +106,7 @@ export default function Navbar() {
         ))}
         <Divider />
         <ListItem>
-          <MainButton href={isAuthenticated ? "/" : "/login"} sx={{ marginTop: 1 }}>
+          <MainButton sx={{ marginTop: 1 }} onClick={handleAuthButtonClick}>
             {isAuthenticated ? "SESIÓN INICIADA" : "INICIAR SESIÓN"}
           </MainButton>
         </ListItem>
@@ -107,18 +114,15 @@ export default function Navbar() {
     </Box>
   );
 
-  // Función para monitorear el scroll y aplicar el efecto blur
   React.useEffect(() => {
     const handleScroll = () => {
       if (window.scrollY > 50) {
-        setScrolled(true); // Activa el fondo blur
+        setScrolled(true);
       } else {
-        setScrolled(false); // Desactiva el fondo blur
+        setScrolled(false);
       }
     };
-
     window.addEventListener("scroll", handleScroll);
-
     return () => {
       window.removeEventListener("scroll", handleScroll);
     };
@@ -179,7 +183,7 @@ export default function Navbar() {
               <LinkTab label="Localizar" href="/map" />
               {/* end Menu desplegable llamado funcionalidades */}
             </Tabs>
-            <MainButton sx={{ maxWidth: "200px" }} href={isAuthenticated ? "/" : "/login"}>
+            <MainButton sx={{ maxWidth: "200px" }} onClick={handleAuthButtonClick}>
               {isAuthenticated ? "SESIÓN INICIADA" : "INICIAR SESIÓN"}
             </MainButton>
           </Box>
