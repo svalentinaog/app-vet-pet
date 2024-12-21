@@ -18,6 +18,7 @@ import {
   SnackbarCloseReason,
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
+import { CldUploadWidget } from "next-cloudinary";
 
 interface FormDataReport {
   reportType: "lost" | "found";
@@ -29,7 +30,7 @@ interface FormDataReport {
   description: string;
   age?: string; // Edad aproximada (solo para "perdido")
   status?: string; // Estado: Sin hogar, Perdido, etc.
-  images: string[];
+  images: Object[];
   reward?: string; //Solo para "perdido"
   dateCreationReport: string; // Fecha de creación del reporte
 }
@@ -53,6 +54,7 @@ const ReportForm = () => {
   const [formData, setFormData] = useState<FormDataReport>(initialFormData);
   const [loading, setLoading] = useState<boolean>(false);
   const [open, setOpen] = React.useState(false);
+  const [showImages, setShowImages] = useState<string[]>([]);
 
   const handleChange = (
     e:
@@ -70,38 +72,36 @@ const ReportForm = () => {
     }
   };
 
-  const handleImageUpload = (event: ChangeEvent<HTMLInputElement>) => {
-    if (event.target.files) {
-      const files = Array.from(event.target.files);
-      const newImages = files.map((file) => URL.createObjectURL(file));
-
-      setFormData((prev) => ({
-        ...prev,
-        images: [...prev.images, ...newImages],
-      }));
-    }
-  };
-
-  const handleRemoveImage = (index: number) => {
-    setFormData((prev) => ({
-      ...prev,
-      images: prev.images.filter((_, i) => i !== index),
-    }));
-  };
-
   const handleReset = () => {
     setFormData(initialFormData);
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
-    setTimeout(() => {
-      console.log("Formulario enviado:", formData);
+    try {
+      const response = await fetch("/api/cloudinary", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ imagePath: formData.images[0] }), // Asegúrate de enviar la propiedad "imagePath"
+      });
+
+      const data = await response.json();
+      if (response.ok) {
+        console.log("Imágenes subidas exitosamente:", data.urls); // Usar "urls" ya que el backend devuelve un array
+      } else {
+        console.error("Error al subir las imágenes:", data.message);
+      }
+    } catch (error) {
+      console.error("Error en el envío de datos:", error);
+    } finally {
       setOpen(true);
       setLoading(false);
       setFormData(initialFormData);
-    }, 2000);
+      setUploadedImages([]);
+    }
   };
 
   const handleClose = (
@@ -111,7 +111,6 @@ const ReportForm = () => {
     if (reason === "clickaway") {
       return;
     }
-
     setOpen(false);
   };
 
@@ -121,6 +120,34 @@ const ReportForm = () => {
     // Formatear con separadores de miles y punto decimal
     return new Intl.NumberFormat("es-CO").format(Number(numericValue));
   };
+
+  const [uploadedImages, setUploadedImages] = useState<string[]>([]);
+
+  async function deleteImage(publicId: string) {
+    try {
+      const response = await fetch("/api/sign-image", {
+        // Usa la misma ruta que ya tienes
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          public_id: publicId,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to delete image");
+      }
+      setUploadedImages(uploadedImages.filter((e) => e != publicId)); // Eliminar el archivo seleccionado
+      const result = await response.json();
+      return result;
+    } catch (error) {
+      console.error("Error deleting image:", error);
+      throw error;
+    }
+  }
+  console.log(formData);
 
   return (
     <>
@@ -155,7 +182,6 @@ const ReportForm = () => {
               </MenuItem>
             </Select>
           </FormControl>
-
           {/* Campos comunes */}
           <Grid container spacing={2} marginTop={1}>
             <Grid item xs={12} md={6}>
@@ -180,7 +206,6 @@ const ReportForm = () => {
               />
             </Grid>
           </Grid>
-
           <Grid container spacing={2} marginTop={1}>
             <Grid item xs={12} md={6}>
               <FormControl fullWidth>
@@ -210,60 +235,82 @@ const ReportForm = () => {
               />
             </Grid>
           </Grid>
-
-          {/* Subir imágenes */}
-          <Box marginTop={2} textAlign="center">
-            <Button
-              variant="contained"
-              component="label"
-              color="primary"
-              sx={{ mb: 2 }}
-            >
-              Subir fotos de la mascota
-              <input
-                type="file"
-                accept="image/*"
-                multiple
-                onChange={handleImageUpload}
-                hidden
-              />
-            </Button>
-            <Box
-              display="flex"
-              flexWrap="wrap"
-              justifyContent="center"
-              gap={2}
-              marginTop={1}
-            >
-              {formData.images.map((image, index) => (
-                <Box key={index} position="relative">
-                  <img
-                    src={image}
-                    alt={`Uploaded ${index}`}
-                    style={{
-                      width: 100,
-                      height: 100,
-                      objectFit: "cover",
-                      borderRadius: "8px",
-                    }}
-                  />
-                  <IconButton
-                    size="small"
-                    sx={{
-                      position: "absolute",
-                      top: 0,
-                      right: 0,
-                      backgroundColor: "rgba(255, 0, 0, 0.7)",
-                      color: "white",
-                    }}
-                    onClick={() => handleRemoveImage(index)}
-                  >
-                    <CloseIcon />
-                  </IconButton>
-                </Box>
-              ))}
-            </Box>
-          </Box>
+          {/* Subir imágenes en CLoudinary*/}
+          <CldUploadWidget
+            signatureEndpoint="/api/sign-image"
+            onSuccess={(results) => {
+              const newImage = results?.info?.public_id;
+              setUploadedImages((prev) => [...prev, newImage]);
+              setFormData((prev) => ({
+                ...prev,
+                images: [...prev.images, newImage], // Añadir imagen a formData.images
+              }));
+            }}
+            options={{
+              maxFiles: 5,
+              resourceType: "image",
+              showAdvancedOptions: true,
+            }}
+          >
+            {({ open }) => {
+              return (
+                <>
+                  <Box marginTop={2} textAlign="center">
+                    <Button
+                      variant="contained"
+                      component="label"
+                      color="primary"
+                      sx={{ mb: 2 }}
+                      onClick={() => open()}
+                    >
+                      Subir fotos de la mascota (Cloudinary)
+                    </Button>
+                    <Box
+                      display="flex"
+                      flexWrap="wrap"
+                      justifyContent="center"
+                      gap={2}
+                      marginTop={1}
+                    >
+                      {uploadedImages?.map((publicId) => (
+                        <Box key={publicId} position="relative">
+                          <img
+                            src={`https://res.cloudinary.com/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/image/upload/${publicId}`}
+                            alt={`Uploaded ${publicId}`}
+                            style={{
+                              width: 100,
+                              height: 100,
+                              objectFit: "cover",
+                              borderRadius: "8px",
+                            }}
+                          />
+                          <IconButton
+                            size="small"
+                            sx={{
+                              position: "absolute",
+                              top: 0,
+                              right: 0,
+                              backgroundColor: "rgba(255, 0, 0, 0.7)",
+                              color: "white",
+                            }}
+                            onClick={() => {
+                              deleteImage(publicId)
+                              setFormData((prev) => ({
+                                ...prev,
+                                images: prev.images.filter((img) => img !== publicId), // Remover imagen de formData.images
+                              }));
+                            }}
+                          >
+                            <CloseIcon />
+                          </IconButton>
+                        </Box>
+                      ))}
+                    </Box>
+                  </Box>
+                </>
+              );
+            }}
+          </CldUploadWidget>
 
           {/* Campos específicos según el tipo de reporte */}
           {formData.reportType === "lost" && (
@@ -320,39 +367,38 @@ const ReportForm = () => {
                 required
               />
               <Box
-              sx={{
-                position:"relative",
-              }}
+                sx={{
+                  position: "relative",
+                }}
               >
                 <Typography
-                sx={{
-                  position:"absolute",
-                  top: "55%",
-                  right: "0%",
-                  transform: "translate(-50%, -50%)",
-                  fontSize: "16px",
-                  fontWeight: 500,
-                  color: "text.secondary",
-                }}
+                  sx={{
+                    position: "absolute",
+                    top: "55%",
+                    right: "0%",
+                    transform: "translate(-50%, -50%)",
+                    fontSize: "16px",
+                    fontWeight: 500,
+                    color: "text.secondary",
+                  }}
                 >
                   COP
                 </Typography>
-              <TextField
-                label="Recompensa (opcional)"
-                name="reward"
-                value={formData.reward || ""}
-                onChange={handleChange}
-                fullWidth
-                margin="normal"
-                placeholder="Ingrese una cantidad en dinero"
-                inputProps={{
-                  inputMode: "numeric", // Optimiza el teclado para números en móviles
-                }}
-              />
+                <TextField
+                  label="Recompensa (opcional)"
+                  name="reward"
+                  value={formData.reward || ""}
+                  onChange={handleChange}
+                  fullWidth
+                  margin="normal"
+                  placeholder="Ingrese una cantidad en dinero"
+                  inputProps={{
+                    inputMode: "numeric", // Optimiza el teclado para números en móviles
+                  }}
+                />
               </Box>
             </>
           )}
-
           {formData.reportType === "found" && (
             <>
               <FormControl margin="normal" fullWidth>
@@ -380,7 +426,6 @@ const ReportForm = () => {
               />
             </>
           )}
-
           {/* Botón de envío */}
           {loading ? (
             <Box
