@@ -13,7 +13,7 @@ export default function Entry() {
         background: "var(--gradient-round)",
         height: { xs: "50vh", md: "90vh", sm: "90vh" },
       }}
-      >
+    >
       <Box
         sx={{
           width: "100%",
@@ -28,7 +28,12 @@ export default function Entry() {
           display: "flex",
           justifyContent: "center",
           alignItems: "center",
-          padding: { xs: "2em 1em 0", md: "0 4em 0", sm: "0 6em 0" },
+          padding: {
+            xs: "2em 1em 0",
+            sm: "0 6em 0",
+            md: "0 8em 0",
+            lg: "0 15em 0",
+          },
         }}
       >
         <Box
