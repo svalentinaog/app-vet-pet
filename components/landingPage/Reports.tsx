@@ -87,10 +87,15 @@ export default function Reports() {
       id="reports"
       sx={{
         width: "100%",
-        height: { xs: "100%", md: "100vh", sm: "100vh" },
+        height: { xs: "100%", sm: "100vh", md: "100vh", lg: "100%" },
         alignContent: "center",
         background: "var(--gradient-lineal2)",
-        padding: { xs: "0 1em 0", md: "0 4em 0", sm: "0 6em 0" },
+        padding: {
+          xs: "0 1em 0",
+          sm: "0 6em 0",
+          md: "0 8em 0",
+          lg: "0 15em 0",
+        },
       }}
     >
       <Typography
@@ -108,24 +113,29 @@ export default function Reports() {
       <Grid
         container
         spacing={2}
-        sx={{
-          width: "100%",
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-        }}
+        // sx={{
+        //   width: "100%",
+        //   display: "flex",
+        //   justifyContent: "center",
+        //   alignItems: "center",
+        // }}
       >
         {animalsToShow.map((animal) => (
           <Grid
             item
             key={animal.id}
-            sx={{
-              display: "flex",
-              maxWidth: { xs: "100%", sm: "50%", md: "25%" },
-              justifyContent: "center",
-              gap: 1,
-              flex: "1 1 auto",
-            }}
+            xs={12}
+            sm={6}
+            md={3}
+            marginBottom={6}
+            // sx={{
+            //   width: "100%",
+            //   display: "flex",
+            //   maxWidth: { xs: "100%", sm: "50%", md: "25%" },
+            //   justifyContent: "center",
+            //   gap: 1,
+            //   flex: "1 1 auto",
+            // }}
           >
             <AnimalCard animal={animal} />
           </Grid>

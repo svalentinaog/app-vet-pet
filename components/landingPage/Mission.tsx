@@ -10,12 +10,17 @@ export default function Mission() {
       id="mission"
       sx={{
         width: "100%",
-        height: { xs: "100%", md: "70vh" },
+        height: { xs: "100%", md: "100%" },
         display: "flex",
         flexWrap: "wrap",
         alignItems: "center",
         justifyContent: "space-between",
-        padding: { xs: "0 1em 0", md: "0 4em 0", sm: "0 6em 0" },
+        padding: {
+          xs: "0 1em 0",
+          sm: "0 6em 0",
+          md: "0 8em 0",
+          lg: "0 15em 0",
+        },
       }}
     >
       <Box
@@ -44,9 +49,9 @@ export default function Mission() {
           }}
         >
           En VetPet creemos que cada animal merece una oportunidad de vivir en
-          un entorno seguro y amoroso. Nuestra app conecta personas con
-          recursos y herramientas que ayudan a proteger y mejorar la vida de
-          los animales en su comunidad.
+          un entorno seguro y amoroso. Nuestra app conecta personas con recursos
+          y herramientas que ayudan a proteger y mejorar la vida de los animales
+          en su comunidad.
         </Typography>
       </Box>
       <Box

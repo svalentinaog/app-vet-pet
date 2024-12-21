@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import * as React from "react";
 import {
@@ -20,8 +20,8 @@ import { MainButton } from "@/styles/mui";
 import { usePathname, useRouter } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
-import { useSelector } from "react-redux"; 
-import { RootState } from "@/lib/store";  
+import { useSelector } from "react-redux";
+import { RootState } from "@/lib/store";
 
 interface LinkTabProps {
   label?: string;
@@ -31,10 +31,12 @@ interface LinkTabProps {
 export default function Navbar() {
   const [value, setValue] = React.useState(0);
   const [drawerOpen, setDrawerOpen] = React.useState(false);
-  const [scrolled, setScrolled] = React.useState(false); 
+  const [scrolled, setScrolled] = React.useState(false);
   const pathname = usePathname();
   const navigation = useRouter();
-  const isAuthenticated = useSelector((state: RootState) => state.user.isAuthenticated);  
+  const isAuthenticated = useSelector(
+    (state: RootState) => state.user.isAuthenticated
+  );
 
   const handleAuthButtonClick = () => {
     if (isAuthenticated) {
@@ -134,71 +136,80 @@ export default function Navbar() {
       sx={{
         width: "100%",
         background: scrolled ? "rgba(0, 0, 0, 0.1)" : "transparent",
-        padding: { xs: "1em 1em 1em", md: "1em 4em 1em", sm: "1em 6em 1em" },
+        padding: {
+          xs: "1em 1em 1em",
+          sm: "1em 6em 1em",
+          md: "1em 8em 1em",
+          lg: "2em 15em 2em",
+        },
         boxShadow: scrolled ? "0 1px 1px rgba(255, 255, 255, 0.1)" : "inherit",
         backdropFilter: scrolled ? "blur(2px)" : "none",
         transition: "background 0.3s, box-shadow 0.3s, backdrop-filter 0.3s",
-      }}>
-        <Toolbar
-          disableGutters
+      }}
+    >
+      <Toolbar
+        disableGutters
+        sx={{
+          width: "100%",
+          justifyContent: "space-between",
+          alignItems: "center",
+        }}
+      >
+        {/* Icono de la App (Logo)*/}
+        <Box sx={{ width: "100%" }}>
+          <Image
+            src="/assets/logo.svg"
+            alt="Logo"
+            width={100}
+            height={0}
+            layout="intrinsic"
+          />
+        </Box>
+        {/* Navbar Tabs (Desktop) */}
+        <Box
           sx={{
             width: "100%",
-            justifyContent: "space-between",
+            display: { xs: "none", md: "flex" },
+            justifyContent: "flex-end",
             alignItems: "center",
+            gap: 4,
           }}
         >
-          {/* Icono de la App (Logo)*/}
-          <Box sx={{ width: "100%" }}>
-            <Image
-              src="/assets/logo.svg"
-              alt="Logo"
-              width={100}
-              height={0}
-              layout="intrinsic"
-            />
-          </Box>
-          {/* Navbar Tabs (Desktop) */}
-          <Box
-            sx={{
-              width: "100%",
-              display: { xs: "none", md: "flex" },
-              justifyContent: "flex-end",
-              alignItems: "center",
-              gap: 4,
-            }}
+          <Tabs
+            value={value}
+            onChange={handleChange}
+            textColor="primary"
+            indicatorColor="secondary"
+            sx={{ width: "auto" }}
           >
-            <Tabs
-              value={value}
-              onChange={handleChange}
-              textColor="primary"
-              indicatorColor="secondary"
-              sx={{ width: "auto" }}
-            >
-              <LinkTab label="Inicio" href="/" />
+            <LinkTab label="Inicio" href="/" />
 
-              {/* Menú desplegable */}
-              {/* start Menu desplegable llamado funcionalidades */}
-              <LinkTab label="Informar" href="#report" />
-              <LinkTab label="Consultar" href="/chatbot" />
-              <LinkTab label="Localizar" href="/map" />
-              {/* end Menu desplegable llamado funcionalidades */}
-            </Tabs>
-            <MainButton sx={{ maxWidth: "200px" }} onClick={handleAuthButtonClick}>
-              {isAuthenticated ? "SESIÓN INICIADA" : "INICIAR SESIÓN"}
-            </MainButton>
-          </Box>
+            {/* Menú desplegable */}
+            {/* start Menu desplegable llamado funcionalidades */}
+            <LinkTab label="Informar" href="#report" />
+            <LinkTab label="Consultar" href="/chatbot" />
+            <LinkTab label="Localizar" href="/map" />
+            {/* end Menu desplegable llamado funcionalidades */}
+          </Tabs>
+          <MainButton
+            sx={{ maxWidth: "200px" }}
+            onClick={handleAuthButtonClick}
+          >
+            {isAuthenticated ? "SESIÓN INICIADA" : "INICIAR SESIÓN"}
+          </MainButton>
+        </Box>
 
-          {/* Menu de Hamburguesa (Mobile) */}
-          <Box sx={{ display: { xs: "block", md: "none" } }}>
-            <IconButton
-              onClick={toggleDrawer(true)}
-              color="inherit"
-              sx={{ color: "var(--light-color)" }}
-            >
-              <MenuOpenIcon />
-            </IconButton>
-          </Box>
-        </Toolbar>
+        {/* Menu de Hamburguesa (Mobile) */}
+        <Box sx={{ display: { xs: "block", md: "none" } }}>
+          <IconButton
+            onClick={toggleDrawer(true)}
+            color="inherit"
+            sx={{ color: "var(--light-color)" }}
+          >
+            <MenuOpenIcon />
+          </IconButton>
+        </Box>
+      </Toolbar>
       {/* Drawer para el Menú de Navegación en Mobile */}
       <Drawer anchor="left" open={drawerOpen} onClose={toggleDrawer(false)}>
         {drawerContent}

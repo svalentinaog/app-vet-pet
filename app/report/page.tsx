@@ -123,7 +123,23 @@ const ReportForm = () => {
   };
 
   return (
-    <>
+    <Box
+      id="report"
+      sx={{
+        width: "100%",
+        height: { xs: "100%", md: "100%" },
+        display: "flex",
+        flexWrap: "wrap",
+        alignItems: "center",
+        justifyContent: "space-between",
+        padding: {
+          xs: "0 1em 0",
+          sm: "0 6em 0",
+          md: "0 8em 0",
+          lg: "0 15em 15em",
+        },
+      }}
+    >
       <Box
         sx={{
           maxWidth: 700,
@@ -320,35 +336,35 @@ const ReportForm = () => {
                 required
               />
               <Box
-              sx={{
-                position:"relative",
-              }}
+                sx={{
+                  position: "relative",
+                }}
               >
                 <Typography
-                sx={{
-                  position:"absolute",
-                  top: "55%",
-                  right: "0%",
-                  transform: "translate(-50%, -50%)",
-                  fontSize: "16px",
-                  fontWeight: 500,
-                  color: "text.secondary",
-                }}
+                  sx={{
+                    position: "absolute",
+                    top: "55%",
+                    right: "0%",
+                    transform: "translate(-50%, -50%)",
+                    fontSize: "16px",
+                    fontWeight: 500,
+                    color: "text.secondary",
+                  }}
                 >
                   COP
                 </Typography>
-              <TextField
-                label="Recompensa (opcional)"
-                name="reward"
-                value={formData.reward || ""}
-                onChange={handleChange}
-                fullWidth
-                margin="normal"
-                placeholder="Ingrese una cantidad en dinero"
-                inputProps={{
-                  inputMode: "numeric", // Optimiza el teclado para números en móviles
-                }}
-              />
+                <TextField
+                  label="Recompensa (opcional)"
+                  name="reward"
+                  value={formData.reward || ""}
+                  onChange={handleChange}
+                  fullWidth
+                  margin="normal"
+                  placeholder="Ingrese una cantidad en dinero"
+                  inputProps={{
+                    inputMode: "numeric", // Optimiza el teclado para números en móviles
+                  }}
+                />
               </Box>
             </>
           )}
@@ -417,7 +433,7 @@ const ReportForm = () => {
           ¡Reporte enviado con éxito!
         </Alert>
       </Snackbar>
-    </>
+    </Box>
   );
 };
 

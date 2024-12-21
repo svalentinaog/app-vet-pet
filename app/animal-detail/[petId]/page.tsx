@@ -248,12 +248,15 @@ const AnimalDetail = () => {
         </Tooltip>
         <CardContent sx={{ flex: "1", p: 4 }}>
           <Grid container spacing={2} alignItems="center">
-            <Grid item xs={12} sx={{
+            <Grid
+              item
+              xs={12}
+              sx={{
                 display: "flex",
                 justifyContent: "flex-start",
                 alignItems: "center",
-                
-            }}>
+              }}
+            >
               <Typography
                 variant="h3"
                 fontWeight="bold"
@@ -266,33 +269,33 @@ const AnimalDetail = () => {
                   mb: 0,
                 }}
               >
-                {animal.name} 
+                {animal.name}
                 <PetsIcon fontSize="large" />
               </Typography>
-                {/* Botón de editar */}
-                {animal.id == 1 ? (
-                  <Box
-                    onClick={handleEditModalOpen}
+              {/* Botón de editar */}
+              {animal.id == 1 ? (
+                <Box
+                  onClick={handleEditModalOpen}
+                  sx={{
+                    paddingLeft: 2,
+                  }}
+                >
+                  <IconButton
+                    color="secondary"
                     sx={{
-                        paddingLeft: 2,
+                      transition: "all 0.3s",
+                      "&:hover": {
+                        transform: "rotate(10deg)",
+                        color: "#ab47bc",
+                      },
                     }}
                   >
-                    <IconButton
-                      color="secondary"
-                      sx={{
-                        transition: "all 0.3s",
-                        "&:hover": {
-                          transform: "rotate(10deg)",
-                          color: "#ab47bc",
-                        },
-                      }}
-                    >
-                      <EditIcon fontSize="large" />
-                    </IconButton>
-                  </Box>
-                ) : (
-                  ""
-                )}
+                    <EditIcon fontSize="large" />
+                  </IconButton>
+                </Box>
+              ) : (
+                ""
+              )}
             </Grid>
             <Grid item xs={12}>
               <Chip
