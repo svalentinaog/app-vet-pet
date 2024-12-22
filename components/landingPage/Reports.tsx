@@ -161,13 +161,13 @@ export default function Reports() {
               backgroundColor: "rgba(159, 164, 219, 0.7)",
             },
             "& .Mui-selected": {
-              backgroundColor: "var(--primary-color)",
+              backgroundColor: "var(--primary-color) !important",
               color: "white",
             },
           }}
         />
         <Button
-          href="/all-reports"
+          href="/reports"
           sx={{
             color: "var(--title-color)",
             backgroundColor: "transparent",

@@ -18,6 +18,7 @@ export default function Entry() {
       <Box
         sx={{
           width: "100%",
+          height: "100%",
           backgroundImage: {
             xs: "url('/assets/paws-mobile.svg')",
             md: "url('/assets/paws.svg')",
@@ -25,7 +26,6 @@ export default function Entry() {
           backgroundSize: "cover",
           backgroundPosition: { xs: "right", sm: "center", md: "center" },
           backgroundRepeat: "no-repeat",
-          height: "100%",
           display: "flex",
           justifyContent: "center",
           alignItems: "center",

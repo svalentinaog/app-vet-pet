@@ -66,7 +66,7 @@ export default function Mission() {
           component="img"
           alt="Imagen de fondo"
           height="100%"
-          image="/assets/img-mission.png"
+          image="/assets/mission.svg"
           sx={{
             objectFit: "cover",
             borderRadius: "8px",

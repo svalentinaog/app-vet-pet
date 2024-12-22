@@ -3,8 +3,8 @@ import Entry from "@/components/landingPage/Entry";
 import Functions from "@/components/landingPage/Functions";
 import Reports from "@/components/landingPage/Reports";
 import Mission from "@/components/landingPage/Mission";
+import AddReport from "@/components/landingPage/AddReport";
 import { Box } from "@mui/system";
-import ReportForm from "./report/page";
 
 export default function Home() {
   return (
@@ -20,7 +20,7 @@ export default function Home() {
         <Functions />
         <Reports />
         <Mission />
-        <ReportForm />
+        <AddReport />
       </Box>
     </BaseLayout>
   );
