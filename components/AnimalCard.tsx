@@ -38,7 +38,7 @@ export default function AnimalCard({ animal }: AnimalCardProps) {
           width: "100%",
           height: "auto",
           backgroundColor: "white",
-          boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.1)",
+          boxShadow: "0px 4px 8px rgba(159, 164, 219, 0.1)",
           borderRadius: 4,
           overflow: "hidden",
           transition: "border-color 0.3s",
@@ -139,7 +139,7 @@ export default function AnimalCard({ animal }: AnimalCardProps) {
                   background: "transparent",
                   ":hover": {
                     transition: "all .3s",
-                    background: "rgba(0, 0, 0, 0.05)",
+                    background: "rgba(159, 164, 219, 0.05)",
                     color: "#70d168",
                   },
                 }}

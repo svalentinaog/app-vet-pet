@@ -1,7 +1,9 @@
 "use client";
 
+import { useState } from "react";
 import {
   Box,
+  Button,
   Container,
   Grid,
   Pagination,
@@ -9,7 +11,8 @@ import {
   useMediaQuery,
 } from "@mui/material";
 import AnimalCard from "../AnimalCard";
-import { useState } from "react";
+import Link from "next/link";
+import NavigateNextIcon from "@mui/icons-material/NavigateNext";
 
 interface Animal {
   id: number;
@@ -87,7 +90,7 @@ export default function Reports() {
       id="reports"
       sx={{
         width: "100%",
-        height: { xs: "100%", sm: "100vh", md: "100vh", lg: "100%" },
+        height: "100%",
         alignContent: "center",
         background: "var(--gradient-lineal2)",
         padding: {
@@ -110,7 +113,7 @@ export default function Reports() {
         Reportes más recientes{" "}
       </Typography>
       {/* Grid contenedor para las tarjetas */}
-      <Grid container spacing={2} marginBottom={6}>
+      <Grid container spacing={2}>
         {animalsToShow.map((animal) => (
           <Grid
             item
@@ -120,8 +123,7 @@ export default function Reports() {
             // md={3}
             // lg={3}
             sx={{
-              width: "100%",
-              maxWidth: "25%",
+              width: { xs: "100%", md: "25%", lg: "25%" },
               display: "flex",
               justifyContent: "center",
               gap: 1,
@@ -131,22 +133,61 @@ export default function Reports() {
           </Grid>
         ))}
       </Grid>
-      {/* Paginado */}
       <Box
         sx={{
           width: "100%",
           display: "flex",
           justifyContent: "center",
-          marginTop: 2,
+          flexDirection: "column",
+          alignItems: "center",
+          gap: 4,
+          marginTop: 10,
         }}
       >
+        {/* Paginado */}
         <Pagination
           count={Math.ceil(animals.length / animalsPerPage)}
           page={currentPage}
           onChange={handlePageChange}
           showFirstButton
           showLastButton
+          sx={{
+            "& .MuiPaginationItem-root": {
+              color: "var(--primary-color)",
+              borderRadius: "100px",
+            },
+            "& .MuiPaginationItem-root:hover": {
+              color: "var(--light-color)",
+              backgroundColor: "rgba(159, 164, 219, 0.7)",
+            },
+            "& .Mui-selected": {
+              backgroundColor: "var(--primary-color)",
+              color: "white",
+            },
+          }}
         />
+        <Button
+          href="/all-reports"
+          sx={{
+            color: "var(--title-color)",
+            backgroundColor: "transparent",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            gap: 1,
+            textTransform: "none",
+            border: "none",
+            padding: 2,
+            borderRadius: "100px",
+            "&:hover": {
+              backgroundColor: "rgba(159, 164, 219, 0.1)",
+              textDecoration: "underline",
+            },
+          }}
+        >
+          <Typography>Ver todos</Typography>
+          <NavigateNextIcon />
+        </Button>
       </Box>
     </Box>
   );

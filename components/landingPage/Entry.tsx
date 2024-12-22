@@ -8,6 +8,7 @@ import React from "react";
 export default function Entry() {
   return (
     <Box
+      id={"#star"}
       sx={{
         width: "100%",
         background: "var(--gradient-round)",
