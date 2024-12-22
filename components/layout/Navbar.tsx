@@ -139,7 +139,7 @@ export default function Navbar() {
         padding: {
           xs: "1em 1em 1em",
           sm: "1em 6em 1em",
-          md: "1em 8em 1em",
+          md: "1em 7.5em 1em",
           lg: "2em 15em 2em",
         },
         boxShadow: scrolled ? "0 1px 1px rgba(255, 255, 255, 0.1)" : "inherit",

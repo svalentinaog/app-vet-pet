@@ -39,8 +39,8 @@ export default function Functions() {
         height: "100%",
         padding: {
           xs: "5em 1em 0",
-          sm: "5em 6em 0",
-          md: "5em 8em 0",
+          sm: "5em 5em 0",
+          md: "7.5em 7.5em 0",
           lg: "15em 15em 0",
         },
         alignContent: "center",

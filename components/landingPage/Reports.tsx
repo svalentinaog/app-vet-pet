@@ -93,7 +93,7 @@ export default function Reports() {
         padding: {
           xs: "0 1em 0",
           sm: "0 6em 0",
-          md: "0 8em 0",
+          md: "0 7.5em 0",
           lg: "0 15em 0",
         },
       }}
@@ -110,32 +110,22 @@ export default function Reports() {
         Reportes más recientes{" "}
       </Typography>
       {/* Grid contenedor para las tarjetas */}
-      <Grid
-        container
-        spacing={2}
-        // sx={{
-        //   width: "100%",
-        //   display: "flex",
-        //   justifyContent: "center",
-        //   alignItems: "center",
-        // }}
-      >
+      <Grid container spacing={2} marginBottom={6}>
         {animalsToShow.map((animal) => (
           <Grid
             item
             key={animal.id}
-            xs={12}
-            sm={6}
-            md={3}
-            marginBottom={6}
-            // sx={{
-            //   width: "100%",
-            //   display: "flex",
-            //   maxWidth: { xs: "100%", sm: "50%", md: "25%" },
-            //   justifyContent: "center",
-            //   gap: 1,
-            //   flex: "1 1 auto",
-            // }}
+            // xs={12}
+            // sm={6}
+            // md={3}
+            // lg={3}
+            sx={{
+              width: "100%",
+              maxWidth: "25%",
+              display: "flex",
+              justifyContent: "center",
+              gap: 1,
+            }}
           >
             <AnimalCard animal={animal} />
           </Grid>

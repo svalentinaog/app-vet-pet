@@ -11,7 +11,7 @@ export default function Entry() {
       sx={{
         width: "100%",
         background: "var(--gradient-round)",
-        height: { xs: "50vh", md: "90vh", sm: "90vh" },
+        height: { xs: "50vh", sm: "90vh", md: "90vh", lg: "90vh" },
       }}
     >
       <Box
@@ -30,8 +30,8 @@ export default function Entry() {
           alignItems: "center",
           padding: {
             xs: "2em 1em 0",
-            sm: "0 6em 0",
-            md: "0 8em 0",
+            sm: "0 5em 0",
+            md: "0 7.5em 0",
             lg: "0 15em 0",
           },
         }}
@@ -58,7 +58,7 @@ export default function Entry() {
                 fontWeight: "bold",
                 color: "var(--light-color)",
                 fontSize: { xs: "1.5em", sm: "2em", md: "3em" },
-                width: { xs: "90%", md: "80%", sm: "70%" },
+                width: { xs: "90%", sm: "70%", md: "85%", lg: "80%" },
               }}
             >
               Bienvenido a VetPet ¡Nos encanta tenerte aquí!
