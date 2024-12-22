@@ -19,6 +19,8 @@ import {
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import { CldUploadWidget } from "next-cloudinary";
+import { collection, addDoc } from 'firebase/firestore';
+import { auth, firestore } from "@/lib/firebase"; 
 
 interface FormDataReport {
   reportType: "lost" | "found";
@@ -55,6 +57,7 @@ const ReportForm = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const [open, setOpen] = React.useState(false);
   const [showImages, setShowImages] = useState<string[]>([]);
+  const [success, setSuccess] = useState<boolean>(false)
 
   const handleChange = (
     e:
@@ -73,34 +76,51 @@ const ReportForm = () => {
   };
 
   const handleReset = () => {
-    setFormData(initialFormData);
+    setFormData({ ...initialFormData, images: uploadedImages });
   };
+
+  const uploadFireStore = async (formData : FormDataReport) => {
+    try {
+      //Referenciar la colección "reports"
+      const reportsRef = collection(firestore, "reports");
+
+      //Añadir el documento
+      const docRef = await addDoc(reportsRef, {
+       ...formData,
+      });
+      console.log("Reporte creado con éxito:", docRef.id);
+      setSuccess(true);
+      return docRef.id;
+
+    } catch (error) {
+      console.error("Error al crear el reporte:", error);
+      setSuccess(false);
+      throw error;
+    }
+  }
+
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (formData.images.length < 2) {
+      alert("Por favor, sube al menos 3 imágenes");
+      return;
+    }
     setLoading(true);
     try {
-      const response = await fetch("/api/cloudinary", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ imagePath: formData.images[0] }), // Asegúrate de enviar la propiedad "imagePath"
-      });
+      const docId = await uploadFireStore(formData);
 
-      const data = await response.json();
-      if (response.ok) {
-        console.log("Imágenes subidas exitosamente:", data.urls); // Usar "urls" ya que el backend devuelve un array
-      } else {
-        console.error("Error al subir las imágenes:", data.message);
-      }
     } catch (error) {
-      console.error("Error en el envío de datos:", error);
+      console.error("Error al guardar el reporte:", error);
+      throw error;
     } finally {
       setOpen(true);
       setLoading(false);
-      setFormData(initialFormData);
-      setUploadedImages([]);
+      if(success){
+        setUploadedImages([]);
+        setFormData(initialFormData);
+        setSuccess(false);
+      }
     }
   };
 
@@ -239,12 +259,18 @@ const ReportForm = () => {
           <CldUploadWidget
             signatureEndpoint="/api/sign-image"
             onSuccess={(results) => {
-              const newImage = results?.info?.public_id;
-              setUploadedImages((prev) => [...prev, newImage]);
-              setFormData((prev) => ({
-                ...prev,
-                images: [...prev.images, newImage], // Añadir imagen a formData.images
-              }));
+              if (
+                results?.info &&
+                typeof results.info !== "string" &&
+                "public_id" in results.info
+              ) {
+                const newImage = results.info.public_id;
+                setUploadedImages((prev) => [...prev, newImage]);
+                setFormData((prev) => ({
+                  ...prev,
+                  images: [...prev.images, newImage],
+                }));
+              }
             }}
             options={{
               maxFiles: 5,
@@ -252,61 +278,76 @@ const ReportForm = () => {
               showAdvancedOptions: true,
             }}
           >
-            {({ open }) => {
+            {({ open, isLoading }) => {
               return (
                 <>
-                  <Box marginTop={2} textAlign="center">
-                    <Button
-                      variant="contained"
-                      component="label"
-                      color="primary"
-                      sx={{ mb: 2 }}
-                      onClick={() => open()}
-                    >
-                      Subir fotos de la mascota (Cloudinary)
-                    </Button>
+                  {isLoading ? (
                     <Box
                       display="flex"
-                      flexWrap="wrap"
                       justifyContent="center"
-                      gap={2}
-                      marginTop={1}
+                      alignItems="center"
+                      height="100%"
+                      width="100%"
+                      marginTop={3}
                     >
-                      {uploadedImages?.map((publicId) => (
-                        <Box key={publicId} position="relative">
-                          <img
-                            src={`https://res.cloudinary.com/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/image/upload/${publicId}`}
-                            alt={`Uploaded ${publicId}`}
-                            style={{
-                              width: 100,
-                              height: 100,
-                              objectFit: "cover",
-                              borderRadius: "8px",
-                            }}
-                          />
-                          <IconButton
-                            size="small"
-                            sx={{
-                              position: "absolute",
-                              top: 0,
-                              right: 0,
-                              backgroundColor: "rgba(255, 0, 0, 0.7)",
-                              color: "white",
-                            }}
-                            onClick={() => {
-                              deleteImage(publicId)
-                              setFormData((prev) => ({
-                                ...prev,
-                                images: prev.images.filter((img) => img !== publicId), // Remover imagen de formData.images
-                              }));
-                            }}
-                          >
-                            <CloseIcon />
-                          </IconButton>
-                        </Box>
-                      ))}
+                      <CircularProgress size={30} />
                     </Box>
-                  </Box>
+                  ) : (
+                    <Box marginTop={2} textAlign="center">
+                      <Button
+                        variant="contained"
+                        component="label"
+                        color="primary"
+                        sx={{ mb: 2 }}
+                        onClick={() => open()}
+                      >
+                        Subir fotos de la mascota
+                      </Button>
+                      <Box
+                        display="flex"
+                        flexWrap="wrap"
+                        justifyContent="center"
+                        gap={2}
+                        marginTop={1}
+                      >
+                        {uploadedImages?.map((publicId) => (
+                          <Box key={publicId} position="relative">
+                            <img
+                              src={`https://res.cloudinary.com/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/image/upload/${publicId}`}
+                              alt={`Uploaded ${publicId}`}
+                              style={{
+                                width: 100,
+                                height: 100,
+                                objectFit: "cover",
+                                borderRadius: "8px",
+                              }}
+                            />
+                            <IconButton
+                              size="small"
+                              sx={{
+                                position: "absolute",
+                                top: 0,
+                                right: 0,
+                                backgroundColor: "rgba(255, 0, 0, 0.7)",
+                                color: "white",
+                              }}
+                              onClick={() => {
+                                deleteImage(publicId);
+                                setFormData((prev) => ({
+                                  ...prev,
+                                  images: prev.images.filter(
+                                    (img) => img !== publicId
+                                  ), // Remover imagen de formData.images
+                                }));
+                              }}
+                            >
+                              <CloseIcon />
+                            </IconButton>
+                          </Box>
+                        ))}
+                      </Box>
+                    </Box>
+                  )}
                 </>
               );
             }}
@@ -455,11 +496,11 @@ const ReportForm = () => {
       <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
         <Alert
           onClose={handleClose}
-          severity="success"
+          severity={success? "success" : "error"}
           variant="filled"
           sx={{ width: "100%" }}
         >
-          ¡Reporte enviado con éxito!
+          {success? "Reporte enviado con éxito!" : "Ha ocurrido un error al enviar el reporte"}
         </Alert>
       </Snackbar>
     </>
