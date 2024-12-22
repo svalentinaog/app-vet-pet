@@ -5,7 +5,6 @@ import {
   AppBar,
   Toolbar,
   Box,
-  Container,
   Tabs,
   Tab,
   Drawer,
@@ -14,14 +13,16 @@ import {
   ListItem,
   ListItemText,
   Divider,
+  Typography,
 } from "@mui/material";
 import MenuOpenIcon from "@mui/icons-material/MenuOpen";
-import { MainButton } from "@/styles/mui";
+import PersonIcon from "@mui/icons-material/Person";
 import { usePathname, useRouter } from "next/navigation";
+import { useSelector } from "react-redux";
+import { MainButton } from "@/styles/mui";
+import { RootState } from "@/lib/store";
 import Image from "next/image";
 import Link from "next/link";
-import { useSelector } from "react-redux";
-import { RootState } from "@/lib/store";
 
 interface LinkTabProps {
   label?: string;
@@ -93,11 +94,11 @@ export default function Navbar() {
 
         {[
           { label: "Inicio", href: "/" },
-          // start Menu desplegable llamado funcionalidades
+          // start 🐸 Menu desplegable llamado funcionalidades
           { label: "Informar", href: "#report" },
           { label: "Consultar", href: "/chatbot" },
           { label: "Localizar", href: "/map" },
-          // end Menu desplegable llamado funcionalidades
+          // end 🐸 Menu desplegable llamado funcionalidades
         ].map((item, index) => (
           <ListItem key={index} component={Link} href={item.href}>
             <ListItemText
@@ -109,7 +110,21 @@ export default function Navbar() {
         <Divider />
         <ListItem>
           <MainButton sx={{ marginTop: 1 }} onClick={handleAuthButtonClick}>
-            {isAuthenticated ? "SESIÓN INICIADA" : "INICIAR SESIÓN"}
+            {isAuthenticated ? (
+              <Box
+                sx={{
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  gap: 1,
+                }}
+              >
+                <PersonIcon />
+                <Typography>MI PERFIL</Typography>
+              </Box>
+            ) : (
+              "INICIAR SESIÓN"
+            )}
           </MainButton>
         </ListItem>
       </List>
@@ -175,6 +190,7 @@ export default function Navbar() {
             gap: 4,
           }}
         >
+          {/* 🐈 MENU DESKTOP */}
           <Tabs
             value={value}
             onChange={handleChange}
@@ -184,22 +200,36 @@ export default function Navbar() {
           >
             <LinkTab label="Inicio" href="/" />
 
-            {/* Menú desplegable */}
+            {/* 😎 Menú desplegable */}
             {/* start Menu desplegable llamado funcionalidades */}
             <LinkTab label="Informar" href="#report" />
             <LinkTab label="Consultar" href="/chatbot" />
             <LinkTab label="Localizar" href="/map" />
-            {/* end Menu desplegable llamado funcionalidades */}
+            {/* 😎 end Menu desplegable llamado funcionalidades */}
           </Tabs>
           <MainButton
             sx={{ maxWidth: "200px" }}
             onClick={handleAuthButtonClick}
           >
-            {isAuthenticated ? "SESIÓN INICIADA" : "INICIAR SESIÓN"}
+            {isAuthenticated ? (
+              <Box
+                sx={{
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  gap: 1,
+                }}
+              >
+                <PersonIcon />
+                <Typography>MI PERFIL</Typography>
+              </Box>
+            ) : (
+              "INICIAR SESIÓN"
+            )}
           </MainButton>
         </Box>
 
-        {/* Menu de Hamburguesa (Mobile) */}
+        {/* 🐈 MENU MOBILE */}
         <Box sx={{ display: { xs: "block", md: "none" } }}>
           <IconButton
             onClick={toggleDrawer(true)}
@@ -210,7 +240,7 @@ export default function Navbar() {
           </IconButton>
         </Box>
       </Toolbar>
-      {/* Drawer para el Menú de Navegación en Mobile */}
+      {/* 🐥 ITEMS DE MENU MOBILE */}
       <Drawer anchor="left" open={drawerOpen} onClose={toggleDrawer(false)}>
         {drawerContent}
       </Drawer>

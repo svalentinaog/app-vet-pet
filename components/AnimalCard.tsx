@@ -47,6 +47,8 @@ export default function AnimalCard({ animal }: AnimalCardProps) {
           borderColor: "white",
           ":hover": {
             borderColor: "var(--secondary-color)",
+            boxShadow: "0 0 15px var(--secondary-color)",
+            transition: "all 0.3s ease-in-out",
           },
           display: "flex",
           flexDirection: "column",
@@ -86,7 +88,7 @@ export default function AnimalCard({ animal }: AnimalCardProps) {
             flexDirection: "column",
             gap: 1,
             paddingTop: 0,
-            paddingBottom: 0,
+            paddingBottom: "0 !important",
             paddingLeft: 0,
             paddingRight: 0,
           }}
@@ -108,6 +110,7 @@ export default function AnimalCard({ animal }: AnimalCardProps) {
           >
             <span
               style={{
+                fontSize: "25px",
                 color: statusColors[animal.status] || "gray",
               }}
             >
@@ -124,7 +127,7 @@ export default function AnimalCard({ animal }: AnimalCardProps) {
           >
             <PetsIcon sx={{ color: "var(--secondary-color)" }} />
             <a href={`tel:${animal.phone}`}>
-              <Button
+              <Box
                 sx={{
                   borderRadius: "50%",
                   width: 40,
@@ -132,10 +135,17 @@ export default function AnimalCard({ animal }: AnimalCardProps) {
                   display: "flex",
                   justifyContent: "center",
                   alignItems: "center",
+                  color: "var(--title-color)",
+                  background: "transparent",
+                  ":hover": {
+                    transition: "all .3s",
+                    background: "rgba(0, 0, 0, 0.05)",
+                    color: "#70d168",
+                  },
                 }}
               >
                 <PhoneIcon />
-              </Button>
+              </Box>
             </a>
           </CardActions>
         </CardContent>
