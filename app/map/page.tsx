@@ -53,7 +53,7 @@ const MyMap: React.FC = () => {
     // Limpieza si es necesario al desmontar el componente
     return () => {
       if (mapRef.current) {
-        mapRef.current.setTarget(null);
+        mapRef.current.setTarget(undefined);
       }
     };
   }, [markerSource]);
