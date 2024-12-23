@@ -369,7 +369,6 @@ export default function AddReport() {
                     onChange={handleChange}
                     multiline
                     rows={1}
-                    fullWidth
                     required
                   />
                 </Grid>
@@ -518,7 +517,6 @@ export default function AddReport() {
                     onChange={handleChange}
                     multiline
                     rows={1}
-                    fullWidth
                     required
                   />
                 </Grid>
