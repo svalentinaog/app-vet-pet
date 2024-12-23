@@ -13,7 +13,7 @@ import {
 } from "@mui/material";
 import AnimalCard from "../AnimalCard";
 import NavigateNextIcon from "@mui/icons-material/NavigateNext";
-import { collection, getDocs } from "firebase/firestore";
+import { collection, getDocs, onSnapshot  } from "firebase/firestore";
 import { firestore } from "@/lib/firebase";
 
 interface Animal {
@@ -26,21 +26,6 @@ interface Animal {
   phone: number;
 }
 
-interface FormDataReport {
-  id: number;
-  reportType: "lost" | "found";
-  reporterName: string; // Nombre del reportante
-  phone: string; // Número de teléfono del reportante
-  petType: string; // Tipo de mascota
-  petName?: string; // Nombre de la mascota (para "perdido")
-  foundLocation?: string; // Lugar encontrado
-  description: string;
-  age?: string; // Edad aproximada (solo para "perdido")
-  status?: string; // Estado: Sin hogar, Perdido, etc.
-  images: string[];
-  reward?: string; //Solo para "perdido"
-  dateCreationReport: string; // Fecha de creación del reporte
-}
 
 export default function Reports() {
   const [reports, setReports] = useState<any[]>([]);
@@ -61,50 +46,32 @@ export default function Reports() {
     setCurrentPage(value);
   };
 
-  const getAllReports = async () => {
-    try {
-      // Referencia a la colección "reports"
-      const reportsRef = collection(firestore, "reports");
+  const getReportsRealTime = () => {
+    const reportsRef = collection(firestore, "reports");
 
-      // Obtener todos los documentos
-      const querySnapshot = await getDocs(reportsRef);
-
-      // Convertir los documentos a un array de objetos
-      const reports = querySnapshot.docs.map((doc) => ({
-        ...doc.data(), // Expandir todos los campos del documento
+    // Usamos onSnapshot para escuchar los cambios en la colección
+    onSnapshot(reportsRef, (querySnapshot) => {
+      const reportsList = querySnapshot.docs.map((doc) => ({
+        ...doc.data(),
       }));
 
-      reports.sort((a, b) => {
-        // Asumiendo que dateCreationReport es un string con formato ISO 8601
-        return (
-          new Date(b.dateCreationReport).getTime() -
-          new Date(a.dateCreationReport).getTime()
-        );
+      // Ordenar los reportes por fecha de creación (más recientes primero)
+      reportsList.sort((a, b) => {
+        return new Date(b.dateCreationReport).getTime() - new Date(a.dateCreationReport).getTime();
       });
 
-      console.log(reports);
-      return reports;
-    } catch (error) {
-      console.error("Error al obtener los reportes:", error);
-      throw error;
-    }
+      setReports(reportsList);
+      setLoading(false); // Ya no está cargando
+    });
   };
 
+  
   useEffect(() => {
-    const fetchReports = async () => {
-      try {
-        const data = await getAllReports();
-        setReports(data);
-      } catch (err) {
-        console.error("Error al cargar los reportes:", err);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchReports();
+    // Obtener los reportes en tiempo real
+    getReportsRealTime();
   }, []);
 
+  
   // Obtener los animales de la página actual
   const startIndex = (currentPage - 1) * animalsPerPage;
   const endIndex = startIndex + animalsPerPage;
@@ -130,9 +97,13 @@ export default function Reports() {
     return (
       <Box
         sx={{
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
           width: "100%",
           height: "100%",
           alignContent: "center",
+          justifyContent: "center",
           background: "var(--gradient-lineal2)",
           padding: {
             xs: "0 1em 0",

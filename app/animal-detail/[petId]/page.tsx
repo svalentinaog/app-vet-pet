@@ -25,8 +25,10 @@ import React, { useEffect, useState } from "react";
 import AnimalModalEdit from "@/components/AnimalModalEdit";
 import Carousel from "react-material-ui-carousel";
 import { firestore } from "@/lib/firebase";
-import { collection, getDocs } from "firebase/firestore";
+import { collection, doc, getDoc, getDocs } from "firebase/firestore";
 import DateRangeIcon from "@mui/icons-material/DateRange";
+import { RootState } from "@/lib/store";
+import { useSelector } from "react-redux";
 
 const AnimalDetail = () => {
   const { petId } = useParams<{ petId: string }>();
@@ -35,7 +37,31 @@ const AnimalDetail = () => {
   const handleEditModalClose = () => setOpenEdit(false);
   const [reports, setReports] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+  const [userDoc, setUserDoc] = React.useState<any | null>(null);
+  const userId = useSelector((state: RootState) => state.user.user.id);
 
+  // Consulta a Firestore para obtener el documento del usuario
+  React.useEffect(() => {
+    const fetchUserDoc = async () => {
+      if (!userId) return; // Verifica si tienes el userId
+      try {
+        const userRef = doc(firestore, "users", userId); // Consulta al documento de usuarios
+        const docSnap = await getDoc(userRef);
+
+        if (docSnap.exists()) {
+          // Si el documento existe, lo almacenamos en el estado
+          setUserDoc(docSnap.data());
+          console.log("Documento del usuario: ", docSnap.data());
+        } else {
+          console.log("No se encontró el documento del usuario.");
+        }
+      } catch (error) {
+        console.error("Error al obtener el documento del usuario: ", error);
+      }
+    };
+
+    fetchUserDoc();
+  }, [userId]);
   const getAllReports = async () => {
     try {
       // Referencia a la colección "reports"
@@ -48,7 +74,6 @@ const AnimalDetail = () => {
       const reports = querySnapshot.docs.map((doc) => ({
         ...doc.data(), // Expandir todos los campos del documento
       }));
-      console.log(reports);
       return reports;
     } catch (error) {
       console.error("Error al obtener los reportes:", error);
@@ -72,9 +97,7 @@ const AnimalDetail = () => {
   }, []);
 
   const currentId = parseInt(petId);
-  const animal = reports.find((a) => a.id === currentId);
-  const previousAnimal = reports.find((a) => a.id === currentId - 1);
-  const nextAnimal = reports.find((a) => a.id === currentId + 1);
+  const animal = reports.find((a) => parseInt(a.id) === currentId);
 
   if (loading) {
     return (
@@ -92,7 +115,7 @@ const AnimalDetail = () => {
       </Box>
     );
   }
-  
+
   if (!animal) {
     return (
       <Box textAlign="center" p={5}>
@@ -100,6 +123,7 @@ const AnimalDetail = () => {
       </Box>
     );
   }
+
 
   return (
     <>
@@ -117,7 +141,6 @@ const AnimalDetail = () => {
           </IconButton>
         </Link>
       </Box>
-
 
       <Card
         sx={{
@@ -196,7 +219,6 @@ const AnimalDetail = () => {
         </Box>
         <CardContent sx={{ flex: "1", p: 4 }}>
           <Grid container spacing={2} alignItems="center">
-            
             <Grid
               item
               xs={12}
@@ -222,7 +244,7 @@ const AnimalDetail = () => {
                 <PetsIcon sx={{ fontSize: "5rem" }} />
               </Typography>
               {/* Botón de editar animal.petId cambia al uid del usuario que coincida con el report. */}
-              {animal.petId == 1 ? (
+              {userDoc?.pets?.some((pet: any) => pet === petId) ? (
                 <Box
                   onClick={handleEditModalOpen}
                   sx={{
@@ -324,7 +346,8 @@ const AnimalDetail = () => {
                   fontSize: "1.3rem",
                 }}
               >
-                <PetsIcon color="primary" fontSize="large" /> <strong>{animal.petType}</strong>
+                <PetsIcon color="primary" fontSize="large" />{" "}
+                <strong>{animal.petType}</strong>
                 <Divider sx={{ mb: 2, width: 300, height: 5 }} />
               </Typography>
             </Grid>
@@ -339,7 +362,7 @@ const AnimalDetail = () => {
                   fontSize: "1.2rem",
                 }}
               >
-                <DateRangeIcon color="primary" fontSize="large"/>{" "}
+                <DateRangeIcon color="primary" fontSize="large" />{" "}
                 <strong>{animal.dateCreationReport}</strong>
                 <Divider sx={{ mb: 2, width: 300, height: 5 }} />
               </Typography>
@@ -364,6 +387,7 @@ const AnimalDetail = () => {
       {/* Modal para editar animal */}
       {openEdit && (
         <AnimalModalEdit
+          userPets={userDoc.pets}
           animal={animal}
           open={openEdit}
           onClose={handleEditModalClose}
