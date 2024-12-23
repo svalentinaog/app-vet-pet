@@ -455,11 +455,11 @@ export default function AddReport() {
                             variant="outlined"
                             component="label"
                             sx={{
-                              color: "white",
+                              color: "var(--light-color)",
                               width: "100%",
                               padding: "14.5px 14px",
                               borderRadius: "100px",
-                              border: "1px solid #fff",
+                              border: "1px solid var(--light-color)",
                               textTransform: "none",
                               backgroundColor: "transparent",
                               "&:hover": {
@@ -646,10 +646,11 @@ export default function AddReport() {
                             variant="outlined"
                             component="label"
                             sx={{
+                              color: "var(--light-color)",
                               width: "100%",
                               padding: "14.5px 14px",
                               borderRadius: "100px",
-                              border: "1px solid",
+                              border: "1px solid var(--light-color)",
                               textTransform: "none",
                               backgroundColor: "transparent",
                               "&:hover": {
@@ -658,7 +659,7 @@ export default function AddReport() {
                             }}
                             onClick={() => open()}
                           >
-                            Cargar imagenes
+                            Cargar imágenes
                           </Button>
                           <Box
                             display="flex"
