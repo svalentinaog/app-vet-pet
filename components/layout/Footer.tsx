@@ -30,14 +30,15 @@ export default function Footer() {
           display: "flex",
           flexDirection: "column",
           gap: 3,
-          justifyContent: "center",
+          justifyContent: { xs: "flex-start", md: "center" },
+          alignContent: { xs: "flex-start", md: "center" },
         }}
       >
         <Stack
           direction={{ xs: "column", sm: "row" }}
           spacing={{ xs: 4, sm: 2 }}
           justifyContent="space-between"
-          alignItems="center"
+          alignItems={{ xs: "flex-start", md: "center" }}
         >
           {/* Logo */}
           <Stack direction="row" spacing={1} alignItems="center">
@@ -69,7 +70,10 @@ export default function Footer() {
             direction={{ xs: "column", sm: "row" }}
             spacing={3}
             sx={{
-              "& a": { color: "var(--light-color)", textDecoration: "none" },
+              "& a": {
+                color: "var(--light-color)",
+                textDecoration: "none",
+              },
             }}
           >
             <Link href="#">Soporte técnico</Link>
@@ -107,6 +111,7 @@ export default function Footer() {
         <Divider sx={{ borderColor: "var(--light-color)" }} />
         {/* Copyright */}
         <Typography
+          width="100%"
           variant="body1"
           align="center"
           sx={{ mt: 2, color: "var(--light-color)" }}
