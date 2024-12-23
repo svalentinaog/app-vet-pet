@@ -37,11 +37,18 @@ export default function Functions() {
       sx={{
         width: "100%",
         height: "100%",
-        padding: {
-          xs: "5em 1em 0",
-          sm: "5em 6em 0",
-          md: "5em 8em 0",
-          lg: "15em 15em 0",
+        paddingTop: { xs: 10, md: 8, lg: "15em" },
+        paddingLeft: {
+          xs: "1em",
+          sm: "5em",
+          md: "7.5em",
+          lg: "15em",
+        },
+        paddingRight: {
+          xs: "1em",
+          sm: "5em",
+          md: "7.5em",
+          lg: "15em",
         },
         alignContent: "center",
         background: "var(--gradient-lineal)",

@@ -5,23 +5,27 @@ import {
   AppBar,
   Toolbar,
   Box,
-  Container,
   Tabs,
   Tab,
+  Menu,
+  MenuItem,
   Drawer,
   IconButton,
   List,
   ListItem,
   ListItemText,
   Divider,
+  Typography,
 } from "@mui/material";
 import MenuOpenIcon from "@mui/icons-material/MenuOpen";
-import { MainButton } from "@/styles/mui";
+import FaceIcon from "@mui/icons-material/Face";
+import { KeyboardArrowDown, KeyboardArrowUp } from "@mui/icons-material";
 import { usePathname, useRouter } from "next/navigation";
+import { useSelector } from "react-redux";
+import { MainButton } from "@/styles/mui";
+import { RootState } from "@/lib/store";
 import Image from "next/image";
 import Link from "next/link";
-import { useSelector } from "react-redux";
-import { RootState } from "@/lib/store";
 
 interface LinkTabProps {
   label?: string;
@@ -37,6 +41,17 @@ export default function Navbar() {
   const isAuthenticated = useSelector(
     (state: RootState) => state.user.isAuthenticated
   );
+
+  const [anchorEl, setAnchorEl] = React.useState<HTMLElement | null>(null);
+  const open = Boolean(anchorEl);
+
+  const handleMenuClick = (event: React.MouseEvent<HTMLElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
 
   const handleAuthButtonClick = () => {
     if (isAuthenticated) {
@@ -90,14 +105,12 @@ export default function Navbar() {
           </Box>
         </ListItem>
         <Divider />
-
+        {/* start 🐸 Menu desplegable llamado SERVICIOS Mobile */}
         {[
           { label: "Inicio", href: "/" },
-          // start Menu desplegable llamado funcionalidades
           { label: "Informar", href: "#report" },
           { label: "Consultar", href: "/chatbot" },
           { label: "Localizar", href: "/map" },
-          // end Menu desplegable llamado funcionalidades
         ].map((item, index) => (
           <ListItem key={index} component={Link} href={item.href}>
             <ListItemText
@@ -106,10 +119,25 @@ export default function Navbar() {
             />
           </ListItem>
         ))}
+        {/* end 🐸 Menu desplegable llamado SERVICIOS Mobile */}
         <Divider />
         <ListItem>
           <MainButton sx={{ marginTop: 1 }} onClick={handleAuthButtonClick}>
-            {isAuthenticated ? "SESIÓN INICIADA" : "INICIAR SESIÓN"}
+            {isAuthenticated ? (
+              <Box
+                sx={{
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  gap: 1,
+                }}
+              >
+                <FaceIcon />
+                <Typography>MI PERFIL</Typography>
+              </Box>
+            ) : (
+              "INICIAR SESIÓN"
+            )}
           </MainButton>
         </ListItem>
       </List>
@@ -135,16 +163,16 @@ export default function Navbar() {
       position="fixed"
       sx={{
         width: "100%",
-        background: scrolled ? "rgba(0, 0, 0, 0.1)" : "transparent",
+        background: scrolled ? "rgba(159, 164, 219, 0.7)" : "transparent",
         padding: {
-          xs: "1em 1em 1em",
-          sm: "1em 6em 1em",
-          md: "1em 8em 1em",
-          lg: "2em 15em 2em",
+          xs: scrolled ? "0.5em 1em 0.5em" : "1.5em 1em 1.5em",
+          sm: scrolled ? "0.5em 6em 0.5em" : "1.5em 6em 1.5em",
+          md: scrolled ? "0.5em 7.5em 0.5em" : "2em 7.5em 2em",
+          lg: scrolled ? "0.75em 15em 0.75em" : "2em 15em 2em",
         },
         boxShadow: scrolled ? "0 1px 1px rgba(255, 255, 255, 0.1)" : "inherit",
-        backdropFilter: scrolled ? "blur(2px)" : "none",
-        transition: "background 0.3s, box-shadow 0.3s, backdrop-filter 0.3s",
+        backdropFilter: scrolled ? "blur(5px)" : "none",
+        transition: "all 0.3s",
       }}
     >
       <Toolbar
@@ -156,7 +184,7 @@ export default function Navbar() {
         }}
       >
         {/* Icono de la App (Logo)*/}
-        <Box sx={{ width: "100%" }}>
+        <Box sx={{ width: "auto" }}>
           <Image
             src="/assets/logo.svg"
             alt="Logo"
@@ -175,6 +203,7 @@ export default function Navbar() {
             gap: 4,
           }}
         >
+          {/* 🐈 MENU DESKTOP */}
           <Tabs
             value={value}
             onChange={handleChange}
@@ -182,24 +211,151 @@ export default function Navbar() {
             indicatorColor="secondary"
             sx={{ width: "auto" }}
           >
-            <LinkTab label="Inicio" href="/" />
+            <Tab
+              label="Inicio"
+              component={Link}
+              href="/#star"
+              sx={{
+                color: "white",
+                "&.Mui-selected": {
+                  color: "primary.main",
+                  textShadow: "none",
+                },
+                textShadow: scrolled
+                  ? "2px 2px 10px rgba(0, 0, 0, 0.2)"
+                  : "none",
+              }}
+            />
+            <Tab
+              label="Funcionalidades"
+              component={Link}
+              href="/#functions"
+              sx={{
+                color: "white",
+                "&.Mui-selected": {
+                  color: "primary.main",
+                  textShadow: "none",
+                },
+                textShadow: scrolled
+                  ? "2px 2px 10px rgba(0, 0, 0, 0.2)"
+                  : "none",
+              }}
+            />
+            <Tab
+              label="Reportes"
+              component={Link}
+              href="/#reports"
+              sx={{
+                color: "white",
+                "&.Mui-selected": {
+                  color: "primary.main",
+                  textShadow: "none",
+                },
+                textShadow: scrolled
+                  ? "2px 2px 10px rgba(0, 0, 0, 0.2)"
+                  : "none",
+              }}
+            />
+            <Tab
+              label="Mision"
+              component={Link}
+              href="/#mission"
+              sx={{
+                color: "white",
+                "&.Mui-selected": {
+                  color: "primary.main",
+                  textShadow: "none",
+                },
+                textShadow: scrolled
+                  ? "2px 2px 10px rgba(0, 0, 0, 0.2)"
+                  : "none",
+              }}
+            />
 
-            {/* Menú desplegable */}
-            {/* start Menu desplegable llamado funcionalidades */}
-            <LinkTab label="Informar" href="#report" />
-            <LinkTab label="Consultar" href="/chatbot" />
-            <LinkTab label="Localizar" href="/map" />
-            {/* end Menu desplegable llamado funcionalidades */}
+            {/* ¿QUE QUIERES HACER? - Menú desplegable */}
+            <Tab
+              label={
+                <Box
+                  sx={{
+                    display: "flex",
+                    alignItems: "center",
+                  }}
+                >
+                  ¿QUE QUIERES HACER?
+                  {open ? (
+                    <KeyboardArrowUp
+                      sx={{ marginLeft: 1, cursor: "pointer" }}
+                    />
+                  ) : (
+                    <KeyboardArrowDown
+                      sx={{ marginLeft: 1, cursor: "pointer" }}
+                    />
+                  )}
+                </Box>
+              }
+              sx={{
+                color: "white",
+                "&.Mui-selected": {
+                  color: "primary.main",
+                  textShadow: "none",
+                },
+                textShadow: scrolled
+                  ? "2px 2px 10px rgba(0, 0, 0, 0.2)"
+                  : "none",
+              }}
+              onClick={handleMenuClick}
+              aria-controls={open ? "services-menu" : undefined}
+              aria-haspopup="true"
+            />
+            <Menu
+              id="services-menu"
+              anchorEl={anchorEl}
+              open={open}
+              onClose={handleClose}
+              MenuListProps={{
+                "aria-labelledby": "services-button",
+              }}
+            >
+              <MenuItem onClick={handleClose}>
+                <Link href="#report" passHref>
+                  Hacer un reporte
+                </Link>
+              </MenuItem>
+              <MenuItem onClick={handleClose}>
+                <Link href="/chatbot" passHref>
+                  Realizar consulta
+                </Link>
+              </MenuItem>
+              <MenuItem onClick={handleClose}>
+                <Link href="/map" passHref>
+                  Localizar
+                </Link>
+              </MenuItem>
+            </Menu>
           </Tabs>
           <MainButton
             sx={{ maxWidth: "200px" }}
             onClick={handleAuthButtonClick}
           >
-            {isAuthenticated ? "SESIÓN INICIADA" : "INICIAR SESIÓN"}
+            {isAuthenticated ? (
+              <Box
+                sx={{
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  gap: 1,
+                }}
+              >
+                <FaceIcon />
+                <Typography>MI PERFIL</Typography>
+              </Box>
+            ) : (
+              "INICIAR SESIÓN"
+            )}
           </MainButton>
         </Box>
 
-        {/* Menu de Hamburguesa (Mobile) */}
+        {/* 🐈 MENU MOBILE */}
         <Box sx={{ display: { xs: "block", md: "none" } }}>
           <IconButton
             onClick={toggleDrawer(true)}
@@ -210,7 +366,7 @@ export default function Navbar() {
           </IconButton>
         </Box>
       </Toolbar>
-      {/* Drawer para el Menú de Navegación en Mobile */}
+      {/* 🐥 ITEMS DE MENU MOBILE */}
       <Drawer anchor="left" open={drawerOpen} onClose={toggleDrawer(false)}>
         {drawerContent}
       </Drawer>

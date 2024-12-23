@@ -3,8 +3,8 @@ import Entry from "@/components/landingPage/Entry";
 import Functions from "@/components/landingPage/Functions";
 import Reports from "@/components/landingPage/Reports";
 import Mission from "@/components/landingPage/Mission";
+import AddReport from "@/components/landingPage/AddReport";
 import { Box } from "@mui/system";
-import ReportForm from "./report/page";
 
 export default function Home() {
   return (
@@ -14,13 +14,13 @@ export default function Home() {
         display="flex"
         flexDirection="column"
         sx={{
-          gap: { xs: 10, md: 8, lg: "17em" },
+          gap: { xs: 10, md: 8, lg: "15em" },
         }}
       >
         <Functions />
         <Reports />
         <Mission />
-        <ReportForm />
+        <AddReport />
       </Box>
     </BaseLayout>
   );

@@ -17,6 +17,12 @@ body {
   box-sizing: inherit;
 }
 
-.css-1lg07yq-MuiCardContent-root, .css-1um1sdq-MuiGrid-root>.MuiGrid-item {
+.css-1lg07yq-MuiCardContent-root,
+.css-1um1sdq-MuiGrid-root>.MuiGrid-item,
+.css-iz7uyt-MuiInputBase-root-MuiOutlinedInput-root {
   padding: 0 !important;
+}
+
+.css-w76bbz-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input:focus {
+  border-radius: 100px !important;
 }

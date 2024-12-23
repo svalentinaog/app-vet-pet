@@ -1,7 +1,9 @@
 "use client";
 
+import { useState } from "react";
 import {
   Box,
+  Button,
   Container,
   Grid,
   Pagination,
@@ -9,7 +11,8 @@ import {
   useMediaQuery,
 } from "@mui/material";
 import AnimalCard from "../AnimalCard";
-import { useState } from "react";
+import Link from "next/link";
+import NavigateNextIcon from "@mui/icons-material/NavigateNext";
 
 interface Animal {
   id: number;
@@ -87,13 +90,13 @@ export default function Reports() {
       id="reports"
       sx={{
         width: "100%",
-        height: { xs: "100%", sm: "100vh", md: "100vh", lg: "100%" },
+        height: "100%",
         alignContent: "center",
         background: "var(--gradient-lineal2)",
         padding: {
           xs: "0 1em 0",
           sm: "0 6em 0",
-          md: "0 8em 0",
+          md: "0 7.5em 0",
           lg: "0 15em 0",
         },
       }}
@@ -110,53 +113,80 @@ export default function Reports() {
         Reportes más recientes{" "}
       </Typography>
       {/* Grid contenedor para las tarjetas */}
-      <Grid
-        container
-        spacing={2}
-        // sx={{
-        //   width: "100%",
-        //   display: "flex",
-        //   justifyContent: "center",
-        //   alignItems: "center",
-        // }}
-      >
+      <Grid container spacing={2}>
         {animalsToShow.map((animal) => (
           <Grid
             item
             key={animal.id}
-            xs={12}
-            sm={6}
-            md={3}
-            marginBottom={6}
-            // sx={{
-            //   width: "100%",
-            //   display: "flex",
-            //   maxWidth: { xs: "100%", sm: "50%", md: "25%" },
-            //   justifyContent: "center",
-            //   gap: 1,
-            //   flex: "1 1 auto",
-            // }}
+            // xs={12}
+            // sm={6}
+            // md={3}
+            // lg={3}
+            sx={{
+              width: { xs: "100%", md: "25%", lg: "25%" },
+              display: "flex",
+              justifyContent: "center",
+              gap: 1,
+            }}
           >
             <AnimalCard animal={animal} />
           </Grid>
         ))}
       </Grid>
-      {/* Paginado */}
       <Box
         sx={{
           width: "100%",
           display: "flex",
           justifyContent: "center",
-          marginTop: 2,
+          flexDirection: "column",
+          alignItems: "center",
+          gap: 4,
+          marginTop: 10,
         }}
       >
+        {/* Paginado */}
         <Pagination
           count={Math.ceil(animals.length / animalsPerPage)}
           page={currentPage}
           onChange={handlePageChange}
           showFirstButton
           showLastButton
+          sx={{
+            "& .MuiPaginationItem-root": {
+              color: "var(--primary-color)",
+              borderRadius: "100px",
+            },
+            "& .MuiPaginationItem-root:hover": {
+              color: "var(--light-color)",
+              backgroundColor: "rgba(159, 164, 219, 0.7)",
+            },
+            "& .Mui-selected": {
+              backgroundColor: "var(--primary-color) !important",
+              color: "white",
+            },
+          }}
         />
+        <Button
+          href="/reports"
+          sx={{
+            color: "var(--title-color)",
+            backgroundColor: "transparent",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            gap: 1,
+            textTransform: "none",
+            border: "none",
+            padding: 0,
+            borderRadius: "100px",
+            "&:hover": {
+              textDecoration: "underline",
+            },
+          }}
+        >
+          <Typography>Ver todos</Typography>
+          <NavigateNextIcon />
+        </Button>
       </Box>
     </Box>
   );

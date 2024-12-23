@@ -18,7 +18,7 @@ export default function Mission() {
         padding: {
           xs: "0 1em 0",
           sm: "0 6em 0",
-          md: "0 8em 0",
+          md: "0 7.5em 0",
           lg: "0 15em 0",
         },
       }}
@@ -66,7 +66,7 @@ export default function Mission() {
           component="img"
           alt="Imagen de fondo"
           height="100%"
-          image="/assets/img-mission.png"
+          image="/assets/mission.svg"
           sx={{
             objectFit: "cover",
             borderRadius: "8px",
