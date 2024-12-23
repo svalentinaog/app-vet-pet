@@ -229,6 +229,7 @@ export const InputSelectFieldReport = styled(FormControl)`
 
 export const InputTextFieldDescription = styled(InputBase)`
   & .MuiInputBase-input {
+    padding: 16.5px 14px;
     line-height: 1.5;
     color: var(--title-color);
   }
