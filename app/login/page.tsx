@@ -3,14 +3,20 @@
 import CustomPassField from "@/components/CustomPassField";
 import CustomTextField from "@/components/CustomTextField";
 import useUserAuthentication from "@/hooks/useUserAuthentication";
-import { FormContainer, Fields, FormActions, MainButton, BtnGoogle } from "@/styles/mui";
+import {
+  FormContainer,
+  Fields,
+  FormActions,
+  MainButton,
+  BtnGoogle,
+} from "@/styles/mui";
 import { CardMedia, Typography } from "@mui/material";
 import Link from "next/link";
 
 export default function Login() {
   const {
     user: { email, password },
-    methods: { updateField, handleSignInForm },
+    methods: { updateField, handleSignInForm, handleGoogleSignIn },
   } = useUserAuthentication();
 
   return (
@@ -32,17 +38,13 @@ export default function Login() {
       </Fields>
       <FormActions>
         {/* Botón de iniciar sesión */}
-        <MainButton
-          onClick={handleSignInForm}
-        >
-          Acceder
-        </MainButton>
+        <MainButton onClick={handleSignInForm}>Acceder</MainButton>
         {/* Enlace a la página de registro */}
         <Typography variant="subtitle1" sx={{ lineHeight: "normal" }}>
           ó continua con
         </Typography>
         {/* Iniciar sesión con Google */}
-        <BtnGoogle>
+        <BtnGoogle onClick={handleGoogleSignIn}>
           <CardMedia
             component="img"
             image="/assets/google.png"
@@ -51,7 +53,8 @@ export default function Login() {
               maxWidth: "100%",
               maxHeight: "100%",
               objectFit: "contain",
-            }}/>
+            }}
+          />
         </BtnGoogle>
         {/* Enlace a la página de registro */}
         <Typography variant="subtitle1" sx={{ lineHeight: "normal" }}>
