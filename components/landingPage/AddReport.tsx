@@ -182,7 +182,7 @@ export default function AddReport() {
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
-        paddingBottom: { xs: 10, md: 8, lg: "15em" },
+        paddingBottom: { xs: 10, md: 8, lg: "20em" },
         paddingLeft: {
           xs: "1em",
           sm: "5em",
@@ -197,14 +197,14 @@ export default function AddReport() {
         },
       }}
     >
-      <FormControl
+      <form
         onSubmit={handleSubmit}
-        sx={{
+        style={{
           width: "100%",
-          maxWidth: { xs: "100%", md: 700 },
+          maxWidth: "700px",
           backgroundColor: "var(--primary-color)",
-          padding: { xs: "4em 2em 4em 2em", md: "6em 4em 6em 4em" },
-          borderRadius: 4,
+          padding: "4em 2em",
+          borderRadius: "1em",
         }}
       >
         <Box>
@@ -731,7 +731,7 @@ export default function AddReport() {
           )}
           {/* END */}
         </Box>
-      </FormControl>
+      </form>
       <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
         <Alert
           onClose={handleClose}
