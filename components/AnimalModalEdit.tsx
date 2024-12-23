@@ -5,11 +5,11 @@ import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
-import { Animal } from "./AnimalCard";
 import { Backdrop, MenuItem, TextField } from "@mui/material";
 import Snackbar, { SnackbarCloseReason } from "@mui/material/Snackbar";
 import Alert from "@mui/material/Alert";
 import CircularProgress from "@mui/material/CircularProgress";
+import { FormDataReport } from "./AnimalCard";
 
 const style = {
   position: "absolute",
@@ -28,13 +28,13 @@ interface TransitionsModalProps {
   }
   
   interface AnimalModalEditProps extends TransitionsModalProps {
-    animal: Animal; // Propiedad que representa al animal
+    animal: FormDataReport; // Propiedad que representa al animal
   }
 
 function AnimalModalEdit({ open, onClose, animal }: AnimalModalEditProps) {
   const [openSnack, setOpenSnack] = React.useState(false);
   const [isLoading, setIsLoading] = React.useState(false);
-  const [formValues, setFormValues] = React.useState<Animal>({ ...animal });
+  const [formValues, setFormValues] = React.useState<FormDataReport>({ ...animal });
   console.log("Modal abierto: ", open);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -111,7 +111,7 @@ function AnimalModalEdit({ open, onClose, animal }: AnimalModalEditProps) {
           }}
         >
           <Typography id="modal-modal-title" variant="h6" component="h1">
-            Editar Información de {animal.name}
+            Editar Información de {animal.petName}
           </Typography>
           {/* Formulario de edición */}
           <Box
@@ -141,7 +141,7 @@ function AnimalModalEdit({ open, onClose, animal }: AnimalModalEditProps) {
               }}
             >
               <img
-                src={formValues.image}
+                src={formValues.images[0]}
                 alt="Imagen del animal"
                 style={{
                   width: "100%",
@@ -166,7 +166,7 @@ function AnimalModalEdit({ open, onClose, animal }: AnimalModalEditProps) {
             <TextField
               label="Nombre"
               name="name"
-              value={formValues.name}
+              value={formValues.petName}
               onChange={handleChange}
             />
             <TextField
@@ -191,7 +191,7 @@ function AnimalModalEdit({ open, onClose, animal }: AnimalModalEditProps) {
             <TextField
               label="Ubicación"
               name="location"
-              value={formValues.location}
+              value={formValues.foundLocation}
               onChange={handleChange}
             />
             <TextField
