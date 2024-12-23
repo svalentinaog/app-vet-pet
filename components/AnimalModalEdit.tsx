@@ -41,8 +41,9 @@ function AnimalModalEdit({
 
 
   console.log("Modal abierto: ", open);
+  
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+ const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormValues((prevValues) => ({
       ...prevValues,
@@ -51,21 +52,23 @@ function AnimalModalEdit({
   };
 
   const handleSubmit = async () => {
-    console.log("Datos editados:", formValues);
-
     setIsLoading(true);
     try {
+      // Asegurarse de que las imágenes en formValues se sincronicen con las cargadas
+      const updatedImages = uploadedImages.length > 0 ? uploadedImages : formValues.images;
+
       // Referencia al documento de la mascota en Firestore
       const animalRef = doc(firestore, "reports", formValues.id.toString());
 
-      // Actualizar los datos en Firestore
+      // Actualización de los datos en Firestore
       await updateDoc(animalRef, {
         ...formValues,
-        images: uploadedImages.length > 0 ? uploadedImages : formValues.images, // Asegura que las imágenes se actualicen si es necesario
+        images: updatedImages, // Se actualizan las imágenes si es necesario
       });
 
       console.log("Información de la mascota actualizada correctamente");
       setOpenSnack(true); // Muestra el Snackbar
+      window.location.reload(); 
     } catch (error) {
       console.error("Error al actualizar la información de la mascota:", error);
     } finally {
