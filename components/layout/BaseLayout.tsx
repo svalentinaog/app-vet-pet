@@ -4,6 +4,7 @@ import React, { useState, useEffect } from "react";
 import { Box, Fab } from "@mui/material";
 import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
 import Navbar from "./Navbar";
+import Footer from "./Footer";
 
 export default function BaseLayout({
   children,
@@ -46,7 +47,7 @@ export default function BaseLayout({
     <Box>
       <Navbar />
       <Box>{children}</Box>
-
+      <Footer />
       {/* Botón para ir arriba */}
       <Fab
         color="secondary"

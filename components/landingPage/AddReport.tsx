@@ -215,7 +215,7 @@ export default function AddReport() {
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
-        paddingBottom: { xs: 10, md: 8, lg: "15em" },
+        paddingBottom: { xs: 10, md: 8, lg: "20em" },
         paddingLeft: {
           xs: "1em",
           sm: "5em",
@@ -242,8 +242,9 @@ export default function AddReport() {
       >
         <Box>
           <Typography
-            variant="h4"
+            variant="h5"
             align="center"
+            fontSize={{ xs: "1.5em", md: "2.5em" }}
             marginBottom={{ xs: 5, md: 6 }}
             color="white"
           >
