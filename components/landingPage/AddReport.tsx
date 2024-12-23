@@ -28,8 +28,13 @@ import {
 import { CldUploadWidget } from "next-cloudinary";
 import { collection, addDoc } from "firebase/firestore";
 import { firestore } from "@/lib/firebase";
+import { doc, updateDoc } from "firebase/firestore";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "@/lib/store";
+import { updateUserStateByKey } from "@/lib/features/userSlice";
 
 interface FormDataReport {
+  id: number;
   reportType: string;
   reporterName: string; // Nombre del reportante
   phone: string; // Número de teléfono del reportante
@@ -45,6 +50,7 @@ interface FormDataReport {
 }
 
 const initialFormData: FormDataReport = {
+  id : 0,
   reportType: "",
   reporterName: "",
   phone: "",
@@ -56,7 +62,7 @@ const initialFormData: FormDataReport = {
   status: "",
   images: [],
   reward: "",
-  dateCreationReport: new Date().toString(),
+  dateCreationReport: new Date().toString().split('(')[0],
 };
 
 export default function AddReport() {
@@ -65,6 +71,9 @@ export default function AddReport() {
   const [open, setOpen] = React.useState(false);
   const [success, setSuccess] = useState<boolean>(false);
   const [uploadedImages, setUploadedImages] = useState<string[]>([]);
+
+  const dispatch = useDispatch();
+  const user = useSelector((state: RootState) => state.user.user);
 
   async function deleteImage(publicId: string) {
     try {
@@ -130,23 +139,47 @@ export default function AddReport() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    // Validación inicial
     if (formData.images.length < 2) {
       alert("Por favor, sube al menos 3 imágenes");
       return;
     }
+
     setLoading(true);
+    let operationSuccess = false; // Control explícito del éxito de la operación
+
     try {
-      const docId = await uploadFireStore(formData);
+      // Subir datos al Firestore
+      if(formData.reportType == "found"){
+        formData.petName = "Sin nombre"
+      }
+      const docId = await uploadFireStore( {...formData, id: Math.floor(Math.random() * 1000000000)});
+      // Actualizar el estado local del usuario
+      dispatch(
+        updateUserStateByKey({
+          key: "pets",
+          value: [...user.pets, docId],
+        })
+      );
+
+      // Actualizar el documento en Firestore
+      const userRef = doc(firestore, "users", user.id);
+      await updateDoc(userRef, {
+        pets: [...user.pets, docId],
+      });
+
+      operationSuccess = true; // Operación completada con éxito
     } catch (error) {
       console.error("Error al guardar el reporte:", error);
-      throw error;
     } finally {
       setOpen(true);
       setLoading(false);
-      if (success) {
+
+      if (operationSuccess) {
+        // Resetear el formulario y estados solo si la operación fue exitosa
         setUploadedImages([]);
         setFormData(initialFormData);
-        setSuccess(false);
       }
     }
   };
