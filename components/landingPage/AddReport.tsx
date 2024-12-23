@@ -3,7 +3,6 @@
 import React, { ChangeEvent, useState } from "react";
 import {
   Box,
-  TextField,
   MenuItem,
   Typography,
   Grid,
@@ -11,13 +10,12 @@ import {
   Select,
   SelectChangeEvent,
   InputLabel,
-  FormControl,
   IconButton,
   CircularProgress,
   Alert,
   Snackbar,
   SnackbarCloseReason,
-  CardMedia,
+  FormControl,
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import {
@@ -26,6 +24,10 @@ import {
   InputTextFieldReport,
   MainButton,
 } from "@/styles/mui";
+
+import { CldUploadWidget } from "next-cloudinary";
+import { collection, addDoc } from "firebase/firestore";
+import { firestore } from "@/lib/firebase";
 
 interface FormDataReport {
   reportType: string;
@@ -61,6 +63,32 @@ export default function AddReport() {
   const [formData, setFormData] = useState<FormDataReport>(initialFormData);
   const [loading, setLoading] = useState<boolean>(false);
   const [open, setOpen] = React.useState(false);
+  const [success, setSuccess] = useState<boolean>(false);
+  const [uploadedImages, setUploadedImages] = useState<string[]>([]);
+
+  async function deleteImage(publicId: string) {
+    try {
+      const response = await fetch("/api/upload", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          public_id: publicId,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to delete image");
+      }
+      setUploadedImages(uploadedImages.filter((e) => e != publicId));
+      const result = await response.json();
+      return result;
+    } catch (error) {
+      console.error("Error deleting image:", error);
+      throw error;
+    }
+  }
 
   const handleChange = (
     e:
@@ -78,38 +106,49 @@ export default function AddReport() {
     }
   };
 
-  const handleImageUpload = (event: ChangeEvent<HTMLInputElement>) => {
-    if (event.target.files) {
-      const files = Array.from(event.target.files);
-      const newImages = files.map((file) => URL.createObjectURL(file));
+  // const handleReset = () => {
+  //   setFormData({ ...initialFormData, images: uploadedImages });
+  // };
 
-      setFormData((prev) => ({
-        ...prev,
-        images: [...prev.images, ...newImages],
-      }));
+  const uploadFireStore = async (formData: FormDataReport) => {
+    try {
+      //Referenciar la colección "reports"
+      const reportsRef = collection(firestore, "reports");
+      //Añadir el documento
+      const docRef = await addDoc(reportsRef, {
+        ...formData,
+      });
+      console.log("Reporte creado con éxito:", docRef.id);
+      setSuccess(true);
+      return docRef.id;
+    } catch (error) {
+      console.error("Error al crear el reporte:", error);
+      setSuccess(false);
+      throw error;
     }
   };
 
-  const handleRemoveImage = (index: number) => {
-    setFormData((prev) => ({
-      ...prev,
-      images: prev.images.filter((_, i) => i !== index),
-    }));
-  };
-
-  const handleReset = () => {
-    setFormData(initialFormData);
-  };
-
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (formData.images.length < 2) {
+      alert("Por favor, sube al menos 3 imágenes");
+      return;
+    }
     setLoading(true);
-    setTimeout(() => {
-      console.log("Formulario enviado:", formData);
+    try {
+      const docId = await uploadFireStore(formData);
+    } catch (error) {
+      console.error("Error al guardar el reporte:", error);
+      throw error;
+    } finally {
       setOpen(true);
       setLoading(false);
-      setFormData(initialFormData);
-    }, 2000);
+      if (success) {
+        setUploadedImages([]);
+        setFormData(initialFormData);
+        setSuccess(false);
+      }
+    }
   };
 
   const handleClose = (
@@ -158,7 +197,8 @@ export default function AddReport() {
         },
       }}
     >
-      <Box
+      <FormControl
+        onSubmit={handleSubmit}
         sx={{
           width: "100%",
           maxWidth: { xs: "100%", md: 700 },
@@ -207,7 +247,7 @@ export default function AddReport() {
           >
             <Grid item xs={12} md={6}>
               {/* Selector del tipo de reporte */}
-              <InputSelectFieldReport onSubmit={handleSubmit}>
+              <InputSelectFieldReport>
                 <InputLabel>Tipo de reporte</InputLabel>
                 <Select
                   name="reportType"
@@ -259,7 +299,6 @@ export default function AddReport() {
             </Grid>
           </Grid>
           {/* 📃 Campos específicos según el tipo de reporte */}
-
           {/* PERDIDO */}
           {formData.reportType === "lost" && (
             <Box>
@@ -373,70 +412,113 @@ export default function AddReport() {
                   />
                 </Grid>
               </Grid>
-              {/* Cargar imágenes */}
-              <Box textAlign="center">
-                <Button
-                  variant="outlined"
-                  component="label"
-                  color="primary"
-                  sx={{
-                    width: "100%",
-                    padding: "14.5px 14px",
-                    borderRadius: "100px",
-                    border: "1px solid",
-                    textTransform: "none",
-                    backgroundColor: "transparent",
-                    "&:hover": {
-                      backgroundColor: "rgba(0, 0, 0, 0.08)",
-                    },
-                  }}
-                >
-                  Cargar imágenes
-                  <input
-                    type="file"
-                    accept="image/*"
-                    multiple
-                    onChange={handleImageUpload}
-                    hidden
-                  />
-                </Button>
-                <Box
-                  display="flex"
-                  flexWrap="wrap"
-                  justifyContent="center"
-                  gap={2}
-                  marginTop={2}
-                >
-                  {formData.images.map((image, index) => (
-                    <Box key={index} position="relative">
-                      <CardMedia
-                        component="img"
-                        src={image}
-                        alt={`Uploaded ${index}`}
-                        style={{
-                          width: 100,
-                          height: 100,
-                          objectFit: "cover",
-                          borderRadius: "8px",
-                        }}
-                      />
-                      <IconButton
-                        size="small"
-                        sx={{
-                          position: "absolute",
-                          top: 0,
-                          right: 0,
-                          backgroundColor: "rgba(255, 0, 0, 0.7)",
-                          color: "white",
-                        }}
-                        onClick={() => handleRemoveImage(index)}
-                      >
-                        <CloseIcon />
-                      </IconButton>
-                    </Box>
-                  ))}
-                </Box>
-              </Box>
+
+              <CldUploadWidget
+                signatureEndpoint="/api/upload"
+                onSuccess={(results) => {
+                  if (
+                    results?.info &&
+                    typeof results.info !== "string" &&
+                    "public_id" in results.info
+                  ) {
+                    const newImage = results.info.public_id;
+                    setUploadedImages((prev) => [...prev, newImage]);
+                    setFormData((prev) => ({
+                      ...prev,
+                      images: [...prev.images, newImage],
+                    }));
+                  }
+                }}
+                options={{
+                  maxFiles: 5,
+                  resourceType: "image",
+                  showAdvancedOptions: true,
+                }}
+              >
+                {({ open, isLoading }) => {
+                  return (
+                    <>
+                      {isLoading ? (
+                        <Box
+                          display="flex"
+                          justifyContent="center"
+                          alignItems="center"
+                          height="100%"
+                          width="100%"
+                          marginTop={3}
+                        >
+                          <CircularProgress size={30} />
+                        </Box>
+                      ) : (
+                        <Box marginTop={2} textAlign="center">
+                          <Button
+                            variant="outlined"
+                            component="label"
+                            sx={{
+                              color: "var(--light-color)",
+                              width: "100%",
+                              padding: "14.5px 14px",
+                              borderRadius: "100px",
+                              border: "1px solid var(--light-color)",
+                              textTransform: "none",
+                              backgroundColor: "transparent",
+                              "&:hover": {
+                                backgroundColor: "rgba(0, 0, 0, 0.08)",
+                              },
+                            }}
+                            onClick={() => open()}
+                          >
+                            Cargar imágenes
+                          </Button>
+                          <Box
+                            display="flex"
+                            flexWrap="wrap"
+                            justifyContent="center"
+                            gap={2}
+                            marginTop={1}
+                          >
+                            {uploadedImages?.map((publicId) => (
+                              <Box key={publicId} position="relative">
+                                <img
+                                  src={`https://res.cloudinary.com/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/image/upload/${publicId}`}
+                                  alt={`Uploaded ${publicId}`}
+                                  style={{
+                                    width: 100,
+                                    height: 100,
+                                    objectFit: "cover",
+                                    borderRadius: "8px",
+                                  }}
+                                />
+                                <IconButton
+                                  size="small"
+                                  sx={{
+                                    position: "absolute",
+                                    top: 0,
+                                    right: 0,
+                                    backgroundColor: "rgba(255, 0, 0, 0.7)",
+                                    color: "white",
+                                  }}
+                                  onClick={() => {
+                                    deleteImage(publicId);
+                                    setFormData((prev) => ({
+                                      ...prev,
+                                      images: prev.images.filter(
+                                        (img) => img !== publicId
+                                      ),
+                                    }));
+                                  }}
+                                >
+                                  <CloseIcon />
+                                </IconButton>
+                              </Box>
+                            ))}
+                          </Box>
+                        </Box>
+                      )}
+                    </>
+                  );
+                }}
+              </CldUploadWidget>
 
               {loading ? (
                 <Box
@@ -521,70 +603,113 @@ export default function AddReport() {
                   />
                 </Grid>
               </Grid>
-              {/* Cargar imágenes */}
-              <Box textAlign="center">
-                <Button
-                  variant="outlined"
-                  component="label"
-                  color="primary"
-                  sx={{
-                    width: "100%",
-                    padding: "14.5px 14px",
-                    borderRadius: "100px",
-                    border: "1px solid",
-                    textTransform: "none",
-                    backgroundColor: "transparent",
-                    "&:hover": {
-                      backgroundColor: "rgba(0, 0, 0, 0.08)",
-                    },
-                  }}
-                >
-                  Cargar imágenes
-                  <input
-                    type="file"
-                    accept="image/*"
-                    multiple
-                    onChange={handleImageUpload}
-                    hidden
-                  />
-                </Button>
-                <Box
-                  display="flex"
-                  flexWrap="wrap"
-                  justifyContent="center"
-                  gap={2}
-                  marginTop={{ xs: "0", md: 2 }}
-                >
-                  {formData.images.map((image, index) => (
-                    <Box key={index} position="relative">
-                      <CardMedia
-                        component="img"
-                        src={image}
-                        alt={`Uploaded ${index}`}
-                        style={{
-                          width: 100,
-                          height: 100,
-                          objectFit: "cover",
-                          borderRadius: "8px",
-                        }}
-                      />
-                      <IconButton
-                        size="small"
-                        sx={{
-                          position: "absolute",
-                          top: 0,
-                          right: 0,
-                          backgroundColor: "rgba(255, 0, 0, 0.7)",
-                          color: "white",
-                        }}
-                        onClick={() => handleRemoveImage(index)}
-                      >
-                        <CloseIcon />
-                      </IconButton>
-                    </Box>
-                  ))}
-                </Box>
-              </Box>
+
+              <CldUploadWidget
+                signatureEndpoint="/api/upload"
+                onSuccess={(results) => {
+                  if (
+                    results?.info &&
+                    typeof results.info !== "string" &&
+                    "public_id" in results.info
+                  ) {
+                    const newImage = results.info.public_id;
+                    setUploadedImages((prev) => [...prev, newImage]);
+                    setFormData((prev) => ({
+                      ...prev,
+                      images: [...prev.images, newImage],
+                    }));
+                  }
+                }}
+                options={{
+                  maxFiles: 5,
+                  resourceType: "image",
+                  showAdvancedOptions: true,
+                }}
+              >
+                {({ open, isLoading }) => {
+                  return (
+                    <>
+                      {isLoading ? (
+                        <Box
+                          display="flex"
+                          justifyContent="center"
+                          alignItems="center"
+                          height="100%"
+                          width="100%"
+                          marginTop={3}
+                        >
+                          <CircularProgress size={30} />
+                        </Box>
+                      ) : (
+                        <Box marginTop={2} textAlign="center">
+                          <Button
+                            variant="outlined"
+                            component="label"
+                            sx={{
+                              color: "var(--light-color)",
+                              width: "100%",
+                              padding: "14.5px 14px",
+                              borderRadius: "100px",
+                              border: "1px solid var(--light-color)",
+                              textTransform: "none",
+                              backgroundColor: "transparent",
+                              "&:hover": {
+                                backgroundColor: "rgba(0, 0, 0, 0.08)",
+                              },
+                            }}
+                            onClick={() => open()}
+                          >
+                            Cargar imágenes
+                          </Button>
+                          <Box
+                            display="flex"
+                            flexWrap="wrap"
+                            justifyContent="center"
+                            gap={2}
+                            marginTop={1}
+                          >
+                            {uploadedImages?.map((publicId) => (
+                              <Box key={publicId} position="relative">
+                                <img
+                                  src={`https://res.cloudinary.com/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/image/upload/${publicId}`}
+                                  alt={`Uploaded ${publicId}`}
+                                  style={{
+                                    width: 100,
+                                    height: 100,
+                                    objectFit: "cover",
+                                    borderRadius: "8px",
+                                  }}
+                                />
+                                <IconButton
+                                  size="small"
+                                  sx={{
+                                    position: "absolute",
+                                    top: 0,
+                                    right: 0,
+                                    backgroundColor: "rgba(255, 0, 0, 0.7)",
+                                    color: "white",
+                                  }}
+                                  onClick={() => {
+                                    deleteImage(publicId);
+                                    setFormData((prev) => ({
+                                      ...prev,
+                                      images: prev.images.filter(
+                                        (img) => img !== publicId
+                                      ),
+                                    }));
+                                  }}
+                                >
+                                  <CloseIcon />
+                                </IconButton>
+                              </Box>
+                            ))}
+                          </Box>
+                        </Box>
+                      )}
+                    </>
+                  );
+                }}
+              </CldUploadWidget>
 
               {loading ? (
                 <Box
@@ -599,22 +724,24 @@ export default function AddReport() {
                 </Box>
               ) : (
                 <Box marginTop={{ xs: 4, md: 2 }} textAlign="center">
-                  <MainButton type="submit">Enviar reporte</MainButton>
+                  <MainButton onClick={handleSubmit}>Enviar reporte</MainButton>
                 </Box>
               )}
             </>
           )}
           {/* END */}
         </Box>
-      </Box>
+      </FormControl>
       <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
         <Alert
           onClose={handleClose}
-          severity="success"
+          severity={success ? "success" : "error"}
           variant="filled"
           sx={{ width: "100%" }}
         >
-          ¡Reporte enviado con éxito!
+          {success
+            ? "Reporte enviado con éxito!"
+            : "Ha ocurrido un error al enviar el reporte"}
         </Alert>
       </Snackbar>
     </Box>

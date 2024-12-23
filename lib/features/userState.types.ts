@@ -1,9 +1,12 @@
 export interface IUserState {
   user: {
+    id: string;
     name: string;
+
     email: string;
     phone: string;
     password: string;
+    confirmPassword: string;
     pets: string[];
     role?: "user" | "admin";
     registrationDate?: Date;
@@ -24,10 +27,13 @@ export type UserStateUpdate = {
 // Estado inicial
 const UserState: IUserState = {
   user: {
+    id: "",
     name: "",
+
     email: "",
     phone: "",
     password: "",
+    confirmPassword: "",
     pets: [],
     role: undefined,
     registrationDate: undefined,
