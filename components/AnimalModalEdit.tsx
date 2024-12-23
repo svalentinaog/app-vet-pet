@@ -11,31 +11,25 @@ import Alert from "@mui/material/Alert";
 import CircularProgress from "@mui/material/CircularProgress";
 import { FormDataReport } from "./AnimalCard";
 
-const style = {
-  position: "absolute",
-  top: "50%",
-  left: "50%",
-  transform: "translate(-50%, -50%)",
-  width: 400,
-  bgcolor: "background.paper",
-  border: "2px solid #000",
-  boxShadow: 24,
-  p: 4,
-};
 interface TransitionsModalProps {
-    open: boolean;
-    onClose: () => void; // Callback para manejar el cierre del modal
-  }
-  
-  interface AnimalModalEditProps extends TransitionsModalProps {
-    animal: FormDataReport; // Propiedad que representa al animal
-  }
+  open: boolean;
+  onClose: () => void; // Callback para manejar el cierre del modal
+}
 
-function AnimalModalEdit({ open, onClose, animal }: AnimalModalEditProps) {
+interface AnimalModalEditProps extends TransitionsModalProps {
+  animal: FormDataReport; // Propiedad que representa al animal
+  userPets: string[];
+}
+
+function AnimalModalEdit({ open, onClose, animal, userPets }: AnimalModalEditProps) {
   const [openSnack, setOpenSnack] = React.useState(false);
   const [isLoading, setIsLoading] = React.useState(false);
-  const [formValues, setFormValues] = React.useState<FormDataReport>({ ...animal });
+  const [formValues, setFormValues] = React.useState<FormDataReport>({
+    ...animal,
+  });
+  
   console.log("Modal abierto: ", open);
+
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -63,9 +57,8 @@ function AnimalModalEdit({ open, onClose, animal }: AnimalModalEditProps) {
     setTimeout(() => {
       setOpenSnack(true);
       setIsLoading(false);
-      onClose()
+      onClose();
     }, 2000);
-
   };
 
   const handleCloseSnack = (
