@@ -15,12 +15,12 @@ import {
 
 // Configuración de Firebase
 const firebaseConfig = {
-  apiKey: "AIzaSyBAOGtkq9UqqnGAUgXN8l9WLVIqZLAD-oY",
-  authDomain: "app-vet-pet-ff124.firebaseapp.com",
-  projectId: "app-vet-pet-ff124",
-  storageBucket: "app-vet-pet-ff124.firebasestorage.app",
-  messagingSenderId: "914502278527",
-  appId: "1:914502278527:web:75135a52cbb2962a860e4a",
+  apiKey: "AIzaSyArSZd1AK84pJ2sWQml-ryT_EmOvh4viQY",
+  authDomain: "buffalo-app-data.firebaseapp.com",
+  projectId: "buffalo-app-data",
+  storageBucket: "buffalo-app-data.firebasestorage.app",
+  messagingSenderId: "792528119735",
+  appId: "1:792528119735:web:488bd195f1f54950b3aa32"
 };
 
 // Inicializar Firebase

@@ -10,18 +10,24 @@ import PhoneIcon from "@mui/icons-material/Phone";
 import PetsIcon from "@mui/icons-material/Pets";
 import Link from "next/link";
 
-export interface Animal {
+export interface FormDataReport {
   id: number;
-  image: string;
-  name: string;
-  status: string;
+  reportType: "lost" | "found";
+  reporterName: string; // Nombre del reportante
+  phone: string; // Número de teléfono del reportante
+  petType: string; // Tipo de mascota
+  petName?: string; // Nombre de la mascota (para "perdido")
+  foundLocation?: string; // Lugar encontrado
   description: string;
-  location: string;
-  phone: number;
+  age?: string; // Edad aproximada (solo para "perdido")
+  status?: string; // Estado: Sin hogar, Perdido, etc.
+  images: string[];
+  reward?: string; //Solo para "perdido"
+  dateCreationReport: string; // Fecha de creación del reporte
 }
 
 interface AnimalCardProps {
-  animal: Animal;
+  animal: FormDataReport;
 }
 
 export default function AnimalCard({ animal }: AnimalCardProps) {
@@ -73,8 +79,8 @@ export default function AnimalCard({ animal }: AnimalCardProps) {
         >
           <CardMedia
             component="img"
-            image={animal.image}
-            alt={animal.name}
+            image={`https://res.cloudinary.com/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/image/upload/${animal.images[0]}`}
+            alt={animal.petName}
             sx={{
               height: { xs: "250px", md: "225px", lg: "250px" },
               maxWidth: "100%",
@@ -97,10 +103,11 @@ export default function AnimalCard({ animal }: AnimalCardProps) {
           }}
         >
           <Typography variant="body1" component="div">
-            {animal.name}
+            {animal.petName}
           </Typography>
           <Typography variant="body2" color="text.secondary">
-            {animal.description}
+            {animal.description.split(" ").slice(0, 4).join(" ")}
+            {animal.description.split(" ").length > 4 && "…"}
           </Typography>
           <Typography
             variant="caption"
@@ -114,7 +121,9 @@ export default function AnimalCard({ animal }: AnimalCardProps) {
             <span
               style={{
                 fontSize: "25px",
-                color: statusColors[animal.status] || "gray",
+                color: animal?.status
+                  ? statusColors[animal.status] || "gray"
+                  : "gray",
               }}
             >
               •
