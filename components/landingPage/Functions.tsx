@@ -37,7 +37,7 @@ export default function Functions() {
       sx={{
         width: "100%",
         height: "100%",
-        paddingTop: { xs: 10, md: 8, lg: "17em" },
+        paddingTop: { xs: 10, md: 8, lg: "15em" },
         paddingLeft: {
           xs: "1em",
           sm: "5em",

@@ -177,10 +177,9 @@ export default function Reports() {
             gap: 1,
             textTransform: "none",
             border: "none",
-            padding: 2,
+            padding: 0,
             borderRadius: "100px",
             "&:hover": {
-              backgroundColor: "rgba(159, 164, 219, 0.1)",
               textDecoration: "underline",
             },
           }}

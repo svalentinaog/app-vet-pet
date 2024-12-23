@@ -14,7 +14,7 @@ export default function Home() {
         display="flex"
         flexDirection="column"
         sx={{
-          gap: { xs: 10, md: 8, lg: "17em" },
+          gap: { xs: 10, md: 8, lg: "15em" },
         }}
       >
         <Functions />

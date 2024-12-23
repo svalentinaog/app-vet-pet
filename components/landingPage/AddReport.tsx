@@ -20,9 +20,15 @@ import {
   CardMedia,
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
+import {
+  InputSelectFieldReport,
+  InputTextFieldDescription,
+  InputTextFieldReport,
+  MainButton,
+} from "@/styles/mui";
 
 interface FormDataReport {
-  reportType: "lost" | "found";
+  reportType: string;
   reporterName: string; // Nombre del reportante
   phone: string; // Número de teléfono del reportante
   petType: string; // Tipo de mascota
@@ -37,7 +43,7 @@ interface FormDataReport {
 }
 
 const initialFormData: FormDataReport = {
-  reportType: "lost",
+  reportType: "",
   reporterName: "",
   phone: "",
   petType: "",
@@ -137,7 +143,7 @@ export default function AddReport() {
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
-        paddingBottom: { xs: 10, md: 8, lg: "17em" },
+        paddingBottom: { xs: 10, md: 8, lg: "15em" },
         paddingLeft: {
           xs: "1em",
           sm: "5em",
@@ -154,71 +160,70 @@ export default function AddReport() {
     >
       <Box
         sx={{
-          width: "100%", // Ocupa todo el ancho disponible
-          maxWidth: 700,
+          width: "100%",
+          maxWidth: { xs: "100%", md: 700 },
           backgroundColor: "var(--primary-color)",
-          padding: 4,
+          padding: { xs: "4em 2em 4em 2em", md: "6em 4em 6em 4em" },
           borderRadius: 4,
         }}
       >
-        <Typography variant="h4" align="center" gutterBottom>
-          Reportar mascota
-        </Typography>
-        <Box
-          sx={{
-            width: "100%",
-            height: "100%",
-            backgroundColor: "var(--primary-color)",
-            padding: 6,
-            borderRadius: 4,
-          }}
-        >
-          {/* Selector del tipo de reporte */}
-          <FormControl margin="normal" onSubmit={handleSubmit}>
-            <InputLabel>Tipo de reporte</InputLabel>
-            <Select
-              name="reportType"
-              value={formData.reportType}
-              onChange={handleChange}
-            >
-              <MenuItem onClick={handleReset} value="lost">
-                He perdido una mascota
-              </MenuItem>
-              <MenuItem onClick={handleReset} value="found">
-                He encontrado una mascota
-              </MenuItem>
-            </Select>
-          </FormControl>
+        <Box>
+          <Typography
+            variant="h4"
+            align="center"
+            marginBottom={{ xs: 5, md: 6 }}
+            color="white"
+          >
+            Realizar reporte
+          </Typography>
 
-          {/* Campos comunes */}
-          <Grid container spacing={2} marginTop={1}>
+          <Grid container spacing={{ xs: 4, md: 2 }}>
             <Grid item xs={12} md={6}>
-              <TextField
-                label="Nombre del reportante"
+              <InputTextFieldReport
+                label="Tu nombre"
                 name="reporterName"
                 value={formData.reporterName}
                 onChange={handleChange}
-                fullWidth
                 required
               />
             </Grid>
+
             <Grid item xs={12} md={6}>
-              <TextField
-                label="Teléfono de contacto"
+              <InputTextFieldReport
+                label="Número telefonico"
                 name="phone"
-                type="tel"
                 value={formData.phone}
                 onChange={handleChange}
-                fullWidth
+                type="tel"
                 required
               />
             </Grid>
           </Grid>
 
-          <Grid container spacing={2} marginTop={1}>
+          <Grid
+            container
+            spacing={{ xs: 4, md: 2 }}
+            marginTop={{ xs: "0", md: 2 }}
+          >
             <Grid item xs={12} md={6}>
-              <FormControl fullWidth>
-                <InputLabel>Tipo de Mascota</InputLabel>
+              {/* Selector del tipo de reporte */}
+              <InputSelectFieldReport onSubmit={handleSubmit}>
+                <InputLabel>Tipo de reporte</InputLabel>
+                <Select
+                  name="reportType"
+                  value={formData.reportType}
+                  onChange={handleChange}
+                >
+                  <MenuItem value="lost">He perdido una mascota</MenuItem>
+                  <MenuItem value="found">He encontrado una mascota</MenuItem>
+                </Select>
+              </InputSelectFieldReport>
+            </Grid>
+
+            <Grid item xs={12} md={6}>
+              {/* Selector de Animal */}
+              <InputSelectFieldReport>
+                <InputLabel>Tipo de mascota</InputLabel>
                 <Select
                   name="petType"
                   value={formData.petType}
@@ -229,217 +234,379 @@ export default function AddReport() {
                   <MenuItem value="Ave">Ave</MenuItem>
                   <MenuItem value="Otro">Otro</MenuItem>
                 </Select>
-              </FormControl>
-            </Grid>
-            <Grid item xs={12} md={6}>
-              <TextField
-                label="Descripción (color, tamaño, raza, etc.)"
-                name="description"
-                value={formData.description}
-                onChange={handleChange}
-                multiline
-                rows={4}
-                fullWidth
-                required
-              />
+              </InputSelectFieldReport>
             </Grid>
           </Grid>
-
-          {/* Subir imágenes */}
-          <Box marginTop={2} textAlign="center">
-            <Button
-              variant="contained"
-              component="label"
-              color="primary"
-              sx={{ mb: 2 }}
-            >
-              Subir fotos de la mascota
-              <input
-                type="file"
-                accept="image/*"
-                multiple
-                onChange={handleImageUpload}
-                hidden
-              />
-            </Button>
-            <Box
-              display="flex"
-              flexWrap="wrap"
-              justifyContent="center"
-              gap={2}
-              marginTop={1}
-            >
-              {formData.images.map((image, index) => (
-                <Box key={index} position="relative">
-                  <CardMedia
-                    component="img"
-                    src={image}
-                    alt={`Uploaded ${index}`}
-                    style={{
-                      width: 100,
-                      height: 100,
-                      objectFit: "cover",
-                      borderRadius: "8px",
-                    }}
-                  />
-                  <IconButton
-                    size="small"
-                    sx={{
-                      position: "absolute",
-                      top: 0,
-                      right: 0,
-                      backgroundColor: "rgba(255, 0, 0, 0.7)",
-                      color: "white",
-                    }}
-                    onClick={() => handleRemoveImage(index)}
-                  >
-                    <CloseIcon />
-                  </IconButton>
-                </Box>
-              ))}
-            </Box>
-          </Box>
-
-          {/* Campos específicos según el tipo de reporte */}
-          {formData.reportType === "lost" && (
-            <>
-              <TextField
-                label="Nombre de la mascota"
-                name="petName"
-                value={formData.petName || ""}
-                onChange={handleChange}
-                fullWidth
-                margin="normal"
-                required
-              />
-
-              <FormControl margin="normal" fullWidth>
-                <InputLabel id="demo-simple-select-label">
-                  Edad aproximada de la mascota
-                </InputLabel>
-                <Select
-                  name="age"
-                  value={formData.age}
-                  label="age"
-                  onChange={handleChange}
-                  required
-                >
-                  <MenuItem value="Menor de 3 años">Menor de 3 años</MenuItem>
-                  <MenuItem value="Mayor a 3 años y menor que 6 años">
-                    Mayor a 3 años y menor que 6 años
-                  </MenuItem>
-                  <MenuItem value="Mayor de 6 años">Mayor de 6 años</MenuItem>
-                </Select>
-              </FormControl>
-
-              <FormControl margin="normal" fullWidth>
+          <Grid
+            container
+            spacing={{ xs: 4, md: 2 }}
+            marginTop={2}
+            sx={{ display: "none" }}
+          >
+            <Grid item xs={12} md={6}>
+              <InputSelectFieldReport>
                 <InputLabel>Estado de la mascota</InputLabel>
                 <Select
                   name="status"
-                  value={formData.status || ""}
+                  value={formData.status || "Perdido"}
                   onChange={handleChange}
                   required
                 >
                   <MenuItem value="Perdido">Perdido</MenuItem>
                   <MenuItem value="Encontrado">Encontrado</MenuItem>
                 </Select>
-              </FormControl>
+              </InputSelectFieldReport>
+            </Grid>
+          </Grid>
+          {/* 📃 Campos específicos según el tipo de reporte */}
 
-              <TextField
-                label="Último lugar donde viste a tu mascota"
-                name="foundLocation"
-                value={formData.foundLocation || ""}
-                onChange={handleChange}
-                fullWidth
-                margin="normal"
-                required
-              />
-              <Box
-                sx={{
-                  position: "relative",
-                }}
+          {/* PERDIDO */}
+          {formData.reportType === "lost" && (
+            <Box>
+              <Grid
+                container
+                spacing={{ xs: 4, md: 2 }}
+                marginTop={{ xs: "0px", md: 2 }}
               >
-                <Typography
+                {/* Nombre del animal */}
+                <Grid item xs={12} md={6}>
+                  <InputTextFieldReport
+                    label="Nombre de la mascota"
+                    name="petName"
+                    value={formData.petName || ""}
+                    onChange={handleChange}
+                    required
+                  />
+                </Grid>
+
+                {/* Edad aproximada de este */}
+                <Grid item xs={12} md={6}>
+                  <InputSelectFieldReport>
+                    <InputLabel id="demo-simple-select-label">
+                      Edad aproximada
+                    </InputLabel>
+                    <Select
+                      label="age"
+                      name="age"
+                      value={formData.age}
+                      onChange={handleChange}
+                      required
+                    >
+                      <MenuItem value="Menor de 3 años">
+                        Menor de 3 años
+                      </MenuItem>
+                      <MenuItem value="Mayor a 3 años y menor que 6 años">
+                        Mayor a 3 años y menor que 6 años
+                      </MenuItem>
+                      <MenuItem value="Mayor de 6 años">
+                        Mayor de 6 años
+                      </MenuItem>
+                    </Select>
+                  </InputSelectFieldReport>
+                </Grid>
+              </Grid>
+              <Grid
+                container
+                spacing={{ xs: 4, md: 2 }}
+                marginTop={{ xs: "0px", md: 2 }}
+              >
+                {/* Ultimo lugar vista */}
+                <Grid item xs={12} md={6}>
+                  <InputTextFieldReport
+                    label="Último lugar donde fue vista"
+                    name="foundLocation"
+                    value={formData.foundLocation || ""}
+                    onChange={handleChange}
+                    required
+                  />
+                </Grid>
+
+                {/* Recompensa */}
+                <Grid item xs={12} md={6}>
+                  <Box
+                    sx={{
+                      position: "relative",
+                    }}
+                  >
+                    <Typography
+                      sx={{
+                        position: "absolute",
+                        top: "55%",
+                        right: "0%",
+                        transform: "translate(-50%, -50%)",
+                        fontSize: "16px",
+                        fontWeight: 500,
+                        color: "text.secondary",
+                      }}
+                    >
+                      COP
+                    </Typography>
+                    <InputTextFieldReport
+                      label="Valor recompensa (opcional)"
+                      name="reward"
+                      value={formData.reward || ""}
+                      onChange={handleChange}
+                      placeholder="Ingrese una cantidad en dinero"
+                      inputProps={{
+                        inputMode: "numeric",
+                      }}
+                    />
+                  </Box>
+                </Grid>
+              </Grid>
+              <Grid
+                container
+                spacing={{ xs: 4, md: 2 }}
+                marginTop={{ xs: "0", md: 2 }}
+                marginBottom={4}
+              >
+                {/* Descripcion general del animal */}
+                <Grid item xs={12} md={12}>
+                  <InputTextFieldDescription
+                    label="Descripción general"
+                    name="description"
+                    value={formData.description}
+                    onChange={handleChange}
+                    multiline
+                    rows={1}
+                    fullWidth
+                    required
+                  />
+                </Grid>
+              </Grid>
+              {/* Cargar imágenes */}
+              <Box textAlign="center">
+                <Button
+                  variant="outlined"
+                  component="label"
+                  color="primary"
                   sx={{
-                    position: "absolute",
-                    top: "55%",
-                    right: "0%",
-                    transform: "translate(-50%, -50%)",
-                    fontSize: "16px",
-                    fontWeight: 500,
-                    color: "text.secondary",
+                    width: "100%",
+                    padding: "14.5px 14px",
+                    borderRadius: "100px",
+                    border: "1px solid",
+                    textTransform: "none",
+                    backgroundColor: "transparent",
+                    "&:hover": {
+                      backgroundColor: "rgba(0, 0, 0, 0.08)",
+                    },
                   }}
                 >
-                  COP
-                </Typography>
-                <TextField
-                  label="Recompensa (opcional)"
-                  name="reward"
-                  value={formData.reward || ""}
-                  onChange={handleChange}
-                  fullWidth
-                  margin="normal"
-                  placeholder="Ingrese una cantidad en dinero"
-                  inputProps={{
-                    inputMode: "numeric", // Optimiza el teclado para números en móviles
-                  }}
-                />
+                  Cargar imágenes
+                  <input
+                    type="file"
+                    accept="image/*"
+                    multiple
+                    onChange={handleImageUpload}
+                    hidden
+                  />
+                </Button>
+                <Box
+                  display="flex"
+                  flexWrap="wrap"
+                  justifyContent="center"
+                  gap={2}
+                  marginTop={2}
+                >
+                  {formData.images.map((image, index) => (
+                    <Box key={index} position="relative">
+                      <CardMedia
+                        component="img"
+                        src={image}
+                        alt={`Uploaded ${index}`}
+                        style={{
+                          width: 100,
+                          height: 100,
+                          objectFit: "cover",
+                          borderRadius: "8px",
+                        }}
+                      />
+                      <IconButton
+                        size="small"
+                        sx={{
+                          position: "absolute",
+                          top: 0,
+                          right: 0,
+                          backgroundColor: "rgba(255, 0, 0, 0.7)",
+                          color: "white",
+                        }}
+                        onClick={() => handleRemoveImage(index)}
+                      >
+                        <CloseIcon />
+                      </IconButton>
+                    </Box>
+                  ))}
+                </Box>
               </Box>
-            </>
-          )}
 
+              {loading ? (
+                <Box
+                  display="flex"
+                  justifyContent="center"
+                  alignItems="center"
+                  height="100%"
+                  width="100%"
+                  marginTop={2}
+                >
+                  <CircularProgress size={30} />
+                </Box>
+              ) : (
+                <Box marginTop={2} textAlign="center">
+                  <MainButton type="submit">Enviar reporte</MainButton>
+                </Box>
+              )}
+            </Box>
+          )}
+          {/* END */}
+
+          {/* ENCONTRADO */}
           {formData.reportType === "found" && (
             <>
-              <FormControl margin="normal" fullWidth>
-                <InputLabel>Estado de la mascota</InputLabel>
-                <Select
-                  name="status"
-                  value={formData.status || ""}
-                  onChange={handleChange}
-                  required
-                >
-                  <MenuItem value="Perdido">Perdido</MenuItem>
-                  <MenuItem value="Sin hogar">Sin hogar</MenuItem>
-                  <MenuItem value="Encontrado">Encontrado</MenuItem>
-                </Select>
-              </FormControl>
+              <Grid
+                container
+                spacing={{ xs: 4, md: 2 }}
+                marginTop={{ xs: "0px", md: 2 }}
+              >
+                {/* Estado del animal */}
+                <Grid item xs={12} md={12}>
+                  <InputSelectFieldReport>
+                    <InputLabel>Estado del animal</InputLabel>
+                    <Select
+                      name="status"
+                      value={formData.status || ""}
+                      onChange={handleChange}
+                      required
+                    >
+                      <MenuItem value="Sin hogar">Sin hogar</MenuItem>
+                      <MenuItem value="Encontrado">
+                        Encontrado, tiene hogar
+                      </MenuItem>
+                    </Select>
+                  </InputSelectFieldReport>
+                </Grid>
+              </Grid>
 
-              <TextField
-                label="Lugar donde encontraste la mascota"
-                name="foundLocation"
-                value={formData.foundLocation || ""}
-                onChange={handleChange}
-                fullWidth
-                margin="normal"
-                required
-              />
+              <Grid
+                container
+                spacing={{ xs: 4, md: 2 }}
+                marginTop={{ xs: "0px", md: 2 }}
+              >
+                {/* Ubicacion donde fue encontrada */}
+                <Grid item xs={12} md={12}>
+                  <InputTextFieldReport
+                    label="Ubicación donde encontraste la mascota"
+                    name="foundLocation"
+                    value={formData.foundLocation || ""}
+                    onChange={handleChange}
+                    required
+                  />
+                </Grid>
+              </Grid>
+
+              <Grid
+                container
+                spacing={{ xs: 4, md: 2 }}
+                marginTop={{ xs: "0", md: 2 }}
+                marginBottom={4}
+              >
+                {/* Descripcion general */}
+                <Grid item xs={12} md={12}>
+                  <InputTextFieldDescription
+                    label="Descripción general"
+                    name="description"
+                    value={formData.description}
+                    onChange={handleChange}
+                    multiline
+                    rows={1}
+                    fullWidth
+                    required
+                  />
+                </Grid>
+              </Grid>
+              {/* Cargar imágenes */}
+              <Box textAlign="center">
+                <Button
+                  variant="outlined"
+                  component="label"
+                  color="primary"
+                  sx={{
+                    width: "100%",
+                    padding: "14.5px 14px",
+                    borderRadius: "100px",
+                    border: "1px solid",
+                    textTransform: "none",
+                    backgroundColor: "transparent",
+                    "&:hover": {
+                      backgroundColor: "rgba(0, 0, 0, 0.08)",
+                    },
+                  }}
+                >
+                  Cargar imágenes
+                  <input
+                    type="file"
+                    accept="image/*"
+                    multiple
+                    onChange={handleImageUpload}
+                    hidden
+                  />
+                </Button>
+                <Box
+                  display="flex"
+                  flexWrap="wrap"
+                  justifyContent="center"
+                  gap={2}
+                  marginTop={{ xs: "0", md: 2 }}
+                >
+                  {formData.images.map((image, index) => (
+                    <Box key={index} position="relative">
+                      <CardMedia
+                        component="img"
+                        src={image}
+                        alt={`Uploaded ${index}`}
+                        style={{
+                          width: 100,
+                          height: 100,
+                          objectFit: "cover",
+                          borderRadius: "8px",
+                        }}
+                      />
+                      <IconButton
+                        size="small"
+                        sx={{
+                          position: "absolute",
+                          top: 0,
+                          right: 0,
+                          backgroundColor: "rgba(255, 0, 0, 0.7)",
+                          color: "white",
+                        }}
+                        onClick={() => handleRemoveImage(index)}
+                      >
+                        <CloseIcon />
+                      </IconButton>
+                    </Box>
+                  ))}
+                </Box>
+              </Box>
+
+              {loading ? (
+                <Box
+                  display="flex"
+                  justifyContent="center"
+                  alignItems="center"
+                  height="100%"
+                  width="100%"
+                  marginTop={{ xs: 4, md: 2 }}
+                >
+                  <CircularProgress size={30} />
+                </Box>
+              ) : (
+                <Box marginTop={{ xs: 4, md: 2 }} textAlign="center">
+                  <MainButton type="submit">Enviar reporte</MainButton>
+                </Box>
+              )}
             </>
           )}
-
-          {/* Botón de envío */}
-          {loading ? (
-            <Box
-              display="flex"
-              justifyContent="center"
-              alignItems="center"
-              height="100%"
-              width="100%"
-              marginTop={3}
-            >
-              <CircularProgress size={30} />
-            </Box>
-          ) : (
-            <Box marginTop={3} textAlign="center">
-              <Button
-                type="submit"
-                variant="contained"
-                color="secondary"
-                sx={{ width: "100%" }}
-              >
-                Enviar reporte
-              </Button>
-            </Box>
-          )}
+          {/* END */}
         </Box>
       </Box>
       <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>

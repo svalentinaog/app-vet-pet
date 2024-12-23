@@ -1,5 +1,5 @@
 import styled from "@emotion/styled";
-import { FormControl, TextField, Box, Button } from "@mui/material";
+import { FormControl, TextField, Box, Button, CardMedia } from "@mui/material";
 import { Grid } from "@mui/system";
 
 // Formulario
@@ -65,16 +65,16 @@ export const FormContainerTwo = styled(Grid)`
   }
 `;
 
-// Entrada de texto
+// Entrada de texto 1
 export const InputTextField = styled(TextField)`
   font-family: var(--font-poppins);
   width: 100%;
 
   & .MuiOutlinedInput-root {
     border-radius: 0px;
-    }
-    
-    & .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline {
+  }
+
+  & .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline {
     border: none;
     border-bottom: 2px solid !important;
     border-color: var(--primary-color);
@@ -158,3 +158,85 @@ export const BtnGoogle = styled(Button)`
     cursor: pointer;
   }
 `;
+
+// Formulario de reportes
+
+// Entrada de texto 2 🐾📌🐈
+const InputBase = styled(TextField)`
+  font-family: var(--font-poppins);
+  width: 100%;
+  border-radius: 100px;
+
+  & .MuiOutlinedInput-root {
+    border-radius: 100px;
+  }
+
+  & .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline {
+    border: none;
+    border-radius: 100px;
+  }
+
+  & .MuiInputLabel-root {
+    color: var(--subprimary-color);
+  }
+
+  & .MuiInputLabel-root.MuiInputLabel-shrink {
+    color: var(--light-color);
+    transform: translate(14px, -25px);
+  }
+
+  & .MuiInputBase-input {
+    border-radius: 100px;
+    background-color: var(--light-color);
+  }
+`;
+
+export const InputTextFieldReport = styled(InputBase)`
+  & .MuiInputBase-input {
+    color: var(--title-color);
+  }
+`;
+
+export const InputSelectFieldReport = styled(FormControl)`
+  font-family: var(--font-poppins);
+  width: 100%;
+  border-radius: 100px;
+
+  & .MuiOutlinedInput-root {
+    border-radius: 100px;
+  }
+
+  & .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline {
+    border: none;
+    border-radius: 100px;
+  }
+
+  & .MuiInputLabel-root {
+    color: var(--subprimary-color);
+  }
+
+  & .MuiInputLabel-root.MuiInputLabel-shrink {
+    color: var(--light-color);
+    transform: translate(14px, -25px);
+  }
+
+  & .MuiSelect-select {
+    border-radius: 100px;
+    background-color: var(--light-color);
+    color: var(--title-color);
+  }
+`;
+
+export const InputTextFieldDescription = styled(InputBase)`
+  & .MuiInputBase-input {
+    padding: 16.5px 14px;
+    line-height: 1.5;
+    color: var(--title-color);
+  }
+
+  & .MuiInputBase-input.MuiOutlinedInput-multiline {
+    min-height: 56px;
+  }
+`;
+
+// 🐈🐈🐈🐈🐈🐈🐈🐈🐈🐈🐈🐈🐈🐈🐈

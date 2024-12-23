@@ -34,7 +34,7 @@ export default function AnimalCard({ animal }: AnimalCardProps) {
     <Link href={`/animal-detail/${String(animal.id)}`} legacyBehavior>
       <Card
         sx={{
-          aspectRatio: "4 / 5",
+          aspectRatio: { xs: "none", md: "4 / 6", lg: "none" },
           width: "100%",
           height: "auto",
           backgroundColor: "white",
@@ -62,11 +62,13 @@ export default function AnimalCard({ animal }: AnimalCardProps) {
         <Box
           sx={{
             width: "100%",
+            height: "auto",
             flex: 1,
             display: "flex",
             justifyContent: "center",
             alignItems: "center",
             overflow: "hidden",
+            objectFit: "contain",
           }}
         >
           <CardMedia
@@ -74,6 +76,7 @@ export default function AnimalCard({ animal }: AnimalCardProps) {
             image={animal.image}
             alt={animal.name}
             sx={{
+              height: { xs: "250px", md: "225px", lg: "250px" },
               maxWidth: "100%",
               maxHeight: "100%",
               objectFit: "contain",
