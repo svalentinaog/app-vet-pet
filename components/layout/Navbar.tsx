@@ -63,7 +63,45 @@ export default function Navbar() {
 
   const handleChange = (_event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
+    const sectionId = ["star", "functions", "reports", "mission"][newValue];
+    const section = document.getElementById(sectionId);
+    if (section) {
+      section.scrollIntoView({ behavior: "smooth" });
+    }
   };
+
+  React.useEffect(() => {
+    const sectionOffsets = [
+      { id: "star", index: 0 },
+      { id: "functions", index: 1 },
+      { id: "reports", index: 2 },
+      { id: "mission", index: 3 },
+      { id: "report", index: 4 },
+    ];
+
+    const handleScroll = () => {
+      const scrollPos = window.scrollY + window.innerHeight / 3;
+
+      // Verificar si el usuario está en la parte superior de la página
+      if (window.scrollY === 0) {
+        setValue(0); // Marcar la primera sección como activa
+        return;
+      }
+
+      for (let i = sectionOffsets.length - 1; i >= 0; i--) {
+        const section = document.getElementById(sectionOffsets[i].id);
+        if (section && section.offsetTop <= scrollPos) {
+          setValue(sectionOffsets[i].index);
+          break;
+        }
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
 
   const toggleDrawer = (open: boolean) => () => {
     setDrawerOpen(open);
@@ -108,10 +146,12 @@ export default function Navbar() {
         {/* start 🐸 Menu desplegable llamado SERVICIOS Mobile */}
         {[
           { label: "Inicio", href: "/" },
-          { label: "Informar", href: "#report" },
+          { label: "Servicios", href: "#functions" },
+          { label: "Reportes", href: "#reports" },
+          { label: "Misión", href: "#mission" },
+          { label: "Crear reporte", href: "#report" },
           { label: "Consultar", href: "/chatbot" },
           { label: "Localizar", href: "/map" },
-          { label: "Reportes", href: "/reports" },
         ].map((item, index) => (
           <ListItem key={index} component={Link} href={item.href}>
             <ListItemText
@@ -272,6 +312,21 @@ export default function Navbar() {
                   : "none",
               }}
             />
+            <Tab
+              label="Crear reporte"
+              component={Link}
+              href="/#report"
+              sx={{
+                color: "white",
+                "&.Mui-selected": {
+                  color: "primary.main",
+                  textShadow: "none",
+                },
+                textShadow: scrolled
+                  ? "2px 2px 10px rgba(0, 0, 0, 0.2)"
+                  : "none",
+              }}
+            />
 
             {/* ¿QUE QUIERES HACER? - Menú desplegable */}
             <Tab
@@ -282,7 +337,7 @@ export default function Navbar() {
                     alignItems: "center",
                   }}
                 >
-                  ¿QUE QUIERES HACER?
+                  OTROS SERVICIOS
                   {open ? (
                     <KeyboardArrowUp
                       sx={{ marginLeft: 1, cursor: "pointer" }}
@@ -317,22 +372,34 @@ export default function Navbar() {
                 "aria-labelledby": "services-button",
               }}
             >
-              <MenuItem onClick={handleClose}>
-                <Link href="#report" passHref>
-                  Hacer un reporte
+              <MenuItem onClick={handleClose} sx={{ width: "200px" }}>
+                <Link
+                  href="/chatbot"
+                  passHref
+                  style={{
+                    textDecoration: "none",
+                    color: "var(--title-color)",
+                    textTransform: "uppercase",
+                    fontSize: "14px",
+                  }}
+                >
+                  Consultar
                 </Link>
               </MenuItem>
               <MenuItem onClick={handleClose}>
-                <Link href="/chatbot" passHref>
-                  Realizar consulta
+                <Link
+                  href="/map"
+                  passHref
+                  style={{
+                    textDecoration: "none",
+                    color: "var(--title-color)",
+                    textTransform: "uppercase",
+                    fontSize: "14px",
+                  }}
+                >
+                  Localizar
                 </Link>
               </MenuItem>
-              <Link href="/map" passHref>
-                <MenuItem onClick={handleClose}>Localizar</MenuItem>
-              </Link>
-              <Link href="/reports" passHref>
-                <MenuItem onClick={handleClose}>Reportes</MenuItem>
-              </Link>
             </Menu>
           </Tabs>
           <MainButton

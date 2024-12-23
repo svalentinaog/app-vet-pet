@@ -182,7 +182,7 @@ export default function AddReport() {
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
-        paddingBottom: { xs: 10, md: 8, lg: "15em" },
+        paddingBottom: { xs: 10, md: 8, lg: "20em" },
         paddingLeft: {
           xs: "1em",
           sm: "5em",
