@@ -5,11 +5,16 @@ import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
-import { Backdrop, MenuItem, TextField } from "@mui/material";
+import { IconButton, MenuItem, TextField } from "@mui/material";
 import Snackbar, { SnackbarCloseReason } from "@mui/material/Snackbar";
 import Alert from "@mui/material/Alert";
 import CircularProgress from "@mui/material/CircularProgress";
 import { FormDataReport } from "./AnimalCard";
+import { CldUploadWidget } from "next-cloudinary";
+import CloseIcon from "@mui/icons-material/Close";
+import { doc, updateDoc } from "firebase/firestore";
+import { firestore } from "@/lib/firebase";
+
 
 interface TransitionsModalProps {
   open: boolean;
@@ -21,15 +26,21 @@ interface AnimalModalEditProps extends TransitionsModalProps {
   userPets: string[];
 }
 
-function AnimalModalEdit({ open, onClose, animal, userPets }: AnimalModalEditProps) {
+function AnimalModalEdit({
+  open,
+  onClose,
+  animal,
+}: AnimalModalEditProps) {
   const [openSnack, setOpenSnack] = React.useState(false);
   const [isLoading, setIsLoading] = React.useState(false);
   const [formValues, setFormValues] = React.useState<FormDataReport>({
     ...animal,
   });
-  
-  console.log("Modal abierto: ", open);
+  const [uploadedImages, setUploadedImages] = React.useState<string[]>([]);
+  const [showPreviousImages, setShowPreviousImages] = React.useState(true);
 
+
+  console.log("Modal abierto: ", open);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -39,26 +50,28 @@ function AnimalModalEdit({ open, onClose, animal, userPets }: AnimalModalEditPro
     }));
   };
 
-  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files && e.target.files[0]) {
-      const file = e.target.files[0];
-      const imageUrl = URL.createObjectURL(file);
-      setFormValues((prevValues) => ({
-        ...prevValues,
-        image: imageUrl,
-      }));
-    }
-  };
-
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     console.log("Datos editados:", formValues);
-    // Aquí podrías enviar los datos actualizados al backend
+
     setIsLoading(true);
-    setTimeout(() => {
-      setOpenSnack(true);
+    try {
+      // Referencia al documento de la mascota en Firestore
+      const animalRef = doc(firestore, "reports", formValues.id.toString());
+
+      // Actualizar los datos en Firestore
+      await updateDoc(animalRef, {
+        ...formValues,
+        images: uploadedImages.length > 0 ? uploadedImages : formValues.images, // Asegura que las imágenes se actualicen si es necesario
+      });
+
+      console.log("Información de la mascota actualizada correctamente");
+      setOpenSnack(true); // Muestra el Snackbar
+    } catch (error) {
+      console.error("Error al actualizar la información de la mascota:", error);
+    } finally {
       setIsLoading(false);
-      onClose();
-    }, 2000);
+      onClose(); // Cierra el modal
+    }
   };
 
   const handleCloseSnack = (
@@ -72,7 +85,31 @@ function AnimalModalEdit({ open, onClose, animal, userPets }: AnimalModalEditPro
     setOpenSnack(false);
   };
 
+  async function deleteImage(publicId: string) {
+    try {
+      const response = await fetch("/api/upload", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          public_id: publicId,
+        }),
+      });
 
+      if (!response.ok) {
+        throw new Error("Failed to delete image");
+      }
+      setUploadedImages(uploadedImages.filter((e) => e != publicId));
+      const result = await response.json();
+      return result;
+    } catch (error) {
+      console.error("Error deleting image:", error);
+      throw error;
+    }
+  }
+
+  console.log(formValues)
   return (
     <>
       <Modal
@@ -125,40 +162,112 @@ function AnimalModalEdit({ open, onClose, animal, userPets }: AnimalModalEditPro
               disabled
             />
             {/* Mostrar imagen actual */}
-            <Box
-              sx={{
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "center",
-                gap: 1,
+            <CldUploadWidget
+              signatureEndpoint="/api/upload"
+              onSuccess={(results) => {
+                if (
+                  results?.info &&
+                  typeof results.info !== "string" &&
+                  "public_id" in results.info
+                ) {
+                  const newImage = results.info.public_id;
+                  setUploadedImages((prev) => [...prev, newImage]);
+                  setFormValues((prev) => ({
+                    ...prev,
+                    images: [...prev.images, newImage],
+                  }));
+                }
+              }}
+              options={{
+                maxFiles: 5,
+                resourceType: "image",
+                showAdvancedOptions: true,
               }}
             >
-              <img
-                src={formValues.images[0]}
-                alt="Imagen del animal"
-                style={{
-                  width: "100%",
-                  maxHeight: 200,
-                  objectFit: "contain",
-                  borderRadius: 8,
-                  border: "1px solid #ddd",
-                }}
-              />
-              {/* Botón para cambiar imagen */}
-              <Button variant="contained" component="label" sx={{ mt: 1 }}>
-                Cambiar Imagen
-                <input
-                  type="file"
-                  accept="image/*"
-                  hidden
-                  onChange={handleImageChange}
-                />
-              </Button>
-            </Box>
+              {({ open, isLoading }) => {
+                return (
+                  <>
+                    {isLoading ? (
+                      <Box
+                        display="flex"
+                        justifyContent="center"
+                        alignItems="center"
+                        height="100%"
+                        width="100%"
+                        marginTop={3}
+                      >
+                        <CircularProgress size={30} />
+                      </Box>
+                    ) : (
+                      <Box textAlign="center">
+                        <Box
+                          display="flex"
+                          flexWrap="wrap"
+                          justifyContent="center"
+                          gap={2}
+                        >
+                          {uploadedImages?.map((publicId) => (
+                            <Box key={publicId} position="relative">
+                              <img
+                                src={`https://res.cloudinary.com/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/image/upload/${publicId}`}
+                                alt={`Uploaded ${publicId}`}
+                                style={{
+                                  width: 100,
+                                  height: 100,
+                                  objectFit: "cover",
+                                  borderRadius: "8px",
+                                }}
+                              />
+                              <IconButton
+                                size="small"
+                                sx={{
+                                  position: "absolute",
+                                  top: 0,
+                                  right: 0,
+                                  backgroundColor: "rgba(255, 0, 0, 0.7)",
+                                  color: "white",
+                                }}
+                                onClick={() => {
+                                  deleteImage(publicId);
+                                  setFormValues((prev) => ({
+                                    ...prev,
+                                    images: prev.images.filter(
+                                      (img) => img !== publicId
+                                    ),
+                                  }));
+                                }}
+                              >
+                                <CloseIcon />
+                              </IconButton>
+                            </Box>
+                          ))}
+                        </Box>
+                        <Button
+                          component="label"
+                          variant="contained"
+                          sx={{
+                            width: "100%",
+                            padding: "12.5px 14px",
+                            textTransform: "none",
+                          }}
+                          onClick={() => {
+                            open();
+                          }}
+                        >
+                          {showPreviousImages
+                            ? "Cargar imágenes"
+                            : "Añadir más imágenes"}
+                        </Button>
+                      </Box>
+                    )}
+                  </>
+                );
+              }}
+            </CldUploadWidget>
 
             <TextField
               label="Nombre"
-              name="name"
+              name="petName"
               value={formValues.petName}
               onChange={handleChange}
             />
@@ -183,7 +292,7 @@ function AnimalModalEdit({ open, onClose, animal, userPets }: AnimalModalEditPro
             />
             <TextField
               label="Ubicación"
-              name="location"
+              name="foundLocation"
               value={formValues.foundLocation}
               onChange={handleChange}
             />
