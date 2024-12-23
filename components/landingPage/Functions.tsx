@@ -35,87 +35,86 @@ export default function Functions() {
     <Box
       id="functions"
       sx={{
-        height: { xs: "100%", md: "70vh" },
+        width: "100%",
+        height: "100%",
+        paddingTop: { xs: 10, md: 8, lg: "17em" },
+        paddingLeft: {
+          xs: "1em",
+          sm: "5em",
+          md: "7.5em",
+          lg: "15em",
+        },
+        paddingRight: {
+          xs: "1em",
+          sm: "5em",
+          md: "7.5em",
+          lg: "15em",
+        },
         alignContent: "center",
         background: "var(--gradient-lineal)",
-        padding: { xs: "6em 0 0", md: "6em 0 0" },
       }}
     >
-      <Container maxWidth="xl">
-        <Box>
-          <Typography
-            variant="h3"
-            sx={{
-              color: "var(--title-color)",
-              marginBottom: { xs: "1.5em", sm: "2em" },
-              fontSize: { xs: "1.5em", sm: "2.5em" },
-              fontWeight: "bold",
-            }}
-          >
-            Funcionalidades clave
-          </Typography>
-        </Box>
-        <Grid container spacing={3}>
-          {elements.map((element, index) => (
-            <Grid  item key={index} xs={12} sm={4}>
+      <Box>
+        <Typography
+          variant="h3"
+          sx={{
+            color: "var(--title-color)",
+            marginBottom: { xs: "1.5em", md: "1em", sm: "2em" },
+            fontSize: { xs: "1.5em", sm: "2.5em" },
+            fontWeight: "bold",
+          }}
+        >
+          Funcionalidades clave
+        </Typography>
+      </Box>
+      <Grid container spacing={4}>
+        {elements.map((element, index) => (
+          <Grid item key={index} xs={12} sm={4}>
+            <Box
+              sx={{
+                display: "flex",
+                flexDirection: "row",
+                gap: 2,
+                alignItems: "center",
+              }}
+            >
               <Box
                 sx={{
+                  backgroundColor: element.bgcolor,
+                  color: "rgba(0, 0, 0, 0.1)",
+                  padding: 3,
                   display: "flex",
-                  flexDirection: "row",
-                  gap: 2,
                   alignItems: "center",
+                  justifyContent: "center",
+                  borderRadius: "20px",
                 }}
               >
-                <Box
+                {element.icon}
+              </Box>
+              <Box>
+                <Typography
+                  variant="h6"
                   sx={{
-                    backgroundColor: element.bgcolor,
-                    color: "rgba(0, 0, 0, 0.1)",
-                    padding: 3,
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    borderRadius: "20px"
+                    color: "var(--title-color)",
+                    marginBottom: "0.25em",
+                    fontWeight: "bold",
                   }}
                 >
-                  {element.icon}
-                </Box>
-                <Box
-                sx={{
-                  height: "120px",
-                  justifyContent: "center",
-                  alignItems: "center",
-                }}
+                  {element.title}
+                </Typography>
+                <Typography
+                  variant="body2"
+                  sx={{
+                    color: "var(--text-color)",
+                  }}
                 >
-                  <Typography
-                    variant="h6"
-                    sx={{
-                      color: "var(--title-color)",
-                      marginBottom: "0.25em",
-                      fontWeight: "bold",
-                      fontSize: { xs: "1em", sm: "1.5em" },
-                    }}
-                  >
-                    {element.title}
-                  </Typography>
-                  <Typography
-                    variant="body2"
-                    sx={{
-                      color: "var(--text-color)",
-                      fontSize: { xs: "0.75em", sm: "1em" },
-                      textAlign:"justify",
-                      hyphens:"auto",
-                      wordWrap: "break-word",
-                      wordSpacing: '-0.01em',
-                    }}
-                  >
-                    {element.description}
-                  </Typography>
-                </Box>
+                  {element.description}
+                </Typography>
               </Box>
-            </Grid>
-          ))}
-        </Grid>
-      </Container>
+            </Box>
+          </Grid>
+        ))}
+      </Grid>
     </Box>
   );
 }

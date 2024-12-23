@@ -8,8 +8,9 @@ const userSlice = createSlice({
     setAuthenticated: (state: IUserState, action: PayloadAction<boolean>) => {
       state.isAuthenticated = action.payload;
     },
-    setUser: (state: IUserState, action: PayloadAction<IUserState["user"]>) => {
-      state.user = action.payload;
+    setUser: (state: IUserState, action: PayloadAction<IUserState>) => {
+      state.user = action.payload.user;
+      state.isAuthenticated = action.payload.isAuthenticated;
     },
     updateUserStateByKey: (
       state: IUserState,

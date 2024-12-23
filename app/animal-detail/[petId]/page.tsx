@@ -246,6 +246,7 @@ const AnimalDetail = () => {
         </Box>
         <CardContent sx={{ flex: "1", p: 4 }}>
           <Grid container spacing={2} alignItems="center">
+            
             <Grid
               item
               xs={12}

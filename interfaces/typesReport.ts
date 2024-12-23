@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 export interface FormDataReport {
   petId : number;
   reportType: "lost" | "found";
@@ -13,3 +14,14 @@ export interface FormDataReport {
   reward?: string; //Solo para "perdido"
   dateCreationReport: string; // Fecha de creación del reporte
 }
+=======
+  //TODO Reporte para la lista de historial:
+  export interface  Report {
+    id: string;                   
+    type: "lost" | "stray";       
+    age : string;
+    description: string;          
+    date: Date;                   
+    location?: string;            
+  }
+>>>>>>> c2ebae3dda5099f85fddb9dff4dd7514e5227b61

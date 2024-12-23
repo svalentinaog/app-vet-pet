@@ -8,8 +8,6 @@ import Typography from "@mui/material/Typography";
 import { Box, Button, CardMedia } from "@mui/material";
 import PhoneIcon from "@mui/icons-material/Phone";
 import PetsIcon from "@mui/icons-material/Pets";
-import AnimalModalEdit from "@/components/AnimalModalEdit";
-import AnimalDetail from "@/components/AnimalDetail";
 import Link from "next/link";
 
 export interface Animal {
@@ -27,107 +25,131 @@ interface AnimalCardProps {
 }
 
 export default function AnimalCard({ animal }: AnimalCardProps) {
-
   const statusColors: Record<string, string> = {
     "Sin hogar": "#3DC132",
     Perdido: "#CC818E",
   };
 
-
   return (
-    <>
     <Link href={`/animal-detail/${String(animal.id)}`} legacyBehavior>
-    <Card
-      sx={{
-        width: "100%",
-        height: "auto",
-        marginBottom: 2,
-        backgroundColor: "white",
-        boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.1)",
-        borderRadius: 4,
-        overflow: "hidden",
-        transition: "border-color 0.3s",
-        borderWidth: 2,
-        borderStyle: "solid",
-        borderColor: "white",
-        ":hover": {
-          borderColor: "var(--secondary-color)",
-        },
-      }}
-
-    >
-
-      <Box
+      <Card
         sx={{
+          aspectRatio: "4 / 5",
           width: "100%",
-          height: "auto", // Altura fija del contenedor
+          height: "auto",
+          backgroundColor: "white",
+          boxShadow: "0px 4px 8px rgba(159, 164, 219, 0.1)",
+          borderRadius: 4,
+          overflow: "hidden",
+          transition: "border-color 0.3s",
+          borderWidth: 2,
+          borderStyle: "solid",
+          borderColor: "white",
+          ":hover": {
+            borderColor: "var(--secondary-color)",
+            boxShadow: "0 0 15px var(--secondary-color)",
+            transition: "all 0.3s ease-in-out",
+          },
           display: "flex",
-          justifyContent: "center",
+          flexDirection: "column",
           alignItems: "center",
-          overflow: "hidden", // Asegura que no haya desbordamiento
+          justifyContent: "space-between",
+          gap: 1,
+          padding: 3,
+          cursor: "pointer",
         }}
       >
-        <CardMedia
-          component="img"
-          image={animal.image}
-          alt={animal.name}
+        <Box
           sx={{
-            maxWidth: "100%",
-            height: 250,
-            objectFit: "contain", // "contain" para evitar recortes
-            marginTop: 4,
-          }}
-        />
-      </Box>
-      <CardContent
-        sx={{ padding: 4, gap: 1, display: "flex", flexDirection: "column" }}
-      >
-        <Typography variant="body1" component="div">
-          {animal.name}
-        </Typography>
-        <Typography variant="body1" color="text.secondary">
-          {animal.description}
-        </Typography>
-        <Typography
-          variant="body2"
-          sx={{
+            width: "100%",
+            flex: 1,
             display: "flex",
-            textTransform: "uppercase",
+            justifyContent: "center",
             alignItems: "center",
-            gap: 1,
+            overflow: "hidden",
           }}
         >
-          <span
-            style={{
-              color: statusColors[animal.status] || "gray",
-              fontSize: "1.5rem",
+          <CardMedia
+            component="img"
+            image={animal.image}
+            alt={animal.name}
+            sx={{
+              maxWidth: "100%",
+              maxHeight: "100%",
+              objectFit: "contain",
+            }}
+          />
+        </Box>
+        <CardContent
+          sx={{
+            width: "100%",
+            height: "auto",
+            display: "flex",
+            flexDirection: "column",
+            gap: 1,
+            paddingTop: 0,
+            paddingBottom: "0 !important",
+            paddingLeft: 0,
+            paddingRight: 0,
+          }}
+        >
+          <Typography variant="body1" component="div">
+            {animal.name}
+          </Typography>
+          <Typography variant="body2" color="text.secondary">
+            {animal.description}
+          </Typography>
+          <Typography
+            variant="caption"
+            sx={{
+              textTransform: "uppercase",
+              display: "flex",
+              alignItems: "center",
+              gap: 1,
             }}
           >
-            •
-          </span>
-          {animal.status}
-        </Typography>
-        <CardActions sx={{ display: "flex", justifyContent: "space-between" }}>
-          <PetsIcon sx={{ color: "var(--secondary-color)" }} />
-          <a href={`tel:${animal.phone}`}>
-            <Button
-              sx={{
-                borderRadius: "50px",
-                minWidth: "50px",
-                height: "50px",
-                alignContent: "center",
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
+            <span
+              style={{
+                fontSize: "25px",
+                color: statusColors[animal.status] || "gray",
               }}
             >
-              <PhoneIcon />
-            </Button>
-          </a>
-        </CardActions>
-      </CardContent>
-    </Card>
+              •
+            </span>
+            {animal.status}
+          </Typography>
+          <CardActions
+            sx={{
+              display: "flex",
+              justifyContent: "space-between",
+              width: "100%",
+            }}
+          >
+            <PetsIcon sx={{ color: "var(--secondary-color)" }} />
+            <a href={`tel:${animal.phone}`}>
+              <Box
+                sx={{
+                  borderRadius: "50%",
+                  width: 40,
+                  height: 40,
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  color: "var(--title-color)",
+                  background: "transparent",
+                  ":hover": {
+                    transition: "all .3s",
+                    background: "rgba(159, 164, 219, 0.05)",
+                    color: "#70d168",
+                  },
+                }}
+              >
+                <PhoneIcon />
+              </Box>
+            </a>
+          </CardActions>
+        </CardContent>
+      </Card>
     </Link>
-    </>
   );
 }

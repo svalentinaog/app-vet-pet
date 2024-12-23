@@ -1,10 +1,11 @@
 import "../styles/main.scss";
 import { Metadata } from "next";
 import { Toaster } from "sonner";
-import { Poppins } from "next/font/google";
-import StoreProvider from "./StoreProvider";
-import { ThemeProvider } from "@mui/system";
 import { theme } from "@/styles/theme";
+import { Poppins } from "next/font/google";
+import { ThemeProvider } from "@mui/system";
+import StoreProvider from "./StoreProvider";
+import AuthUserProvider from "./AuthUserProvider";
 
 export const metadata: Metadata = {
   title: "VETPET",
@@ -25,8 +26,10 @@ export default function RootLayout({
       <body className={poppins.className}>
         <ThemeProvider theme={theme}>
           <StoreProvider>
-            <Toaster position="top-center" richColors />
-            {children}
+            <AuthUserProvider>
+              <Toaster position="top-center" richColors />
+              {children}
+            </AuthUserProvider>
           </StoreProvider>
         </ThemeProvider>
       </body>
