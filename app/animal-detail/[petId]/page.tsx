@@ -25,17 +25,7 @@ import { useParams } from "next/navigation";
 import React from "react";
 import AnimalModalEdit from "@/components/AnimalModalEdit";
 import Carousel from "react-material-ui-carousel";
-
-interface Animal {
-  id: number;
-  image: string;
-  name: string;
-  status: string;
-  description: string;
-  location: string;
-  phone: number;
-  images?: string[];
-}
+import { FormDataReport } from "../../../interfaces/typesReport";
 
 const AnimalDetail = () => {
   const { petId } = useParams<{ petId: string }>();
@@ -43,58 +33,78 @@ const AnimalDetail = () => {
   const handleEditModalOpen = () => setOpenEdit(true);
   const handleEditModalClose = () => setOpenEdit(false);
 
-  const animals: Animal[] = [
+  const animals: FormDataReport[] = [
     {
-      id: 1,
-      image: "/assets/pet1.png",
-      name: "Manchas",
-      status: "Sin hogar",
+      petId: 1,
+      reportType: "lost",
+      reporterName: "Ana Martinez",
+      phone: "3187399367",
+      petType: "Perro",
+      petName: "Manchas",
+      foundLocation: "Versalles",
       description:
-        "Lorem Ipsum  is Lorem Ipsum is Lorem Ipsum is Lorem Ipsum is Lorem Ipsum is Lore Lorem Ipsum is Lorem Ipsum is Lore",
-      location: "Versalles",
-      phone: 3187399367,
+        "Perro mediano, manchas blancas y negras, muy amigable y juguetón. Encontrado cerca del parque principal, lleva collar azul sin identificación.",
+      status: "Sin hogar",
       images: [
+        "/assets/pet1.png",
         "/assets/pet1-2.png",
         "/assets/pet1-3.png",
         "/assets/pet1-4.png",
       ],
+      reward: "200.000",
+      dateCreationReport: "2024-12-21",
     },
     {
-      id: 2,
-      image: "/assets/pet2.png",
-      name: "Lucas",
+      petId: 2,
+      reportType: "found",
+      reporterName: "Carlos Ruiz",
+      phone: "3187399367",
+      petType: "Perro",
+      petName: "Lucas",
+      foundLocation: "Versalles",
+      description:
+        "Perro pequeño color marrón, raza Yorkshire. Perdido en la zona residencial, lleva collar rojo con placa de identificación.",
+      age: "3 años",
       status: "Perdido",
-      description: "Lorem ipsum...",
-      location: "Versalles",
-      phone: 3187399367,
-      images: ["/assets/pet2.png", "/assets/pet2-2.png"],
+      images: ["/assets/pet2.png", "/asspets/pet2-2.png"],
+      dateCreationReport: "2024-12-20",
     },
     {
-      id: 3,
-      image: "/assets/cat1.png",
-      name: "Carlota",
+      petId: 3,
+      reportType: "lost",
+      reporterName: "María José López",
+      phone: "3187399367",
+      petType: "Gato",
+      petName: "Carlota",
+      foundLocation: "Versalles",
+      description:
+        "Gata siamesa de ojos azules, muy tímida. Se perdió cerca del centro comercial, tiene un collar negro con cascabel.",
+      age: "2 años",
       status: "Perdido",
-      description: "Lorem ipsum...",
-      location: "Versalles",
-      phone: 3187399367,
-      images: ["/assets/cat1.png", "/assets/cat1-2.png"],
+      images: ["/assets/cat1.png", "/assets/cat1-2.png" ],
+      reward: "200.000",
+      dateCreationReport: "2024-12-19",
     },
     {
-      id: 4,
-      image: "/assets/cat2.png",
-      name: "Jericho",
+      petId: 4,
+      reportType: "found",
+      reporterName: "Diego Sánchez",
+      phone: "3187399367",
+      petType: "Gato",
+      petName: "Jericho",
+      foundLocation: "Versalles",
+      description:
+        "Gato naranja con rayas, muy cariñoso. Encontrado deambulando por la zona comercial, sin collar ni identificación.",
       status: "Sin hogar",
-      description: "Lorem ipsum...",
-      location: "Versalles",
-      phone: 3187399367,
-      images: ["/assets/cat2.png", "/assets/cat2-2.png"],
+      images: [ "/assets/cat2.png", "/assets/cat2-2.png" ],
+      dateCreationReport: "2024-12-18",
     },
   ];
 
   const currentId = parseInt(petId);
-  const animal = animals.find((a) => a.id === currentId);
-  const previousAnimal = animals.find((a) => a.id === currentId - 1);
-  const nextAnimal = animals.find((a) => a.id === currentId + 1);
+  const animal = animals.find((a) => a.petId === currentId);
+  const previousAnimal = animals.find((a) => a.petId === currentId - 1);
+  const nextAnimal = animals.find((a) => a.petId === currentId + 1);
 
   if (!animal) {
     return (
@@ -132,7 +142,7 @@ const AnimalDetail = () => {
             zIndex: 100,
           }}
         >
-          <Link href={`/animal-detail/${previousAnimal.id}`} passHref>
+          <Link href={`/animal-detail/${previousAnimal.petId}`} passHref>
             <IconButton color="primary" aria-label="previous animal">
               <ArrowBackIosNewIcon fontSize="large" />
             </IconButton>
@@ -149,7 +159,7 @@ const AnimalDetail = () => {
             zIndex: 100,
           }}
         >
-          <Link href={`/animal-detail/${nextAnimal.id}`} passHref>
+          <Link href={`/animal-detail/${nextAnimal.petId}`} passHref>
             <IconButton color="primary" aria-label="next animal">
               <ArrowForwardIosIcon fontSize="large" />
             </IconButton>
@@ -210,7 +220,7 @@ const AnimalDetail = () => {
         </Box>
 
         <Tooltip
-          title={`¡Hola!, Soy ${animal.name} 🐾`}
+          title={`¡Hola!, Soy ${animal.petName} 🐾`}
           placement="top"
           arrow
           componentsProps={{
@@ -226,8 +236,8 @@ const AnimalDetail = () => {
         >
           <CardMedia
             component="img"
-            image={animal.image}
-            alt={animal.name}
+            image={animal.images[0]}
+            alt={animal.petName}
             sx={{
               width: 200,
               position: "absolute",
@@ -248,12 +258,15 @@ const AnimalDetail = () => {
         </Tooltip>
         <CardContent sx={{ flex: "1", p: 4 }}>
           <Grid container spacing={2} alignItems="center">
-            <Grid item xs={12} sx={{
+            <Grid
+              item
+              xs={12}
+              sx={{
                 display: "flex",
                 justifyContent: "flex-start",
                 alignItems: "center",
-                
-            }}>
+              }}
+            >
               <Typography
                 variant="h3"
                 fontWeight="bold"
@@ -266,33 +279,33 @@ const AnimalDetail = () => {
                   mb: 0,
                 }}
               >
-                {animal.name} 
+                {animal.petName}
                 <PetsIcon fontSize="large" />
               </Typography>
-                {/* Botón de editar */}
-                {animal.id == 1 ? (
-                  <Box
-                    onClick={handleEditModalOpen}
+              {/* Botón de editar animal.petId cambia al uid del usuario que coincida con el report. */}
+              {animal.petId == 1 ? (
+                <Box
+                  onClick={handleEditModalOpen}
+                  sx={{
+                    paddingLeft: 2,
+                  }}
+                >
+                  <IconButton
+                    color="secondary"
                     sx={{
-                        paddingLeft: 2,
+                      transition: "all 0.3s",
+                      "&:hover": {
+                        transform: "rotate(10deg)",
+                        color: "#ab47bc",
+                      },
                     }}
                   >
-                    <IconButton
-                      color="secondary"
-                      sx={{
-                        transition: "all 0.3s",
-                        "&:hover": {
-                          transform: "rotate(10deg)",
-                          color: "#ab47bc",
-                        },
-                      }}
-                    >
-                      <EditIcon fontSize="large" />
-                    </IconButton>
-                  </Box>
-                ) : (
-                  ""
-                )}
+                    <EditIcon fontSize="large" />
+                  </IconButton>
+                </Box>
+              ) : (
+                ""
+              )}
             </Grid>
             <Grid item xs={12}>
               <Chip
@@ -322,7 +335,7 @@ const AnimalDetail = () => {
             <Grid item xs={12}>
               <Typography variant="body2" color="text.secondary">
                 <LocationOnIcon color="primary" />{" "}
-                <strong>{animal.location}</strong>
+                <strong>{animal.foundLocation}</strong>
                 <Divider sx={{ mb: 2, width: 300, height: 5 }} />
               </Typography>
             </Grid>
