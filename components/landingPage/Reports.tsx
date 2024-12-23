@@ -12,7 +12,6 @@ import {
   useMediaQuery,
 } from "@mui/material";
 import AnimalCard from "../AnimalCard";
-import Link from "next/link";
 import NavigateNextIcon from "@mui/icons-material/NavigateNext";
 import { collection, getDocs } from "firebase/firestore";
 import { firestore } from "@/lib/firebase";
