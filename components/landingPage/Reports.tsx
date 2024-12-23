@@ -238,7 +238,7 @@ export default function Reports() {
             },
           }}
         />
-        <Button
+        {/* <Button
           href="/reports"
           sx={{
             color: "var(--title-color)",
@@ -258,7 +258,7 @@ export default function Reports() {
         >
           <Typography>Ver todos</Typography>
           <NavigateNextIcon />
-        </Button>
+        </Button> */}
       </Box>
     </Box>
   );
