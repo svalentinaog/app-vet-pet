@@ -72,7 +72,10 @@ const MyMap: React.FC = () => {
         markerSource.clear(); // Limpiar los marcadores previos
 
         const features = data.map((location: any) => {
-          const coords = fromLonLat([parseFloat(location.lon), parseFloat(location.lat)]);
+          const coords = fromLonLat([
+            parseFloat(location.lon),
+            parseFloat(location.lat),
+          ]);
           const feature = new Feature({
             geometry: new Point(coords),
             name: location.display_name,
@@ -94,7 +97,9 @@ const MyMap: React.FC = () => {
         markerSource.addFeatures(features); // Agregar los nuevos marcadores
 
         const vectorExtent = markerSource.getExtent();
-        mapRef.current.getView().fit(vectorExtent, { padding: [50, 50, 50, 50], duration: 1000 });
+        mapRef.current
+          .getView()
+          .fit(vectorExtent, { padding: [50, 50, 50, 50], duration: 1000 });
       } else {
         alert("No se encontraron resultados para la dirección");
       }
@@ -157,7 +162,14 @@ const MyMap: React.FC = () => {
         }}
       >
         {/* Formulario de búsqueda */}
-        <form onSubmit={handleSubmit} style={{ display: "flex", marginBottom: "20px", flexDirection: "column" }}>
+        <form
+          onSubmit={handleSubmit}
+          style={{
+            display: "flex",
+            marginBottom: "20px",
+            flexDirection: "column",
+          }}
+        >
           <input
             type="text"
             name="location"
@@ -205,9 +217,14 @@ const MyMap: React.FC = () => {
                     overflowWrap: "break-word",
                   }}
                   onClick={() => {
-                    const coords = fromLonLat([parseFloat(result.lon), parseFloat(result.lat)]);
+                    const coords = fromLonLat([
+                      parseFloat(result.lon),
+                      parseFloat(result.lat),
+                    ]);
                     showPopup(coords, result.display_name); // Mostrar popup con el nombre del lugar
-                    mapRef.current?.getView().animate({ center: coords, zoom: 14 });
+                    mapRef.current
+                      ?.getView()
+                      .animate({ center: coords, zoom: 14 });
                   }}
                 >
                   {result.display_name}

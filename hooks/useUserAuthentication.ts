@@ -90,7 +90,7 @@ export default function useUserAuthentication() {
           })
         );
       }
-
+      navigation.refresh();
       console.log("Inicio de sesión exitoso:", loginData);
       navigation.push("/");
     } catch (error) {
@@ -102,7 +102,6 @@ export default function useUserAuthentication() {
     try {
       const user = await signInWithGoogle();
       console.log("Usuario autenticado con Google:", user);
-
       navigation.push("/");
     } catch (error) {
       console.error("Error al iniciar sesión con Google:", error);

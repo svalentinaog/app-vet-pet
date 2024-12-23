@@ -111,6 +111,7 @@ export default function Navbar() {
           { label: "Informar", href: "#report" },
           { label: "Consultar", href: "/chatbot" },
           { label: "Localizar", href: "/map" },
+          { label: "Reportes", href: "/reports" },
         ].map((item, index) => (
           <ListItem key={index} component={Link} href={item.href}>
             <ListItemText
@@ -326,11 +327,12 @@ export default function Navbar() {
                   Realizar consulta
                 </Link>
               </MenuItem>
-              <MenuItem onClick={handleClose}>
-                <Link href="/map" passHref>
-                  Localizar
-                </Link>
-              </MenuItem>
+              <Link href="/map" passHref>
+                <MenuItem onClick={handleClose}>Localizar</MenuItem>
+              </Link>
+              <Link href="/reports" passHref>
+                <MenuItem onClick={handleClose}>Reportes</MenuItem>
+              </Link>
             </Menu>
           </Tabs>
           <MainButton
