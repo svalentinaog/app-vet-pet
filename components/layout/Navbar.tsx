@@ -1,20 +1,29 @@
+"use client";
+
 import * as React from "react";
 import {
   AppBar,
   Toolbar,
   Box,
-  Container,
   Tabs,
   Tab,
+  Menu,
+  MenuItem,
   Drawer,
   IconButton,
   List,
   ListItem,
   ListItemText,
+  Divider,
+  Typography,
 } from "@mui/material";
 import MenuOpenIcon from "@mui/icons-material/MenuOpen";
+import FaceIcon from "@mui/icons-material/Face";
+import { KeyboardArrowDown, KeyboardArrowUp } from "@mui/icons-material";
+import { usePathname, useRouter } from "next/navigation";
+import { useSelector } from "react-redux";
 import { MainButton } from "@/styles/mui";
-import { usePathname } from "next/navigation";
+import { RootState } from "@/lib/store";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -24,10 +33,33 @@ interface LinkTabProps {
 }
 
 export default function Navbar() {
-  const pathname = usePathname();
   const [value, setValue] = React.useState(0);
   const [drawerOpen, setDrawerOpen] = React.useState(false);
-  const [scrolled, setScrolled] = React.useState(false); // Estado para controlar el scroll
+  const [scrolled, setScrolled] = React.useState(false);
+  const pathname = usePathname();
+  const navigation = useRouter();
+  const isAuthenticated = useSelector(
+    (state: RootState) => state.user.isAuthenticated
+  );
+
+  const [anchorEl, setAnchorEl] = React.useState<HTMLElement | null>(null);
+  const open = Boolean(anchorEl);
+
+  const handleMenuClick = (event: React.MouseEvent<HTMLElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
+  const handleAuthButtonClick = () => {
+    if (isAuthenticated) {
+      navigation.push("/profile");
+    } else {
+      navigation.push("/login");
+    }
+  };
 
   const handleChange = (_event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
@@ -51,13 +83,18 @@ export default function Navbar() {
 
   const drawerContent = (
     <Box
-      sx={{ width: 250, height: "100vh", background: "var(--primary-color)" }}
+      sx={{
+        width: 250,
+        height: "100vh",
+        background: "var(--primary-color)",
+        alignItems: "center",
+      }}
       role="presentation"
       onClick={toggleDrawer(false)}
     >
       <List>
         <ListItem>
-          <Box sx={{ display: "flex", alignItems: "center" }}>
+          <Box sx={{ display: "flex", alignItems: "center", marginBottom: 1 }}>
             <Image
               src="/assets/logo.svg"
               alt="Logo"
@@ -67,7 +104,8 @@ export default function Navbar() {
             />
           </Box>
         </ListItem>
-
+        <Divider />
+        {/* start 🐸 Menu desplegable llamado SERVICIOS Mobile */}
         {[
           { label: "Inicio", href: "/" },
           { label: "Informar", href: "#report" },
@@ -77,31 +115,44 @@ export default function Navbar() {
           <ListItem key={index} component={Link} href={item.href}>
             <ListItemText
               primary={item.label}
-              sx={{ color: "var(--light-color)" }}
+              sx={{ color: "var(--light-color)", textTransform: "uppercase" }}
             />
           </ListItem>
         ))}
+        {/* end 🐸 Menu desplegable llamado SERVICIOS Mobile */}
+        <Divider />
         <ListItem>
-          <MainButton fullWidth href="/login">
-            INICIAR SESIÓN
+          <MainButton sx={{ marginTop: 1 }} onClick={handleAuthButtonClick}>
+            {isAuthenticated ? (
+              <Box
+                sx={{
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  gap: 1,
+                }}
+              >
+                <FaceIcon />
+                <Typography>MI PERFIL</Typography>
+              </Box>
+            ) : (
+              "INICIAR SESIÓN"
+            )}
           </MainButton>
         </ListItem>
       </List>
     </Box>
   );
 
-  // Función para monitorear el scroll y aplicar el efecto blur
   React.useEffect(() => {
     const handleScroll = () => {
       if (window.scrollY > 50) {
-        setScrolled(true); // Activa el fondo blur
+        setScrolled(true);
       } else {
-        setScrolled(false); // Desactiva el fondo blur
+        setScrolled(false);
       }
     };
-
     window.addEventListener("scroll", handleScroll);
-
     return () => {
       window.removeEventListener("scroll", handleScroll);
     };
@@ -111,76 +162,214 @@ export default function Navbar() {
     <AppBar
       position="fixed"
       sx={{
-        background: scrolled ? "rgba(0, 0, 0, 0.1)" : "transparent",
-        padding: "1em 0 1em",
+        width: "100%",
+        background: scrolled ? "rgba(159, 164, 219, 0.7)" : "transparent",
+        padding: {
+          xs: scrolled ? "0.5em 1em 0.5em" : "1.5em 1em 1.5em",
+          sm: scrolled ? "0.5em 6em 0.5em" : "1.5em 6em 1.5em",
+          md: scrolled ? "0.5em 7.5em 0.5em" : "2em 7.5em 2em",
+          lg: scrolled ? "0.75em 15em 0.75em" : "2em 15em 2em",
+        },
         boxShadow: scrolled ? "0 1px 1px rgba(255, 255, 255, 0.1)" : "inherit",
-        backdropFilter: scrolled ? "blur(2px)" : "none",
-        transition: "background 0.3s, box-shadow 0.3s, backdrop-filter 0.3s",
+        backdropFilter: scrolled ? "blur(5px)" : "none",
+        transition: "all 0.3s",
       }}
     >
-      <Container maxWidth="xl">
-        <Toolbar
-          disableGutters
+      <Toolbar
+        disableGutters
+        sx={{
+          width: "100%",
+          justifyContent: "space-between",
+          alignItems: "center",
+        }}
+      >
+        {/* Icono de la App (Logo)*/}
+        <Box sx={{ width: "auto" }}>
+          <Image
+            src="/assets/logo.svg"
+            alt="Logo"
+            width={100}
+            height={0}
+            layout="intrinsic"
+          />
+        </Box>
+        {/* Navbar Tabs (Desktop) */}
+        <Box
           sx={{
             width: "100%",
-            justifyContent: "space-between",
+            display: { xs: "none", md: "flex" },
+            justifyContent: "flex-end",
             alignItems: "center",
+            gap: 4,
           }}
         >
-          {/* Icono de la App (Logo)*/}
-          <Box>
-            <Image
-              src="/assets/logo.svg"
-              alt="Logo"
-              width={100}
-              height={0}
-              layout="intrinsic"
-            />
-          </Box>
-
-          {/* Navbar Tabs (Desktop) */}
-          <Box
-            sx={{
-              width: "50%",
-              display: { xs: "none", md: "flex" },
-              alignItems: "center",
-              gap: 4,
-            }}
+          {/* 🐈 MENU DESKTOP */}
+          <Tabs
+            value={value}
+            onChange={handleChange}
+            textColor="primary"
+            indicatorColor="secondary"
+            sx={{ width: "auto" }}
           >
-            <Tabs
-              value={value}
-              onChange={handleChange}
-              textColor="primary"
-              indicatorColor="secondary"
+            <Tab
+              label="Inicio"
+              component={Link}
+              href="/#star"
+              sx={{
+                color: "white",
+                "&.Mui-selected": {
+                  color: "primary.main",
+                  textShadow: "none",
+                },
+                textShadow: scrolled
+                  ? "2px 2px 10px rgba(0, 0, 0, 0.2)"
+                  : "none",
+              }}
+            />
+            <Tab
+              label="Funcionalidades"
+              component={Link}
+              href="/#functions"
+              sx={{
+                color: "white",
+                "&.Mui-selected": {
+                  color: "primary.main",
+                  textShadow: "none",
+                },
+                textShadow: scrolled
+                  ? "2px 2px 10px rgba(0, 0, 0, 0.2)"
+                  : "none",
+              }}
+            />
+            <Tab
+              label="Reportes"
+              component={Link}
+              href="/#reports"
+              sx={{
+                color: "white",
+                "&.Mui-selected": {
+                  color: "primary.main",
+                  textShadow: "none",
+                },
+                textShadow: scrolled
+                  ? "2px 2px 10px rgba(0, 0, 0, 0.2)"
+                  : "none",
+              }}
+            />
+            <Tab
+              label="Mision"
+              component={Link}
+              href="/#mission"
+              sx={{
+                color: "white",
+                "&.Mui-selected": {
+                  color: "primary.main",
+                  textShadow: "none",
+                },
+                textShadow: scrolled
+                  ? "2px 2px 10px rgba(0, 0, 0, 0.2)"
+                  : "none",
+              }}
+            />
+
+            {/* ¿QUE QUIERES HACER? - Menú desplegable */}
+            <Tab
+              label={
+                <Box
+                  sx={{
+                    display: "flex",
+                    alignItems: "center",
+                  }}
+                >
+                  ¿QUE QUIERES HACER?
+                  {open ? (
+                    <KeyboardArrowUp
+                      sx={{ marginLeft: 1, cursor: "pointer" }}
+                    />
+                  ) : (
+                    <KeyboardArrowDown
+                      sx={{ marginLeft: 1, cursor: "pointer" }}
+                    />
+                  )}
+                </Box>
+              }
+              sx={{
+                color: "white",
+                "&.Mui-selected": {
+                  color: "primary.main",
+                  textShadow: "none",
+                },
+                textShadow: scrolled
+                  ? "2px 2px 10px rgba(0, 0, 0, 0.2)"
+                  : "none",
+              }}
+              onClick={handleMenuClick}
+              aria-controls={open ? "services-menu" : undefined}
+              aria-haspopup="true"
+            />
+            <Menu
+              id="services-menu"
+              anchorEl={anchorEl}
+              open={open}
+              onClose={handleClose}
+              MenuListProps={{
+                "aria-labelledby": "services-button",
+              }}
             >
-              <LinkTab label="Inicio" href="/" />
-              <LinkTab label="Informar" href="#report" />
-              <LinkTab label="Consultar" href="/chatbot" />
-              <LinkTab label="Localizar" href="/map" />
-            </Tabs>
+              <MenuItem onClick={handleClose}>
+                <Link href="#report" passHref>
+                  Hacer un reporte
+                </Link>
+              </MenuItem>
+              <MenuItem onClick={handleClose}>
+                <Link href="/chatbot" passHref>
+                  Realizar consulta
+                </Link>
+              </MenuItem>
+              <MenuItem onClick={handleClose}>
+                <Link href="/map" passHref>
+                  Localizar
+                </Link>
+              </MenuItem>
+            </Menu>
+          </Tabs>
+          <MainButton
+            sx={{ maxWidth: "200px" }}
+            onClick={handleAuthButtonClick}
+          >
+            {isAuthenticated ? (
+              <Box
+                sx={{
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  gap: 1,
+                }}
+              >
+                <FaceIcon />
+                <Typography>MI PERFIL</Typography>
+              </Box>
+            ) : (
+              "INICIAR SESIÓN"
+            )}
+          </MainButton>
+        </Box>
 
-            <MainButton sx={{ maxWidth: "200px" }} href="/login">
-              INICIAR SESIÓN
-            </MainButton>
-          </Box>
-
-          {/* Menu de Hamburguesa (Mobile) */}
-          <Box sx={{ display: { xs: "block", md: "none" } }}>
-            <IconButton
-              onClick={toggleDrawer(true)}
-              color="inherit"
-              sx={{ color: "var(--light-color)" }}
-            >
-              <MenuOpenIcon />
-            </IconButton>
-          </Box>
-        </Toolbar>
-
-        {/* Drawer para el Menú de Navegación en Mobile */}
-        <Drawer anchor="left" open={drawerOpen} onClose={toggleDrawer(false)}>
-          {drawerContent}
-        </Drawer>
-      </Container>
+        {/* 🐈 MENU MOBILE */}
+        <Box sx={{ display: { xs: "block", md: "none" } }}>
+          <IconButton
+            onClick={toggleDrawer(true)}
+            color="inherit"
+            sx={{ color: "var(--light-color)" }}
+          >
+            <MenuOpenIcon />
+          </IconButton>
+        </Box>
+      </Toolbar>
+      {/* 🐥 ITEMS DE MENU MOBILE */}
+      <Drawer anchor="left" open={drawerOpen} onClose={toggleDrawer(false)}>
+        {drawerContent}
+      </Drawer>
     </AppBar>
   );
 }

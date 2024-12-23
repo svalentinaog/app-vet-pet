@@ -4,6 +4,9 @@ const nextConfig = {
     additionalData: `$var: red;`,
     implementation: 'sass-embedded',
   },
+  experimental: {
+    middleware: true,
+  },
 };
 
 export default nextConfig;
