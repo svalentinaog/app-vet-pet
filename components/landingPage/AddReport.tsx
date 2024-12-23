@@ -204,7 +204,7 @@ export default function AddReport() {
           maxWidth: "700px",
           backgroundColor: "var(--primary-color)",
           padding: "4em 2em",
-          borderRadius: "4px",
+          borderRadius: "1em",
         }}
       >
         <Box>
