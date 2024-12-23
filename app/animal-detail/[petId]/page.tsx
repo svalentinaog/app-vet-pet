@@ -160,6 +160,7 @@ const AnimalDetail = () => {
           >
             {animal?.images?.map((img: string, index: number) => (
               <Tooltip
+                key={index}
                 title={`¡Hola!, Soy ${animal.petName} 🐾`}
                 placement="top"
                 arrow
@@ -178,7 +179,6 @@ const AnimalDetail = () => {
                 }}
               >
                 <CardMedia
-                  key={index}
                   component="img"
                   image={`https://res.cloudinary.com/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/image/upload/${img}`}
                   alt={`Imagen ${index + 1}`}

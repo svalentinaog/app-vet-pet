@@ -77,7 +77,10 @@ export default function Reports() {
 
       reports.sort((a, b) => {
         // Asumiendo que dateCreationReport es un string con formato ISO 8601
-        return new Date(b.dateCreationReport).getTime() - new Date(a.dateCreationReport).getTime();
+        return (
+          new Date(b.dateCreationReport).getTime() -
+          new Date(a.dateCreationReport).getTime()
+        );
       });
 
       console.log(reports);
@@ -119,6 +122,38 @@ export default function Reports() {
         }}
       >
         <CircularProgress sx={{ color: "var(--primary-color)" }} />
+      </Box>
+    );
+  }
+
+  // Si no hay reportes, mostrar mensaje
+  if (reports.length === 0) {
+    return (
+      <Box
+        sx={{
+          width: "100%",
+          height: "100%",
+          alignContent: "center",
+          background: "var(--gradient-lineal2)",
+          padding: {
+            xs: "0 1em 0",
+            sm: "0 6em 0",
+            md: "0 7.5em 0",
+            lg: "0 15em 0",
+          },
+        }}
+      >
+        <Typography
+          variant="h3"
+          sx={{
+            color: "var(--title-color)",
+            marginBottom: "2em",
+            fontSize: { xs: "1.5em", sm: "2.5em" },
+            fontWeight: "bold",
+          }}
+        >
+          No hay reportes de mascotas disponibles
+        </Typography>
       </Box>
     );
   }
