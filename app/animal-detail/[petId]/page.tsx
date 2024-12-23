@@ -26,6 +26,8 @@ import React from "react";
 import AnimalModalEdit from "@/components/AnimalModalEdit";
 import Carousel from "react-material-ui-carousel";
 import { FormDataReport } from "../../../interfaces/typesReport";
+import DateRangeIcon from "@mui/icons-material/DateRange";
+import { width } from "@mui/system";
 
 const AnimalDetail = () => {
   const { petId } = useParams<{ petId: string }>();
@@ -44,7 +46,7 @@ const AnimalDetail = () => {
       foundLocation: "Versalles",
       description:
         "Perro mediano, manchas blancas y negras, muy amigable y juguetón. Encontrado cerca del parque principal, lleva collar azul sin identificación.",
-      status: "Sin hogar",
+      status: "Perdido",
       images: [
         "/assets/pet1.png",
         "/assets/pet1-2.png",
@@ -65,7 +67,7 @@ const AnimalDetail = () => {
       description:
         "Perro pequeño color marrón, raza Yorkshire. Perdido en la zona residencial, lleva collar rojo con placa de identificación.",
       age: "3 años",
-      status: "Perdido",
+      status: "Sin hogar",
       images: ["/assets/pet2.png", "/asspets/pet2-2.png"],
       dateCreationReport: "2024-12-20",
     },
@@ -81,7 +83,7 @@ const AnimalDetail = () => {
         "Gata siamesa de ojos azules, muy tímida. Se perdió cerca del centro comercial, tiene un collar negro con cascabel.",
       age: "2 años",
       status: "Perdido",
-      images: ["/assets/cat1.png", "/assets/cat1-2.png" ],
+      images: ["/assets/cat1.png", "/assets/cat1-2.png"],
       reward: "200.000",
       dateCreationReport: "2024-12-19",
     },
@@ -96,7 +98,7 @@ const AnimalDetail = () => {
       description:
         "Gato naranja con rayas, muy cariñoso. Encontrado deambulando por la zona comercial, sin collar ni identificación.",
       status: "Sin hogar",
-      images: [ "/assets/cat2.png", "/assets/cat2-2.png" ],
+      images: ["/assets/cat2.png", "/assets/cat2-2.png"],
       dateCreationReport: "2024-12-18",
     },
   ];
@@ -109,7 +111,7 @@ const AnimalDetail = () => {
   if (!animal) {
     return (
       <Box textAlign="center" p={5}>
-        <Typography variant="h4">Animal no encontrado</Typography>
+        <Typography variant="h3">Animal no encontrado</Typography>
       </Box>
     );
   }
@@ -191,71 +193,57 @@ const AnimalDetail = () => {
         <Box
           sx={{
             position: "absolute",
-            left: "40%",
+            left: "35%",
             top: "50%",
             transform: "translateY(-50%)",
-            width: 800,
+            width: 1200,
             height: "auto",
             zIndex: 1,
             mb: 2,
           }}
         >
-          <Carousel animation="slide" interval={4000} indicators={true}>
+          <Carousel
+            animation="fade"
+            interval={3000}
+            indicators={true}
+            autoPlay={true}
+          >
             {animal.images?.map((img, index) => (
-              <CardMedia
-                key={index}
-                component="img"
-                image={img}
-                alt={`Imagen ${index + 1}`}
-                sx={{
-                  maxWidth: "100%",
-                  height: "auto",
-                  objectFit: "contain",
-                  aspectRatio: "16/9",
-                  borderRadius: 2,
+              <Tooltip
+                title={`¡Hola!, Soy ${animal.petName} 🐾`}
+                placement="top"
+                arrow
+                componentsProps={{
+                  tooltip: {
+                    sx: {
+                      maxWidth: 1000,
+                      fontSize: "2rem",
+                      backgroundColor: "var(--title-color)",
+                      color: "#fff",
+                      boxShadow: 3,
+                      mb: 2,
+                      mt: 2,
+                    },
+                  },
                 }}
-              />
+              >
+                <CardMedia
+                  key={index}
+                  component="img"
+                  image={img}
+                  alt={`Imagen ${index + 1}`}
+                  sx={{
+                    maxWidth: "100%",
+                    height: "auto",
+                    objectFit: "contain",
+                    aspectRatio: "16/9",
+                    borderRadius: 2,
+                  }}
+                />
+              </Tooltip>
             ))}
           </Carousel>
         </Box>
-
-        <Tooltip
-          title={`¡Hola!, Soy ${animal.petName} 🐾`}
-          placement="top"
-          arrow
-          componentsProps={{
-            tooltip: {
-              sx: {
-                fontSize: "1rem",
-                backgroundColor: "var(--title-color)",
-                color: "#fff",
-                boxShadow: 3,
-              },
-            },
-          }}
-        >
-          <CardMedia
-            component="img"
-            image={animal.images[0]}
-            alt={animal.petName}
-            sx={{
-              width: 200,
-              position: "absolute",
-              left: "10%",
-              bottom: 30,
-              zIndex: 100,
-              objectFit: "contain",
-              borderRadius: 2,
-              padding: 1,
-              filter: "drop-shadow(0px 5px 5px rgba(0, 0, 0, 0.5))",
-              transition: "all 0.3s ease",
-              ":hover": {
-                filter: "drop-shadow(0px 10px 10px rgba(0, 0, 0, 0.8))",
-                transform: "scale(1.1)",
-              },
-            }}
-          />
-        </Tooltip>
         <CardContent sx={{ flex: "1", p: 4 }}>
           <Grid container spacing={2} alignItems="center">
             <Grid
@@ -268,7 +256,7 @@ const AnimalDetail = () => {
               }}
             >
               <Typography
-                variant="h3"
+                variant="h1"
                 fontWeight="bold"
                 color="primary"
                 gutterBottom
@@ -280,7 +268,7 @@ const AnimalDetail = () => {
                 }}
               >
                 {animal.petName}
-                <PetsIcon fontSize="large" />
+                <PetsIcon sx={{ fontSize: "5rem" }} />
               </Typography>
               {/* Botón de editar animal.petId cambia al uid del usuario que coincida con el report. */}
               {animal.petId == 1 ? (
@@ -300,7 +288,7 @@ const AnimalDetail = () => {
                       },
                     }}
                   >
-                    <EditIcon fontSize="large" />
+                    <EditIcon sx={{ fontSize: "4rem" }} />
                   </IconButton>
                 </Box>
               ) : (
@@ -310,8 +298,14 @@ const AnimalDetail = () => {
             <Grid item xs={12}>
               <Chip
                 label={animal.status}
-                color={animal.status === "Perdido" ? "error" : "warning"}
-                sx={{ fontSize: "1rem", fontWeight: "bold", borderRadius: 1 }}
+                color={
+                  animal.status == "Sin hogar"
+                    ? "error"
+                    : animal.status == "Encontrado"
+                    ? "success"
+                    : "warning"
+                }
+                sx={{ fontSize: "1.5rem", fontWeight: "bold", borderRadius: 1 }}
               />
             </Grid>
             <Grid item xs={12}>
@@ -327,21 +321,75 @@ const AnimalDetail = () => {
                   textOverflow: "ellipsis",
                   wordWrap: "break-word",
                   overflowWrap: "break-word",
+                  mb: 2,
+                  mt: 2,
+                  lineHeight: "1.5",
+                  fontSize: "1.3rem",
                 }}
               >
                 {animal.description}
               </Typography>
             </Grid>
             <Grid item xs={12}>
-              <Typography variant="body2" color="text.secondary">
-                <LocationOnIcon color="primary" />{" "}
+              <Typography
+                variant="body1"
+                color="text.secondary"
+                sx={{
+                  mb: 2,
+                  mt: 2,
+                  lineHeight: "1.5",
+                  fontSize: "1.3rem",
+                }}
+              >
+                <LocationOnIcon color="primary" fontSize="large" />{" "}
                 <strong>{animal.foundLocation}</strong>
                 <Divider sx={{ mb: 2, width: 300, height: 5 }} />
               </Typography>
             </Grid>
             <Grid item xs={12}>
-              <Typography variant="body2" color="text.secondary">
-                <PhoneIcon color="primary" /> <strong>{animal.phone}</strong>
+              <Typography
+                variant="body2"
+                color="text.secondary"
+                sx={{
+                  mb: 2,
+                  mt: 2,
+                  lineHeight: "1.5",
+                  fontSize: "1.3rem",
+                }}
+              >
+                <PhoneIcon color="primary" fontSize="large" />{" "}
+                <strong>{animal.phone}</strong>
+                <Divider sx={{ mb: 2, width: 300, height: 5 }} />
+              </Typography>
+            </Grid>
+            <Grid item xs={12}>
+              <Typography
+                variant="body2"
+                color="text.secondary"
+                sx={{
+                  mb: 2,
+                  mt: 2,
+                  lineHeight: "1.5",
+                  fontSize: "1.3rem",
+                }}
+              >
+                <PetsIcon color="primary" fontSize="large" /> <strong>{animal.petType}</strong>
+                <Divider sx={{ mb: 2, width: 300, height: 5 }} />
+              </Typography>
+            </Grid>
+            <Grid item xs={12}>
+              <Typography
+                variant="body2"
+                color="text.secondary"
+                sx={{
+                  mb: 2,
+                  mt: 2,
+                  lineHeight: "1.5",
+                  fontSize: "1.3rem",
+                }}
+              >
+                <DateRangeIcon color="primary" fontSize="large"/>{" "}
+                <strong>{animal.dateCreationReport}</strong>
                 <Divider sx={{ mb: 2, width: 300, height: 5 }} />
               </Typography>
             </Grid>
