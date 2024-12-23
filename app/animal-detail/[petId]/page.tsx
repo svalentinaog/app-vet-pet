@@ -193,10 +193,10 @@ const AnimalDetail = () => {
         <Box
           sx={{
             position: "absolute",
-            left: "35%",
+            left: "40%",
             top: "50%",
             transform: "translateY(-50%)",
-            width: 1200,
+            width: 1000,
             height: "auto",
             zIndex: 1,
             mb: 2,
