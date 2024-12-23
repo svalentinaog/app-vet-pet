@@ -1,9 +1,10 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Box,
   Button,
+  CircularProgress,
   Container,
   Grid,
   Pagination,
@@ -13,6 +14,8 @@ import {
 import AnimalCard from "../AnimalCard";
 import Link from "next/link";
 import NavigateNextIcon from "@mui/icons-material/NavigateNext";
+import { collection, getDocs } from "firebase/firestore";
+import { firestore } from "@/lib/firebase";
 
 interface Animal {
   id: number;
@@ -24,46 +27,25 @@ interface Animal {
   phone: number;
 }
 
-export default function Reports() {
-  const animals: Animal[] = [
-    {
-      id: 1,
-      image: "/assets/pet1.png",
-      name: "Manchas",
-      status: "Sin hogar",
-      description: "Lorem ipsum...",
-      location: "Versalles",
-      phone: 3187399367,
-    },
-    {
-      id: 2,
-      image: "/assets/pet2.png",
-      name: "Lucas",
-      status: "Perdido",
-      description: "Lorem ipsum...",
-      location: "Versalles",
-      phone: 3187399367,
-    },
-    {
-      id: 3,
-      image: "/assets/cat1.png",
-      name: "Carlota",
-      status: "Perdido",
-      description: "Lorem ipsum...",
-      location: "Versalles",
-      phone: 3187399367,
-    },
-    {
-      id: 4,
-      image: "/assets/cat2.png",
-      name: "Jericho",
-      status: "Sin hogar",
-      description: "Lorem ipsum...",
-      location: "Versalles",
-      phone: 3187399367,
-    },
-  ];
+interface FormDataReport {
+  id: number;
+  reportType: "lost" | "found";
+  reporterName: string; // Nombre del reportante
+  phone: string; // Número de teléfono del reportante
+  petType: string; // Tipo de mascota
+  petName?: string; // Nombre de la mascota (para "perdido")
+  foundLocation?: string; // Lugar encontrado
+  description: string;
+  age?: string; // Edad aproximada (solo para "perdido")
+  status?: string; // Estado: Sin hogar, Perdido, etc.
+  images: string[];
+  reward?: string; //Solo para "perdido"
+  dateCreationReport: string; // Fecha de creación del reporte
+}
 
+export default function Reports() {
+  const [reports, setReports] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
 
   // Determinar si el dispositivo es móvil
@@ -80,10 +62,101 @@ export default function Reports() {
     setCurrentPage(value);
   };
 
+  const getAllReports = async () => {
+    try {
+      // Referencia a la colección "reports"
+      const reportsRef = collection(firestore, "reports");
+
+      // Obtener todos los documentos
+      const querySnapshot = await getDocs(reportsRef);
+
+      // Convertir los documentos a un array de objetos
+      const reports = querySnapshot.docs.map((doc) => ({
+        ...doc.data(), // Expandir todos los campos del documento
+      }));
+
+      reports.sort((a, b) => {
+        // Asumiendo que dateCreationReport es un string con formato ISO 8601
+        return (
+          new Date(b.dateCreationReport).getTime() -
+          new Date(a.dateCreationReport).getTime()
+        );
+      });
+
+      console.log(reports);
+      return reports;
+    } catch (error) {
+      console.error("Error al obtener los reportes:", error);
+      throw error;
+    }
+  };
+
+  useEffect(() => {
+    const fetchReports = async () => {
+      try {
+        const data = await getAllReports();
+        setReports(data);
+      } catch (err) {
+        console.error("Error al cargar los reportes:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchReports();
+  }, []);
+
   // Obtener los animales de la página actual
   const startIndex = (currentPage - 1) * animalsPerPage;
   const endIndex = startIndex + animalsPerPage;
-  const animalsToShow = animals.slice(startIndex, endIndex);
+  const animalsToShow = reports.slice(startIndex, endIndex);
+
+  if (loading) {
+    return (
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          height: "100vh", // Ocupa toda la altura de la ventana
+        }}
+      >
+        <CircularProgress sx={{ color: "var(--primary-color)" }} />
+      </Box>
+    );
+  }
+
+  // Si no hay reportes, mostrar mensaje
+  if (reports.length === 0) {
+    return (
+      <Box
+        sx={{
+          width: "100%",
+          height: "100%",
+          alignContent: "center",
+          background: "var(--gradient-lineal2)",
+          padding: {
+            xs: "0 1em 0",
+            sm: "0 6em 0",
+            md: "0 7.5em 0",
+            lg: "0 15em 0",
+          },
+        }}
+      >
+        <Typography
+          variant="h3"
+          sx={{
+            color: "var(--title-color)",
+            marginBottom: "2em",
+            fontSize: { xs: "1.5em", sm: "2.5em" },
+            fontWeight: "bold",
+          }}
+        >
+          No hay reportes de mascotas disponibles
+        </Typography>
+      </Box>
+    );
+  }
 
   return (
     <Box
@@ -146,7 +219,7 @@ export default function Reports() {
       >
         {/* Paginado */}
         <Pagination
-          count={Math.ceil(animals.length / animalsPerPage)}
+          count={Math.ceil(reports.length / animalsPerPage)}
           page={currentPage}
           onChange={handlePageChange}
           showFirstButton

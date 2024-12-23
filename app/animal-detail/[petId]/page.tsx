@@ -16,86 +16,83 @@ import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import EditIcon from "@mui/icons-material/Edit";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
-import HomeIcon from "@mui/icons-material/Home";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 import PhoneIcon from "@mui/icons-material/Phone";
 import PetsIcon from "@mui/icons-material/Pets";
 import Link from "next/link";
 import { useParams } from "next/navigation";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import AnimalModalEdit from "@/components/AnimalModalEdit";
 import Carousel from "react-material-ui-carousel";
-
-interface Animal {
-  id: number;
-  image: string;
-  name: string;
-  status: string;
-  description: string;
-  location: string;
-  phone: number;
-  images?: string[];
-}
+import { firestore } from "@/lib/firebase";
+import { collection, getDocs } from "firebase/firestore";
+import DateRangeIcon from "@mui/icons-material/DateRange";
 
 const AnimalDetail = () => {
   const { petId } = useParams<{ petId: string }>();
   const [openEdit, setOpenEdit] = React.useState(false);
   const handleEditModalOpen = () => setOpenEdit(true);
   const handleEditModalClose = () => setOpenEdit(false);
+  const [reports, setReports] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
 
-  const animals: Animal[] = [
-    {
-      id: 1,
-      image: "/assets/pet1.png",
-      name: "Manchas",
-      status: "Sin hogar",
-      description:
-        "Lorem Ipsum  is Lorem Ipsum is Lorem Ipsum is Lorem Ipsum is Lorem Ipsum is Lore Lorem Ipsum is Lorem Ipsum is Lore",
-      location: "Versalles",
-      phone: 3187399367,
-      images: [
-        "/assets/pet1-2.png",
-        "/assets/pet1-3.png",
-        "/assets/pet1-4.png",
-      ],
-    },
-    {
-      id: 2,
-      image: "/assets/pet2.png",
-      name: "Lucas",
-      status: "Perdido",
-      description: "Lorem ipsum...",
-      location: "Versalles",
-      phone: 3187399367,
-      images: ["/assets/pet2.png", "/assets/pet2-2.png"],
-    },
-    {
-      id: 3,
-      image: "/assets/cat1.png",
-      name: "Carlota",
-      status: "Perdido",
-      description: "Lorem ipsum...",
-      location: "Versalles",
-      phone: 3187399367,
-      images: ["/assets/cat1.png", "/assets/cat1-2.png"],
-    },
-    {
-      id: 4,
-      image: "/assets/cat2.png",
-      name: "Jericho",
-      status: "Sin hogar",
-      description: "Lorem ipsum...",
-      location: "Versalles",
-      phone: 3187399367,
-      images: ["/assets/cat2.png", "/assets/cat2-2.png"],
-    },
-  ];
+  const getAllReports = async () => {
+    try {
+      // Referencia a la colección "reports"
+      const reportsRef = collection(firestore, "reports");
+
+      // Obtener todos los documentos
+      const querySnapshot = await getDocs(reportsRef);
+
+      // Convertir los documentos a un array de objetos
+      const reports = querySnapshot.docs.map((doc) => ({
+        ...doc.data(), // Expandir todos los campos del documento
+      }));
+      console.log(reports);
+      return reports;
+    } catch (error) {
+      console.error("Error al obtener los reportes:", error);
+      throw error;
+    }
+  };
+
+  useEffect(() => {
+    const fetchReports = async () => {
+      try {
+        const data = await getAllReports();
+        setReports(data);
+      } catch (err) {
+        console.error("Error al cargar los reportes:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchReports();
+  }, []);
 
   const currentId = parseInt(petId);
-  const animal = animals.find((a) => a.id === currentId);
-  const previousAnimal = animals.find((a) => a.id === currentId - 1);
-  const nextAnimal = animals.find((a) => a.id === currentId + 1);
+  const animal = reports.find((a) => a.id === currentId);
+  const previousAnimal = reports.find((a) => a.id === currentId - 1);
+  const nextAnimal = reports.find((a) => a.id === currentId + 1);
 
+  if (loading) {
+    return (
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          height: "100vh",
+        }}
+      >
+        <Typography variant="h5" color="text.secondary">
+          Cargando datos de la mascota...
+        </Typography>
+      </Box>
+    );
+  }
+  
   if (!animal) {
     return (
       <Box textAlign="center" p={5}>
@@ -121,41 +118,6 @@ const AnimalDetail = () => {
         </Link>
       </Box>
 
-      {/* Flechas de navegación */}
-      {previousAnimal && (
-        <Box
-          sx={{
-            position: "absolute",
-            left: 16,
-            top: "50%",
-            transform: "translateY(-50%)",
-            zIndex: 100,
-          }}
-        >
-          <Link href={`/animal-detail/${previousAnimal.id}`} passHref>
-            <IconButton color="primary" aria-label="previous animal">
-              <ArrowBackIosNewIcon fontSize="large" />
-            </IconButton>
-          </Link>
-        </Box>
-      )}
-      {nextAnimal && (
-        <Box
-          sx={{
-            position: "absolute",
-            right: 16,
-            top: "50%",
-            transform: "translateY(-50%)",
-            zIndex: 100,
-          }}
-        >
-          <Link href={`/animal-detail/${nextAnimal.id}`} passHref>
-            <IconButton color="primary" aria-label="next animal">
-              <ArrowForwardIosIcon fontSize="large" />
-            </IconButton>
-          </Link>
-        </Box>
-      )}
 
       <Card
         sx={{
@@ -184,70 +146,57 @@ const AnimalDetail = () => {
             left: "40%",
             top: "50%",
             transform: "translateY(-50%)",
-            width: 800,
+            width: 1000,
             height: "auto",
             zIndex: 1,
             mb: 2,
           }}
         >
-          <Carousel animation="slide" interval={4000} indicators={true}>
-            {animal.images?.map((img, index) => (
-              <CardMedia
+          <Carousel
+            animation="fade"
+            interval={3000}
+            indicators={true}
+            autoPlay={true}
+          >
+            {animal?.images?.map((img: string, index: number) => (
+              <Tooltip
                 key={index}
-                component="img"
-                image={img}
-                alt={`Imagen ${index + 1}`}
-                sx={{
-                  maxWidth: "100%",
-                  height: "auto",
-                  objectFit: "contain",
-                  aspectRatio: "16/9",
-                  borderRadius: 2,
+                title={`¡Hola!, Soy ${animal.petName} 🐾`}
+                placement="top"
+                arrow
+                componentsProps={{
+                  tooltip: {
+                    sx: {
+                      maxWidth: 1000,
+                      fontSize: "2rem",
+                      backgroundColor: "var(--title-color)",
+                      color: "#fff",
+                      boxShadow: 3,
+                      mb: 2,
+                      mt: 2,
+                    },
+                  },
                 }}
-              />
+              >
+                <CardMedia
+                  component="img"
+                  image={`https://res.cloudinary.com/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/image/upload/${img}`}
+                  alt={`Imagen ${index + 1}`}
+                  sx={{
+                    maxWidth: "100%",
+                    height: "auto",
+                    objectFit: "contain",
+                    aspectRatio: "16/9",
+                    borderRadius: 2,
+                  }}
+                />
+              </Tooltip>
             ))}
           </Carousel>
         </Box>
-
-        <Tooltip
-          title={`¡Hola!, Soy ${animal.name} 🐾`}
-          placement="top"
-          arrow
-          componentsProps={{
-            tooltip: {
-              sx: {
-                fontSize: "1rem",
-                backgroundColor: "var(--title-color)",
-                color: "#fff",
-                boxShadow: 3,
-              },
-            },
-          }}
-        >
-          <CardMedia
-            component="img"
-            image={animal.image}
-            alt={animal.name}
-            sx={{
-              width: 200,
-              position: "absolute",
-              left: "10%",
-              bottom: 30,
-              zIndex: 100,
-              objectFit: "contain",
-              borderRadius: 2,
-              padding: 1,
-              filter: "drop-shadow(0px 5px 5px rgba(0, 0, 0, 0.5))",
-              transition: "all 0.3s ease",
-              ":hover": {
-                filter: "drop-shadow(0px 10px 10px rgba(0, 0, 0, 0.8))",
-                transform: "scale(1.1)",
-              },
-            }}
-          />
-        </Tooltip>
         <CardContent sx={{ flex: "1", p: 4 }}>
           <Grid container spacing={2} alignItems="center">
+            
             <Grid
               item
               xs={12}
@@ -258,7 +207,7 @@ const AnimalDetail = () => {
               }}
             >
               <Typography
-                variant="h3"
+                variant="h1"
                 fontWeight="bold"
                 color="primary"
                 gutterBottom
@@ -269,11 +218,11 @@ const AnimalDetail = () => {
                   mb: 0,
                 }}
               >
-                {animal.name}
-                <PetsIcon fontSize="large" />
+                {animal.petName}
+                <PetsIcon sx={{ fontSize: "5rem" }} />
               </Typography>
-              {/* Botón de editar */}
-              {animal.id == 1 ? (
+              {/* Botón de editar animal.petId cambia al uid del usuario que coincida con el report. */}
+              {animal.petId == 1 ? (
                 <Box
                   onClick={handleEditModalOpen}
                   sx={{
@@ -290,7 +239,7 @@ const AnimalDetail = () => {
                       },
                     }}
                   >
-                    <EditIcon fontSize="large" />
+                    <EditIcon sx={{ fontSize: "4rem" }} />
                   </IconButton>
                 </Box>
               ) : (
@@ -300,8 +249,14 @@ const AnimalDetail = () => {
             <Grid item xs={12}>
               <Chip
                 label={animal.status}
-                color={animal.status === "Perdido" ? "error" : "warning"}
-                sx={{ fontSize: "1rem", fontWeight: "bold", borderRadius: 1 }}
+                color={
+                  animal.status == "Sin hogar"
+                    ? "error"
+                    : animal.status == "Encontrado"
+                    ? "success"
+                    : "warning"
+                }
+                sx={{ fontSize: "1.5rem", fontWeight: "bold", borderRadius: 1 }}
               />
             </Grid>
             <Grid item xs={12}>
@@ -317,21 +272,75 @@ const AnimalDetail = () => {
                   textOverflow: "ellipsis",
                   wordWrap: "break-word",
                   overflowWrap: "break-word",
+                  mb: 2,
+                  mt: 2,
+                  lineHeight: "1.5",
+                  fontSize: "1.3rem",
                 }}
               >
                 {animal.description}
               </Typography>
             </Grid>
             <Grid item xs={12}>
-              <Typography variant="body2" color="text.secondary">
-                <LocationOnIcon color="primary" />{" "}
-                <strong>{animal.location}</strong>
+              <Typography
+                variant="body1"
+                color="text.secondary"
+                sx={{
+                  mb: 2,
+                  mt: 2,
+                  lineHeight: "1.5",
+                  fontSize: "1.3rem",
+                }}
+              >
+                <LocationOnIcon color="primary" fontSize="large" />{" "}
+                <strong>{animal.foundLocation}</strong>
                 <Divider sx={{ mb: 2, width: 300, height: 5 }} />
               </Typography>
             </Grid>
             <Grid item xs={12}>
-              <Typography variant="body2" color="text.secondary">
-                <PhoneIcon color="primary" /> <strong>{animal.phone}</strong>
+              <Typography
+                variant="body2"
+                color="text.secondary"
+                sx={{
+                  mb: 2,
+                  mt: 2,
+                  lineHeight: "1.5",
+                  fontSize: "1.3rem",
+                }}
+              >
+                <PhoneIcon color="primary" fontSize="large" />{" "}
+                <strong>{animal.phone}</strong>
+                <Divider sx={{ mb: 2, width: 300, height: 5 }} />
+              </Typography>
+            </Grid>
+            <Grid item xs={12}>
+              <Typography
+                variant="body2"
+                color="text.secondary"
+                sx={{
+                  mb: 2,
+                  mt: 2,
+                  lineHeight: "1.5",
+                  fontSize: "1.3rem",
+                }}
+              >
+                <PetsIcon color="primary" fontSize="large" /> <strong>{animal.petType}</strong>
+                <Divider sx={{ mb: 2, width: 300, height: 5 }} />
+              </Typography>
+            </Grid>
+            <Grid item xs={12}>
+              <Typography
+                variant="body2"
+                color="text.secondary"
+                sx={{
+                  mb: 2,
+                  mt: 2,
+                  lineHeight: "1",
+                  fontSize: "1.2rem",
+                }}
+              >
+                <DateRangeIcon color="primary" fontSize="large"/>{" "}
+                <strong>{animal.dateCreationReport}</strong>
                 <Divider sx={{ mb: 2, width: 300, height: 5 }} />
               </Typography>
             </Grid>
