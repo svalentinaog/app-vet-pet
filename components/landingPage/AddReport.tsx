@@ -209,8 +209,9 @@ export default function AddReport() {
       >
         <Box>
           <Typography
-            variant="h4"
+            variant="h5"
             align="center"
+            fontSize={{ xs: "1.5em", md: "2.5em" }}
             marginBottom={{ xs: 5, md: 6 }}
             color="white"
           >
