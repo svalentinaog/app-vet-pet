@@ -26,7 +26,7 @@ import {
 } from "@/styles/mui";
 
 import { CldUploadWidget } from "next-cloudinary";
-import { collection, addDoc } from "firebase/firestore";
+import { collection, addDoc, setDoc } from "firebase/firestore";
 import { firestore } from "@/lib/firebase";
 import { doc, updateDoc } from "firebase/firestore";
 import { useDispatch, useSelector } from "react-redux";
@@ -50,7 +50,7 @@ interface FormDataReport {
 }
 
 const initialFormData: FormDataReport = {
-  id : 0,
+  id: 0,
   reportType: "",
   reporterName: "",
   phone: "",
@@ -62,7 +62,7 @@ const initialFormData: FormDataReport = {
   status: "",
   images: [],
   reward: "",
-  dateCreationReport: new Date().toString().split('(')[0],
+  dateCreationReport: new Date().toString().split("(")[0],
 };
 
 export default function AddReport() {
@@ -115,21 +115,25 @@ export default function AddReport() {
     }
   };
 
-  // const handleReset = () => {
-  //   setFormData({ ...initialFormData, images: uploadedImages });
-  // };
 
   const uploadFireStore = async (formData: FormDataReport) => {
     try {
-      //Referenciar la colección "reports"
+      // Referenciar la colección "reports"
       const reportsRef = collection(firestore, "reports");
-      //Añadir el documento
-      const docRef = await addDoc(reportsRef, {
+
+      // Generar un ID único para el documento
+      const uniqueId = String(Math.floor(Math.random() * 1000000000)); // Generar un número aleatorio de 9 dígitos
+
+      // Crear el documento con el ID especificado
+      const docRef = doc(reportsRef, uniqueId);
+      await setDoc(docRef, {
         ...formData,
+        id: uniqueId, // Asegurar que el campo 'id' coincida con el ID del documento
       });
-      console.log("Reporte creado con éxito:", docRef.id);
+
+      console.log("Reporte creado con éxito:", uniqueId);
       setSuccess(true);
-      return docRef.id;
+      return uniqueId; // Retornar el ID generado
     } catch (error) {
       console.error("Error al crear el reporte:", error);
       setSuccess(false);
@@ -150,11 +154,16 @@ export default function AddReport() {
     let operationSuccess = false; // Control explícito del éxito de la operación
 
     try {
-      // Subir datos al Firestore
-      if(formData.reportType == "found"){
-        formData.petName = "Sin nombre"
+      // Preparar datos según el tipo de reporte
+      if (formData.reportType === "found") {
+        formData.petName = "Sin nombre";
+      } else if (formData.reportType === "lost") {
+        formData.status = "Perdido";
       }
-      const docId = await uploadFireStore( {...formData, id: Math.floor(Math.random() * 1000000000)});
+
+      // Subir datos al Firestore
+      const docId = await uploadFireStore(formData);
+
       // Actualizar el estado local del usuario
       dispatch(
         updateUserStateByKey({
@@ -163,7 +172,7 @@ export default function AddReport() {
         })
       );
 
-      // Actualizar el documento en Firestore
+      // Actualizar el documento en Firestore (colección users)
       const userRef = doc(firestore, "users", user.id);
       await updateDoc(userRef, {
         pets: [...user.pets, docId],
