@@ -1,7 +1,5 @@
-$font-poppins: "Poppins", sans-serif !important;
+$font-poppins: "Poppins", sans-serif;
 
 :root {
-  --font-poppins: {
-    $font-poppins
-  }
+  --font-poppins: #{$font-poppins};
 }

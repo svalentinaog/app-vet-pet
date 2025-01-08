@@ -1,20 +1,21 @@
 import "../styles/main.scss";
 import { Metadata } from "next";
 import { Toaster } from "sonner";
-import { theme } from "@/styles/theme";
-import { Poppins } from "next/font/google";
-import { ThemeProvider } from "@mui/system";
+import { ThemeProvider } from "@mui/material/styles";
 import StoreProvider from "./StoreProvider";
 import AuthUserProvider from "./AuthUserProvider";
+import { Poppins } from "next/font/google";
+import { theme } from "@/styles/theme";
 
-export const metadata: Metadata = {
-  title: "VETPET",
-};
-
+// Fuente Poppins
 const poppins = Poppins({
   weight: ["400", "700"],
   subsets: ["latin"],
 });
+
+export const metadata: Metadata = {
+  title: "VETPET",
+};
 
 export default function RootLayout({
   children,

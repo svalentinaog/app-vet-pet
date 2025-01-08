@@ -2,6 +2,7 @@
 
 import CustomPassField from "@/components/CustomPassField";
 import CustomTextField from "@/components/CustomTextField";
+import GoBackBtn from "@/components/GoBackBtn";
 import useUserAuthentication from "@/hooks/useUserAuthentication";
 import {
   FormContainer,
@@ -10,8 +11,9 @@ import {
   MainButton,
   BtnGoogle,
 } from "@/styles/mui";
-import { CardMedia, Typography } from "@mui/material";
+import { CardMedia, Typography, Button } from "@mui/material";
 import Link from "next/link";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 
 export default function Login() {
   const {
@@ -61,6 +63,7 @@ export default function Login() {
           ¿No tienes una cuenta? <Link href="/register">Registrate</Link>
         </Typography>
         {/* me falto añadir boton ir atras link a home y view de register */}
+        <GoBackBtn />
       </FormActions>
     </FormContainer>
   );

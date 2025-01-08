@@ -2,6 +2,7 @@
 
 import CustomPassField from "@/components/CustomPassField";
 import CustomTextField from "@/components/CustomTextField";
+import GoBackBtn from "@/components/GoBackBtn";
 import useUserAuthentication from "@/hooks/useUserAuthentication";
 import {
   FormContainer,
@@ -53,7 +54,7 @@ export default function Register() {
       </Fields>
       <FormActions>
         {/* Botón de iniciar sesión */}
-        <MainButton onClick={handleSignUpForm}>Acceder</MainButton>
+        <MainButton onClick={handleSignUpForm}>Crear cuenta</MainButton>
         {/* Enlace a la página de registro */}
         <Typography variant="subtitle1" sx={{ lineHeight: "normal" }}>
           ó continua con
@@ -73,8 +74,9 @@ export default function Register() {
         </BtnGoogle>
         {/* Enlace a la página de registro */}
         <Typography variant="subtitle1" sx={{ lineHeight: "normal" }}>
-          ¿No tienes una cuenta? <Link href="/register">Registrate</Link>
+          ¿Ya tienes una cuenta? <Link href="/login">Inicia sesión</Link>
         </Typography>
+
         {/* me falto añadir boton ir atras link a home y view de register */}
       </FormActions>
     </FormContainer>
