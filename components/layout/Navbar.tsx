@@ -258,13 +258,14 @@ export default function Navbar() {
               href="/#star"
               sx={{
                 color: "white",
+                fontWeight: "regular",
                 "&.Mui-selected": {
                   color: "primary.main",
                   textShadow: "none",
                 },
-                textShadow: scrolled
-                  ? "2px 2px 10px rgba(0, 0, 0, 0.2)"
-                  : "none",
+                // textShadow: scrolled
+                //   ? "2px 2px 10px rgba(0, 0, 0, 0.2)"
+                //   : "none",
               }}
             />
             <Tab
@@ -273,13 +274,14 @@ export default function Navbar() {
               href="/#functions"
               sx={{
                 color: "white",
+                fontWeight: "regular",
                 "&.Mui-selected": {
                   color: "primary.main",
                   textShadow: "none",
                 },
-                textShadow: scrolled
-                  ? "2px 2px 10px rgba(0, 0, 0, 0.2)"
-                  : "none",
+                // textShadow: scrolled
+                //   ? "2px 2px 10px rgba(0, 0, 0, 0.2)"
+                //   : "none",
               }}
             />
             <Tab
@@ -288,28 +290,30 @@ export default function Navbar() {
               href="/#reports"
               sx={{
                 color: "white",
+                fontWeight: "regular",
                 "&.Mui-selected": {
                   color: "primary.main",
                   textShadow: "none",
                 },
-                textShadow: scrolled
-                  ? "2px 2px 10px rgba(0, 0, 0, 0.2)"
-                  : "none",
+                // textShadow: scrolled
+                //   ? "2px 2px 10px rgba(0, 0, 0, 0.2)"
+                //   : "none",
               }}
             />
             <Tab
-              label="Mision"
+              label="Misión"
               component={Link}
               href="/#mission"
               sx={{
                 color: "white",
+                fontWeight: "regular",
                 "&.Mui-selected": {
                   color: "primary.main",
                   textShadow: "none",
                 },
-                textShadow: scrolled
-                  ? "2px 2px 10px rgba(0, 0, 0, 0.2)"
-                  : "none",
+                // textShadow: scrolled
+                //   ? "2px 2px 10px rgba(0, 0, 0, 0.2)"
+                //   : "none",
               }}
             />
             <Tab
@@ -318,13 +322,14 @@ export default function Navbar() {
               href="/#report"
               sx={{
                 color: "white",
+                fontWeight: "regular",
                 "&.Mui-selected": {
                   color: "primary.main",
                   textShadow: "none",
                 },
-                textShadow: scrolled
-                  ? "2px 2px 10px rgba(0, 0, 0, 0.2)"
-                  : "none",
+                // textShadow: scrolled
+                //   ? "2px 2px 10px rgba(0, 0, 0, 0.2)"
+                //   : "none",
               }}
             />
 
@@ -351,13 +356,14 @@ export default function Navbar() {
               }
               sx={{
                 color: "white",
+                fontWeight: "regular",
                 "&.Mui-selected": {
                   color: "primary.main",
                   textShadow: "none",
                 },
-                textShadow: scrolled
-                  ? "2px 2px 10px rgba(0, 0, 0, 0.2)"
-                  : "none",
+                // textShadow: scrolled
+                //   ? "2px 2px 10px rgba(0, 0, 0, 0.2)"
+                //   : "none",
               }}
               onClick={handleMenuClick}
               aria-controls={open ? "services-menu" : undefined}

@@ -10,7 +10,7 @@ interface GoBackBtnProps {
 }
 
 const GoBackBtn: React.FC<GoBackBtnProps> = ({
-  texto = "Volver",
+  texto = "Ir Atrás",
   rutaPredeterminada = "/",
 }) => {
   const router = useRouter();

@@ -115,7 +115,6 @@ export default function AddReport() {
     }
   };
 
-
   const uploadFireStore = async (formData: FormDataReport) => {
     try {
       // Referenciar la colección "reports"
@@ -253,7 +252,7 @@ export default function AddReport() {
           <Typography
             variant="h5"
             align="center"
-            fontSize={{ xs: "1.5em", md: "2.5em" }}
+            fontSize={{ xs: "1.5em", md: "2em" }}
             marginBottom={{ xs: 5, md: 6 }}
             color="white"
           >

@@ -17,6 +17,24 @@ body {
   box-sizing: inherit;
 }
 
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-weight: 500 !important;
+}
+
+p,
+span,
+label,
+input,
+button,
+a {
+  font-weight: 400 !important;
+}
+
 .css-1lg07yq-MuiCardContent-root,
 .css-1um1sdq-MuiGrid-root>.MuiGrid-item,
 .css-iz7uyt-MuiInputBase-root-MuiOutlinedInput-root {
